@@ -1,0 +1,6 @@
+name : agda-prop
+depend:
+  standard-library
+include:
+  src/
+  test/
