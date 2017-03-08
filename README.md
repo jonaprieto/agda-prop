@@ -8,13 +8,14 @@ We define the following constructors for Prop data type.
 
 ```agda
 data Prop : Type where
-  Var    : Fin n → Prop          -- Variables.
-  ⊤ ⊥   : Prop                  -- Top and Bottom.
-  _∧_   : (φ ψ : Prop) → Prop    -- Conjunction.
-  _∨_   : (φ ψ : Prop) → Prop    -- Disjunction.
-  _⇒_   : (φ ψ : Prop) → Prop    -- Implication.
-  _⇔_   : (φ ψ : Prop) → Prop    -- Biimplication.
-  ¬_    : (φ : Prop) → Prop       -- Negation.
+  Var  : Fin n → Prop           -- Variables.
+  ⊤    : Prop                   -- Top (truth).
+  ⊥    : Prop                   -- Bottom (falsum).
+  _∧_  : (φ ψ : Prop) → Prop    -- Conjunction.
+  _∨_  : (φ ψ : Prop) → Prop    -- Disjunction.
+  _⇒_  : (φ ψ : Prop) → Prop    -- Implication.
+  _⇔_  : (φ ψ : Prop) → Prop    -- Biimplication.
+  ¬_   : (φ : Prop) → Prop       -- Negation.
 ```
 And for the turnstile, we have a list of inference rules:
 
