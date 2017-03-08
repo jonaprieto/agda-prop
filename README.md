@@ -3,15 +3,18 @@ A library to work with propositional logic based on a deep embedding.
 
 ## Quick Start
 
-This library provides us two data types: `Prop` and `⊢`.
-The Prop data type define the following constructors.
+This library provides us two data types: `Prop` and `_⊢_`.
+We define the following constructors for Prop data type.
 
 ```agda
 data Prop : Type where
-  Var              : Fin n → Prop
-  ⊤ ⊥              : Prop
-  _∧_ _∨_ _⇒_ _⇔_ : (φ ψ : Prop) → Prop
-  ¬_               : (φ : Prop) → Prop
+  Var    : Fin n → Prop          -- Variables.
+  ⊤ ⊥   : Prop                  -- Top and Bottom.
+  _∧_   : (φ ψ : Prop) → Prop    -- Conjunction.
+  _∨_   : (φ ψ : Prop) → Prop    -- Disjunction.
+  _⇒_   : (φ ψ : Prop) → Prop    -- Implication.
+  _⇔_   : (φ ψ : Prop) → Prop    -- Biimplication.
+  ¬_    : (φ : Prop) → Prop       -- Negation.
 ```
 And for the turnstile, we have a list of inference rules:
 
@@ -73,6 +76,8 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
                                           →  Γ ⊢ φ
 ```
 
+See examples more below.
+
 ### Requirements
 
 * [Agda](https://github.com/agda/agda) version 2.5.1+
@@ -95,8 +100,8 @@ $ cat $HOME/.agda/libraries
 /home/jonaprieto/agda-prop/agda-prop.agda-lib.agda
 ```
 
-More information about managing libraries in Agda
-[here](http://agda.readthedocs.io/en/latest/tools/package-system.html#installing-libraries)
+[Here](http://agda.readthedocs.io/en/latest/tools/package-system.html#installing-libraries)
+we can find more information about installing libraries in Agda.
 
 ### Usage Examples
 
@@ -153,4 +158,4 @@ ex4 {φ} {ψ} =
 ### Contributions
 
 There are postulates in `Data.Prop.Theorems` files that need a proof, and
-other missing ones lemmas and theorems. That's is the challenge.
+other missing ones lemmas and theorems. Proofs are welcomed.
