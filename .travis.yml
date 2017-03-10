@@ -8,10 +8,20 @@ services:
 before_install:
 - docker pull scottfleischman/agda:2.5.2
 - export MY_HOME=${HOME}/build/jonaprieto
+- export CMD_HOME=`pwd`
+- mkdir .agda
+- touch .agda/defaults
+- echo "standard-library" >> .agda/defaults
+- touch .agda/libraries
+- echo "$MY_HOME/agda-stdlib/standard-library.agda-lib" >> .agda/libraries
+- cat .agda/defaults
+- cat .agda/libraries
+- git clone https://github.com/agda/agda-stdlib
+
+env:
+- AGDA_DIR="$CMD_HOME/.agda"
 
 script:
-- git clone https://github.com/agda/agda-stdlib
-- echo "$MY_HOME/agda-stdlib/standard-library.agda-lib" >> /root/.agda/libraries
 - docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda src/Data/Prop.agda -i src/'
 - docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/ex-andreas-abel.agda -i src/'
 - docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/test.agda -i src/'
