@@ -1,4 +1,4 @@
-# agda-prop
+# agda-prop [![Build Status](https://travis-ci.org/jonaprieto/agda-prop.svg?branch=master)](https://travis-ci.org/jonaprieto/agda-prop)
 A library to work with propositional logic based on a deep embedding.
 
 ## Quick Start
