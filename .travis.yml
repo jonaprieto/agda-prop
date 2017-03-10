@@ -9,6 +9,7 @@ before_install:
 - docker pull scottfleischman/agda:2.5.2
 - export MY_HOME=${HOME}/build/jonaprieto
 - export CMD_HOME=`pwd`
+- export AGDA_DIR=${CMD_HOME}/.agda
 - mkdir .agda
 - touch .agda/defaults
 - echo "standard-library" >> .agda/defaults
@@ -17,11 +18,14 @@ before_install:
 - cat .agda/defaults
 - cat .agda/libraries
 - git clone https://github.com/agda/agda-stdlib
+- ls
 
 env:
-- AGDA_DIR="$CMD_HOME/.agda"
+- AGDA_DIR=${CMD_HOME}/.agda
 
 script:
+- echo "$AGDA_DIR"
+- ls
 - docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda src/Data/Prop.agda -i src/'
 - docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/ex-andreas-abel.agda -i src/'
 - docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/test.agda -i src/'
