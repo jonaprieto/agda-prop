@@ -1,6 +1,6 @@
 # This file was adapted from https://github.com/hvr/multi-ghc-travis
-env:
-  TRAVIS_OS_NAME=osx
+os:
+  osx
 # Here starts the actual work to be performed for the package under test;
 # any command which exits with a non-zero exit code causes the build to fail.
 
@@ -8,6 +8,7 @@ before_install:
   - brew update
   - brew install ghc
   - brew install agda
+
 script:
   - agda src/Data/Prop.agda
 # EOF
