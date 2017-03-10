@@ -8,12 +8,7 @@ services:
 before_install:
 - docker pull scottfleischman/agda:2.5.2
 
-env:
-- AGDA_PROP="src/Data/Prop.agda"
-- AGDA_EX1="test/ex-andreas-abel.agda"
-- AGDA_EX2="test/test.agda"
-
 script:
-- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda '$AGDA_PROP
-- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda '$AGDA_EX1
-- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda '$AGDA_EX2
+- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda src/Data/Prop.agda -i src/'
+- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/ex-andreas-abel.agda -i src/'
+- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/test.agda -i src/'
