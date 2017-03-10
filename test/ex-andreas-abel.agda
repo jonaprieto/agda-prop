@@ -31,3 +31,25 @@ ex3 {φ} {ψ} {ω} =
             (∧-proj₁ (weaken ω (assume {Γ = ∅} (φ ∧ (ψ ∨ ω)))))
             (assume {Γ = ∅ , (φ ∧ (ψ ∨ ω))} ω )))))
     (∧-proj₂ (assume {Γ = ∅} (φ ∧ (ψ ∨ ω)))))
+    
+ex4 : ∀ {φ ψ} → ∅ ⊢  (¬ φ  ∨ ψ) ⇒ (φ ⇒ ψ)
+ex4 {φ} {ψ} =
+  ⇒-intro
+    (∨-elim {Γ = ∅}
+      (⇒-intro
+        (⊥-elim {Γ = ∅ , ¬ φ , φ} ψ
+          (¬-elim
+            (weaken φ
+              (assume {Γ = ∅} (¬ φ))
+            )
+            ( assume {Γ = ∅ , ¬ φ} φ)
+          )
+        )
+      )
+      (⇒-intro
+        (weaken φ
+          (assume {Γ = ∅} ψ)
+        )
+      )
+    )
+ 
