@@ -26,6 +26,6 @@ env:
 script:
 - echo "$AGDA_DIR"
 - ls
-- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda src/Data/Prop.agda -i src/'
+- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda src/Data/Prop.agda --include-path=agda-stdlib/src/ --include-path=src/'
 - docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/ex-andreas-abel.agda -i src/'
 - docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/test.agda -i src/'
