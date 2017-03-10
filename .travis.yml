@@ -1,14 +1,18 @@
-sudo: required
-
-language: ruby
-
-services:
-- docker
+# This file was adapted from https://github.com/hvr/multi-ghc-travis
+os:
+  osx
+# Here starts the actual work to be performed for the package under test;
+# any command which exits with a non-zero exit code causes the build to fail.
 
 before_install:
-- docker pull scottfleischman/agda:2.5.2
-
+  - brew update
+  - brew install ghc
+  - brew install agda
+  - mkdir -p ~/.agda
+  - echo /usr/local/lib/agda/standard-library.agda-lib >>~/.agda/libraries
+  - echo standard-library >>~/.agda/defaults
+  
 script:
-- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda src/Data/Prop.agda -i src/'
-- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/ex-andreas-abel.agda -i src/'
-- docker run -v $TRAVIS_BUILD_DIR:/opt/agda-build scottfleischman/agda:2.5.2 /bin/sh -c 'cd /opt/agda-build; agda test/test.agda -i src/'
+  - agda src/Data/Prop.agda
+  - agda test/test.agda
+# EOF
