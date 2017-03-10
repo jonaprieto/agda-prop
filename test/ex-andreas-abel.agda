@@ -53,3 +53,28 @@ ex4 {φ} {ψ} =
       )
     )
  
+ex5 : ∀ {φ ψ} → ∅ ⊢ ¬ (φ ∨ ψ) ⇒ (¬ φ ∧ ¬ ψ)
+ex5 {φ} {ψ} =
+  ⇒-intro
+    (∧-intro
+      (¬-intro
+        (¬-elim
+          (weaken φ
+            (assume {Γ = ∅} (¬ (φ ∨ ψ)))
+          )
+          (∨-intro₁ ψ
+            (assume {Γ = ∅ , ¬ (φ ∨ ψ)} φ)
+          )
+        )
+      )
+      (¬-intro
+        (¬-elim
+          (weaken ψ
+            (assume {Γ = ∅} (¬ (φ ∨ ψ)))
+          )
+          (∨-intro₂ φ
+            (assume {Γ = ∅ , ¬ (φ ∨ ψ)} ψ)
+          )
+        )
+      )
+    )
