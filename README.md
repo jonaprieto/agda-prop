@@ -1,5 +1,6 @@
-# agda-prop [![Build Status](https://travis-ci.org/jonaprieto/agda-prop.svg?branch=master)](https://travis-ci.org/jonaprieto/agda-prop)
-A library to work with propositional logic based on a deep embedding.
+# Agda-Prop [![Build Status](https://travis-ci.org/jonaprieto/agda-prop.svg?branch=master)](https://travis-ci.org/jonaprieto/agda-prop)
+This is an library to work with propositional logic based on a deep embedding.
+It contains a compilation of some useful theorems and properties to work with.
 
 ## Quick Start
 
@@ -106,29 +107,33 @@ we can find more information about installing libraries in Agda.
 
 ### Usage Examples
 
-We type-checked natural deductions proofs of the exercises in the
+As example, we type-checked natural deductions proofs of the exercises in the
 [Type Theory CM0859](http://www1.eafit.edu.co/asr/courses/type-theory-CM0859/exercises.pdf)
-course.
-
-Then, for instance without any assumptions, we can prove:
+course:
 
 ```agda
 -- $ cat test/ex-andreas-abel.agda
 
 open import Data.Prop 2 public
 
-ex1 : ∀ {φ} → ∅ ⊢ φ ⇒ φ
+ex1 : ∀ {φ}
+    → ∅ ⊢ φ ⇒ φ
+
 ex1 {φ} = ⇒-intro (assume {Γ = ∅} φ)
 
-ex2 : ∀ {φ ψ} → ∅ ⊢ (φ ∧ (φ ⇒ ψ)) ⇒ ψ
-ex2 {φ} {ψ} =
+ex2 : ∀ {φ ψ}
+    → ∅ ⊢ (φ ∧ (φ ⇒ ψ)) ⇒ ψ
+
+ex2 {φ}{ψ} =
   ⇒-intro
     (⇒-elim
       (∧-proj₂ (assume {Γ = ∅} (φ ∧ (φ ⇒ ψ))))
       (∧-proj₁ (assume {Γ = ∅}  (φ ∧ (φ ⇒ ψ)))))
 
-ex3 : ∀ {φ ψ ω} → ∅ ⊢ (φ ∧ (ψ ∨ ω)) ⇒ ((φ ∧ ψ) ∨ (φ ∧ ω))
-ex3 {φ} {ψ} {ω} =
+ex3 : ∀ {φ ψ ω}
+    → ∅ ⊢ (φ ∧ (ψ ∨ ω)) ⇒ ((φ ∧ ψ) ∨ (φ ∧ ω))
+
+ex3 {φ}{ψ}{ω} =
   ⇒-intro
   (⇒-elim
     (⇒-intro
@@ -149,5 +154,5 @@ ex3 {φ} {ψ} {ω} =
 
 ### Contributions
 
-There are postulates in `Data.Prop.Theorems` files that need a proof, and
-other missing ones lemmas and theorems. Proofs are welcomed.
+There are postulates in `Data.Prop.Theorems` files waiting for a proof,
+they are welcomed.
