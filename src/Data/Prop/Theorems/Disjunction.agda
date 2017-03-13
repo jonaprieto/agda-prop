@@ -1,5 +1,10 @@
+------------------------------------------------------------------------
+-- Agda-Prop Library.
+-- Theorems of ∨ connective.
+------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ; zero; suc)
+
+open import Data.Nat using (ℕ)
 
 module Data.Prop.Theorems.Disjunction (n : ℕ) where
 
@@ -7,6 +12,14 @@ open import Data.Prop.Syntax n
 open import Data.Prop.Theorems.Implication n using (th244e)
 
 open import Function using (_$_)
+
+lem1 : ∀ {Γ} {φ ψ}
+     → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
+     → Γ ⊢ φ ∨ ψ
+
+lem2 : ∀ {Γ} {φ ψ}
+     → Γ ⊢ (φ ∨ ψ) ∧ ¬ ψ
+     → Γ ⊢ φ
 
 
 postulate
@@ -41,9 +54,10 @@ postulate
             → Γ ⊢ ¬ φ ∧ ¬ ψ
             → Γ ⊢ ¬ (φ ∨ ψ)
 
-lem1 : ∀ {Γ} {φ ψ}
-     → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
-     → Γ ⊢ φ ∨ ψ
+------------------------------------------------------------------------
+-- Proofs.
+------------------------------------------------------------------------
+
 
 lem1 {Γ}{φ}{ψ} =
   ⇒-elim $
@@ -54,9 +68,6 @@ lem1 {Γ}{φ}{ψ} =
         (∨-intro₂ φ $
           ⇒-elim th244e $ assume {Γ = Γ} $ ¬ ¬ ψ)
 
-lem2 : ∀ {Γ} {φ ψ}
-      → Γ ⊢ (φ ∨ ψ) ∧ ¬ ψ
-      → Γ ⊢ φ
 
 lem2 {Γ}{φ}{ψ} seq =
   ⇒-elim

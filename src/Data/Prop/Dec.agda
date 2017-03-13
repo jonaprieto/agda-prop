@@ -1,12 +1,12 @@
 ------------------------------------------------------------------------
 -- Agda-Prop Library.
--- Theorems of ⇔ connective.
+-- Dec.
 ------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ; zero; suc)
+open import Data.Nat using (ℕ)
 
-
-module Data.Prop.Theorems.Biimplication (n : ℕ) where
+module Data.Prop.Dec (n : ℕ) where
 
 open import Data.Prop.Syntax n
 open import Function using (_$_)
+
