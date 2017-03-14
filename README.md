@@ -1,4 +1,4 @@
-# Agda-Prop [![Build Status](https://travis-ci.org/jonaprieto/agda-prop.svg?branch=master)](https://travis-ci.org/jonaprieto/agda-prop)
+# Agda-Prop [![Build Status](https://travis-ci.org/jonaprieto/agda-prop.svg?branch=master)](https://travis-ci.org/jonaprieto/agda-prop) [![DOI](https://zenodo.org/badge/84277944.svg)](https://zenodo.org/badge/latestdoi/84277944)
 This is an library to work with propositional logic based on a deep embedding.
 It contains a compilation of some useful theorems and properties to work with.
 
@@ -151,6 +151,18 @@ ex3 {φ}{ψ}{ω} =
     (∧-proj₂ (assume {Γ = ∅} (φ ∧ (ψ ∨ ω)))))
 
 ```
+
+### References
+
+- Jonathan Prieto-Cubides and Alejandro Gomez-Londoño. 
+  [*A proof tool for translating TSTP proofs to Agda code*](https://github.com/jonaprieto/tstp2agda/tree/deep)
+
+- Leran Cai, Ambrus Kaposi, and Thorsten Altenkirch. *Formalising the Completeness
+  Theorem of Classical Propositional Logic in Agda (Proof Pearl)*. The formalisation
+  is available at http://bitbucket.org/Leran/. It has been typechecked with Agda
+  version 2.4.2.2 and standard library 0.9.
+
+
 
 ### Contributions
 
