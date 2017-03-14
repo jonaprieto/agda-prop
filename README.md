@@ -1,4 +1,5 @@
 # Agda-Prop [![Build Status](https://travis-ci.org/jonaprieto/agda-prop.svg?branch=master)](https://travis-ci.org/jonaprieto/agda-prop) [![DOI](https://zenodo.org/badge/84277944.svg)](https://zenodo.org/badge/latestdoi/84277944)
+
 This is an library to work with propositional logic based on a deep embedding.
 It contains a compilation of some useful theorems and properties to work with.
 
@@ -16,7 +17,7 @@ data Prop : Type where
   _∨_  : (φ ψ : Prop) → Prop    -- Disjunction.
   _⇒_  : (φ ψ : Prop) → Prop    -- Implication.
   _⇔_  : (φ ψ : Prop) → Prop    -- Biimplication.
-  ¬_   : (φ : Prop) → Prop       -- Negation.
+  ¬_   : (φ : Prop) → Prop      -- Negation.
 ```
 And for the turnstile, we have a list of inference rules:
 
@@ -99,7 +100,7 @@ located in `~/.agda/libraries`. For instance, my file looks like:
 ```bash
 $ cat $HOME/.agda/libraries
 /home/jonaprieto/agda-stdlib/standard-library.agda-lib
-/home/jonaprieto/agda-prop/agda-prop.agda-lib.agda
+/home/jonaprieto/agda-prop/agda-prop.agda-lib
 ```
 
 [Here](http://agda.readthedocs.io/en/latest/tools/package-system.html#installing-libraries)
