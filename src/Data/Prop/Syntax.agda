@@ -7,13 +7,13 @@ open import Data.Nat using (ℕ; zero; suc)
 
 module Data.Prop.Syntax (n : ℕ) where
 
-open import Data.Bool renaming (_∧_ to _&&_; _∨_ to _||_)
-open import Data.Bool using (Bool; true; false; not)
-open import Data.Fin  using (Fin; zero; suc; #_)
-open import Data.List using (List; []; _∷_; _++_; [_])
-open import Data.Vec  using (Vec; lookup)
+open import Data.Bool
+  renaming (_∧_ to _&&_ ; _∨_ to _||_)
+  using (Bool ; true ; false ; not)
 
-open import Function  using (_$_)
+open import Data.Fin  using (Fin ; zero ; suc; #_)
+open import Data.List using (List ; [] ; _∷_ ; _++_ ; [_])
+
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 
 Type = Set
