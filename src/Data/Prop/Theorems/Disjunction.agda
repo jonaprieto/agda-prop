@@ -13,6 +13,8 @@ open import Data.Prop.Theorems.Implication n using (th244e)
 
 open import Function using (_$_)
 
+
+
 lem1 : ∀ {Γ} {φ ψ}
      → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
      → Γ ⊢ φ ∨ ψ

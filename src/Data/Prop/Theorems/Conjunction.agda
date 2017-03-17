@@ -10,6 +10,7 @@ module Data.Prop.Theorems.Conjunction (n : ℕ) where
 open import Data.Prop.Syntax n
 open import Function using (_$_ ; _∘_ )
 
+
 ∧-assoc   : ∀ {Γ} {φ ψ ω}
           → Γ ⊢ φ ∧ (ψ ∧ ω)
           → Γ ⊢ (φ ∧ ψ) ∧ ω
@@ -40,6 +41,7 @@ open import Function using (_$_ ; _∘_ )
 ------------------------------------------------------------------------
 -- Proofs.
 ------------------------------------------------------------------------
+
 
 ∧-assoc {Γ}{φ}{ψ}{ω} seq =
   ∧-intro
