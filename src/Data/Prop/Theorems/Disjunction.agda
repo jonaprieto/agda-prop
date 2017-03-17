@@ -19,6 +19,11 @@ open import Function using (_$_)
         → Γ ⊢ (φ ∨ ψ) ∧ (φ ∨ ω)
 
 
+∨-dist₂ : ∀ {Γ} {φ ψ ω}
+        → Γ ⊢ (φ ∨ ψ) ∧ (φ ∨ ω)
+        → Γ ⊢ φ ∨ (ψ ∧ ω)
+
+
 lem1 : ∀ {Γ} {φ ψ}
      → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
      → Γ ⊢ φ ∨ ψ
@@ -47,11 +52,6 @@ postulate
           → Γ ⊢ (φ ∨ ψ) ∨ ρ
 
 
-
-  ∨-dist₂ : ∀ {Γ} {φ ψ ω}
-          → Γ ⊢ (φ ∨ ω) ∧ (ψ ∨ ω)
-          → Γ ⊢ (φ ∧ ψ) ∨ ω
-
   ∨-morgan₁ : ∀ {Γ} {φ ψ}
             → Γ ⊢ ¬ (φ ∨ ψ) ⇒ ¬ φ ∧ ¬ ψ
 
@@ -73,6 +73,22 @@ postulate
         (∧-intro
           (∨-intro₂ φ (∧-proj₁ (assume {Γ = Γ} (ψ ∧ ω))))
           (∨-intro₂ φ (∧-proj₂ (assume {Γ = Γ} (ψ ∧ ω)))))))
+
+∨-dist₂  {Γ}{φ}{ψ}{ω} seq =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ (ψ ∧ ω) (assume {Γ = Γ} φ))
+        (⇒-elim
+          (⇒-intro
+            (∨-elim {Γ = Γ , ψ}
+              (∨-intro₁ (ψ ∧ ω) (assume {Γ = Γ , ψ} φ))
+              (∨-intro₂ φ
+                (∧-intro
+                  (weaken ω (assume {Γ = Γ} ψ))
+                  (assume {Γ = Γ , ψ} ω)))))
+          (∧-proj₂ (weaken ψ seq)))))
+    (∧-proj₁ seq)
 
 lem1 {Γ}{φ}{ψ} =
   ⇒-elim $
