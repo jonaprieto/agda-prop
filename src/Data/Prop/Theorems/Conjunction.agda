@@ -8,12 +8,19 @@ open import Data.Nat using (ℕ)
 module Data.Prop.Theorems.Conjunction (n : ℕ) where
 
 open import Data.Prop.Syntax n
-open import Function using (_$_)
+open import Function using (_$_ ; _∘_ )
 
+∧-assoc   : ∀ {Γ} {φ ψ ω}
+          → Γ ⊢ φ ∧ (ψ ∧ ω)
+          → Γ ⊢ (φ ∧ ψ) ∧ ω
 
 ∧-comm    : ∀ {Γ} {φ ψ}
           → Γ ⊢ φ ∧ ψ
           → Γ ⊢ ψ ∧ φ
+
+∧-dist₁ : ∀ {Γ} {φ ψ ω}
+          → Γ ⊢ φ ∧ (ψ ∨ ω)
+          → Γ ⊢ (φ ∧ ψ) ∨ (φ ∧ ω)
 
 ∧-morgan₁ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ (φ ∧ ψ)
@@ -23,24 +30,45 @@ open import Function using (_$_)
           → Γ ⊢ ¬ φ ∨ ¬ ψ
           → Γ ⊢ ¬ (φ ∧ ψ)
 
+
+
 postulate
-  ∧-dist₁ : ∀ {Γ} {φ ψ ω}
-            → Γ ⊢ (φ ∨ ψ) ∧ ω
-            → Γ ⊢ (φ ∧ ω) ∨ (ψ ∧ ω)
 
   ∧-dist₂ : ∀ {Γ} {φ ψ ω}
-          → Γ ⊢ (φ ∧ ω) ∨ (ψ ∧ ω)
-          → Γ ⊢ (φ ∨ ψ) ∧ ω
+          → Γ ⊢ (φ ∧ ψ) ∨ (φ ∧ ω)
+          → Γ ⊢ φ ∧ (ψ ∨ ω)
 
 ------------------------------------------------------------------------
 -- Proofs.
 ------------------------------------------------------------------------
+
+∧-assoc {Γ}{φ}{ψ}{ω} seq =
+  ∧-intro
+    (∧-intro
+      (∧-proj₁  seq)
+      ((∧-proj₁ ∘ ∧-proj₂) seq))
+    ((∧-proj₂ ∘ ∧-proj₂) seq)
 
 ∧-comm {Γ}{φ}{ψ} seq =
   ∧-intro
     (∧-proj₂ seq)
     (∧-proj₁ seq)
 
+∧-dist₁ {Γ}{φ}{ψ}{ω} seq =
+  ⇒-elim (
+    ⇒-intro $
+      ∨-elim {Γ = Γ}
+        (∨-intro₁ (φ ∧ ω)
+          (∧-intro
+            (weaken ψ (∧-proj₁ seq))
+            (assume {Γ = Γ} ψ)
+            ))
+        (∨-intro₂ (φ ∧ ψ)
+          (∧-intro
+            (weaken ω  (∧-proj₁ seq))
+            (assume {Γ = Γ} ω)))
+      )
+    (∧-proj₂ seq)
 
 --- De Morgan's Law
 
