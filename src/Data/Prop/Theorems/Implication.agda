@@ -30,6 +30,10 @@ th244e : ∀ {Γ} {φ}
        → Γ ⊢ ¬ (¬ φ) ⇒ φ
 
 
+impl-15 : ∀ {Γ} {φ ψ ω}
+        → Γ ⊢ (φ ∧ ψ) ⇒ ω
+        → Γ ⊢ φ ⇒ (ψ ⇒ ω)
+
 postulate
 
   ⇒-equiv : ∀ {Γ} {φ ψ}
@@ -95,3 +99,12 @@ th244e {Γ}{φ} =
       (weaken (¬ φ) $
         assume {Γ = Γ} $ ¬ (¬ φ))
       (assume {Γ = Γ , ¬ (¬ φ)} $ ¬ φ))
+
+impl-15 {Γ}{φ}{ψ}{ω} seq =
+  ⇒-intro
+    (⇒-intro
+      (⇒-elim
+        (weaken ψ (weaken φ seq))
+        (∧-intro
+          (weaken ψ (assume {Γ = Γ} φ))
+          (assume {Γ = Γ , φ} ψ))))
