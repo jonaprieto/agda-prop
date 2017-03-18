@@ -9,9 +9,10 @@ open import Data.Nat using (ℕ)
 module Data.Prop.Theorems.Disjunction (n : ℕ) where
 
 open import Data.Prop.Syntax n
+open import Data.Prop.Theorems.Conjunction n using (∧-morgan₁)
 open import Data.Prop.Theorems.Implication n using (th244e)
 
-open import Function using (_$_)
+open import Function using (_$_ ; _∘_)
 
 
 ∨-assoc₁ : ∀ {Γ} {φ ψ ω}
@@ -62,6 +63,57 @@ lem1 : ∀ {Γ} {φ ψ}
 lem2 : ∀ {Γ} {φ ψ}
      → Γ ⊢ (φ ∨ ψ) ∧ ¬ ψ
      → Γ ⊢ φ
+
+
+resolve₀ : ∀ {Γ} {L C D}
+         → Γ ⊢ L ∨ C → Γ ⊢ ¬ L ∨ D
+         → Γ ⊢ C ∨ D
+
+
+resolve₁ : ∀ {Γ} {L C D}
+         → Γ ⊢ C ∨ L → Γ ⊢ ¬ L ∨ D
+         → Γ ⊢ C ∨ D
+
+
+resolve₂ : ∀ {Γ} {L C D}
+         → Γ ⊢ L ∨ C → Γ ⊢ D ∨ ¬ L
+         → Γ ⊢ C ∨ D
+
+
+resolve₃ : ∀ {Γ} {L C D}
+         → Γ ⊢ C ∨ L → Γ ⊢ D ∨ ¬ L
+         → Γ ⊢ C ∨ D
+
+
+resolve₄ : ∀ {Γ} {L C}
+         → Γ ⊢ ¬ L ∨ C → Γ ⊢ L
+         → Γ ⊢ C
+
+
+resolve₅ : ∀ {Γ} {L C}
+         → Γ ⊢ C ∨ ¬ L
+         → Γ ⊢ L
+         → Γ ⊢ C
+
+
+resolve₆ : ∀ {Γ} {L C}
+         → Γ ⊢ C ∨ L → Γ ⊢ ¬ L
+         → Γ ⊢ C
+
+
+resolve₇ : ∀ {Γ} {L C}
+        → Γ ⊢ L ∨ C → Γ ⊢ ¬ L
+        → Γ ⊢ C
+
+
+resolve₈ : ∀ {Γ} {φ}
+         → Γ ⊢ φ → Γ ⊢ ¬ φ
+         → Γ ⊢ ⊥
+
+
+resolve₉ : ∀ {Γ} {φ}
+         → Γ ⊢ ¬ φ → Γ ⊢ φ
+         → Γ ⊢ ⊥
 
 
 ------------------------------------------------------------------------
@@ -168,6 +220,7 @@ lem2 : ∀ {Γ} {φ ψ}
             (weaken ψ seq)))))
     (∧-proj₁ seq)
 
+
 ∨-morgan₁ {Γ}{φ}{ψ} =
   ⇒-elim $
     ⇒-intro $
@@ -185,6 +238,7 @@ lem2 : ∀ {Γ} {φ ψ}
             (∨-intro₂ φ $
               assume {Γ = Γ , ¬ (φ ∨ ψ)} ψ))
 
+
 ∨-morgan₂ {Γ}{φ}{ψ} seq =
   ¬-intro
     (∨-elim {Γ = Γ}
@@ -196,6 +250,7 @@ lem2 : ∀ {Γ} {φ ψ}
         (weaken ψ
           (∧-proj₂ seq))
         (assume {Γ = Γ} ψ)))
+
 
 lem1 {Γ}{φ}{ψ} =
   ⇒-elim $
@@ -217,3 +272,58 @@ lem2 {Γ}{φ}{ψ} seq =
             (weaken ψ (∧-proj₂ seq))
             (assume {Γ = Γ} ψ)))))
     (∧-proj₁ seq)
+
+
+resolve₀ {Γ} {L}{C}{D} seq₁ seq₂ =
+ lem1 $
+   ∧-morgan₁ $
+     ¬-intro $
+       ¬-elim
+         (lem2 {Γ = Γ , ¬ C ∧ ¬ D} $
+           ∧-intro
+             (weaken (¬ C ∧ ¬ D) seq₂)
+             (∧-proj₂ $ assume {Γ = Γ} $ ¬ C ∧ ¬ D))
+         (lem2 $
+           ∧-intro
+             (weaken (¬ C ∧ ¬ D) seq₁)
+             (∧-proj₁ $ assume {Γ = Γ} $ ¬ C ∧ ¬ D))
+
+
+resolve₁ = resolve₀ ∘ ∨-comm
+
+
+resolve₂ seq₁ seq₂ = resolve₀ seq₁ (∨-comm seq₂)
+
+
+resolve₃ {Γ} {L}{C}{D} seq₁ seq₂ =  resolve₀ (∨-comm seq₁) (∨-comm seq₂)
+
+
+resolve₄ {Γ} {L} {C} seq₁ seq₂ =
+ ⇒-elim
+   (⇒-intro $
+     ∨-elim {Γ = Γ}
+       (assume {Γ = Γ} C)
+       (assume {Γ = Γ} C))
+   (resolve₀ {Γ = Γ} {L = L} {C = C} {D = C}
+     (∨-intro₁ C seq₂)
+     seq₁)
+
+
+resolve₅ = resolve₄ ∘ ∨-comm
+
+
+resolve₆ {Γ} {L} {C} seq₁ seq₂ =
+ ⇒-elim
+   (⇒-intro $
+     ∨-elim {Γ = Γ}
+       (assume {Γ = Γ}  C)
+       (assume {Γ = Γ} C))
+   (resolve₀ (∨-comm seq₁) (∨-intro₁ C seq₂))
+
+
+resolve₇ {Γ} {L} {C} seq₁ seq₂ = resolve₆ (∨-comm seq₁) seq₂
+
+
+resolve₈ seq₁ seq₂ = ¬-elim seq₂ seq₁
+
+resolve₉ = ¬-elim
