@@ -32,6 +32,9 @@ open import Function using (_$_)
         → Γ ⊢ (φ ∨ ψ) ∧ (φ ∨ ω)
         → Γ ⊢ φ ∨ (ψ ∧ ω)
 
+∨-morgan₁ : ∀ {Γ} {φ ψ}
+          → Γ ⊢ ¬ (φ ∨ ψ)
+          → Γ ⊢ ¬ φ ∧ ¬ ψ
 
 lem1 : ∀ {Γ} {φ ψ}
      → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
@@ -51,10 +54,6 @@ postulate
   ∨-assoc₂ : ∀ {Γ} {φ ψ ρ}
           → Γ ⊢ φ ∨ (ψ ∨ ρ)
           → Γ ⊢ (φ ∨ ψ) ∨ ρ
-
-
-  ∨-morgan₁ : ∀ {Γ} {φ ψ}
-            → Γ ⊢ ¬ (φ ∨ ψ) ⇒ ¬ φ ∧ ¬ ψ
 
   ∨-morgan₂ : ∀ {Γ} {φ ψ}
             → Γ ⊢ ¬ φ ∧ ¬ ψ
@@ -116,6 +115,23 @@ postulate
                   (assume {Γ = Γ , ψ} ω)))))
           (∧-proj₂ (weaken ψ seq)))))
     (∧-proj₁ seq)
+
+∨-morgan₁ {Γ}{φ}{ψ} =
+  ⇒-elim $
+    ⇒-intro $
+      ∧-intro
+        (¬-intro $
+          ¬-elim
+            (weaken φ $
+              assume {Γ = Γ} (¬ (φ ∨ ψ)))
+            (∨-intro₁ ψ $
+              assume {Γ = Γ , ¬ (φ ∨ ψ)} φ))
+        (¬-intro $
+          ¬-elim
+            (weaken ψ $
+              assume {Γ = Γ} (¬ (φ ∨ ψ)))
+            (∨-intro₂ φ $
+              assume {Γ = Γ , ¬ (φ ∨ ψ)} ψ))
 
 lem1 {Γ}{φ}{ψ} =
   ⇒-elim $
