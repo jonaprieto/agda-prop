@@ -11,6 +11,11 @@ open import Data.Prop.Syntax n
 open import Function using (_$_)
 
 
+⇒-equiv : ∀ {Γ} {φ ψ}
+        → Γ ⊢ φ ⇒ ψ
+        → Γ ⊢ ¬ φ ∨ ψ
+
+
 -- van Dalen 4th Edition. Chapter 2. Section 2.4.
 -- Theorem 2.4.4
 
@@ -35,11 +40,6 @@ impl-15 : ∀ {Γ} {φ ψ ω}
         → Γ ⊢ φ ⇒ (ψ ⇒ ω)
 
 postulate
-
-  ⇒-equiv : ∀ {Γ} {φ ψ}
-          → Γ ⊢ φ ⇒ ψ
-          → Γ ⊢ ¬ φ ∨ ψ
-
   ⇒-neg   : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ (φ ⇒ ψ)
           → Γ ⊢ φ ∧ ¬ ψ
@@ -48,6 +48,17 @@ postulate
 -- Proofs.
 ------------------------------------------------------------------------
 
+⇒-equiv {Γ} {φ}{ψ} seq =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₂ (¬ φ)
+          (⇒-elim
+            (weaken φ seq)
+            (assume {Γ = Γ} φ)))
+        (∨-intro₁ ψ
+          (assume {Γ = Γ} (¬ φ)))))
+      PEM
 
 th244a {Γ}{φ}{ψ} =
   ⇒-intro $
