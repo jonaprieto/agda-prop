@@ -18,13 +18,16 @@ open import Function using (_$_)
          → Γ ⊢ (φ ∨ ψ) ∨ ω
          → Γ ⊢ φ ∨ (ψ ∨ ω)
 
+
 ∨-assoc₂ : ∀ {Γ} {φ ψ ω}
          → Γ ⊢ φ ∨ (ψ ∨ ω)
          → Γ ⊢ (φ ∨ ψ) ∨ ω
 
+
 ∨-comm  : ∀ {Γ} {φ ψ}
         → Γ ⊢ φ ∨ ψ
         → Γ ⊢ ψ ∨ φ
+
 
 ∨-dist₁ : ∀ {Γ} {φ ψ ω}
         → Γ ⊢ φ ∨ (ψ ∧ ω)
@@ -35,29 +38,31 @@ open import Function using (_$_)
         → Γ ⊢ (φ ∨ ψ) ∧ (φ ∨ ω)
         → Γ ⊢ φ ∨ (ψ ∧ ω)
 
+
+∨-equiv : ∀ {Γ} {φ ψ}
+        → Γ ⊢ φ ∨ ψ
+        → Γ ⊢ ¬ (¬ φ ∧ ¬ ψ)
+
+
 ∨-morgan₁ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ (φ ∨ ψ)
           → Γ ⊢ ¬ φ ∧ ¬ ψ
+
 
 ∨-morgan₂ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ φ ∧ ¬ ψ
           → Γ ⊢ ¬ (φ ∨ ψ)
 
+
 lem1 : ∀ {Γ} {φ ψ}
      → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
      → Γ ⊢ φ ∨ ψ
+
 
 lem2 : ∀ {Γ} {φ ψ}
      → Γ ⊢ (φ ∨ ψ) ∧ ¬ ψ
      → Γ ⊢ φ
 
-
-
-postulate
-
-  ∨-equiv : ∀ {Γ} {φ ψ}
-          → Γ ⊢ φ ∨ ψ
-          → Γ ⊢ ¬ (¬ φ ∧ ¬ ψ)
 
 ------------------------------------------------------------------------
 -- Proofs.
@@ -79,6 +84,7 @@ postulate
         (∨-intro₂ φ
           (∨-intro₂ ψ
             (assume {Γ = Γ} ω)))))
+
 
 ∨-assoc₂ {Γ}{φ}{ψ}{ω} =
   ⇒-elim
@@ -105,31 +111,61 @@ postulate
         (∨-intro₁ φ $
            assume {Γ = Γ} ψ))
 
+
+∨-equiv {Γ}{φ}{ψ} seq =
+  ¬-intro
+    (⇒-elim
+      (⇒-intro
+        (∨-elim {Γ = Γ , ¬ φ ∧ ¬ ψ}
+          (¬-elim
+            (weaken φ
+              (∧-proj₁
+                (assume {Γ = Γ} (¬ φ ∧ ¬ ψ))))
+            (assume {Γ = Γ , ¬ φ ∧ ¬ ψ }  φ))
+          (¬-elim
+            (weaken ψ
+              (∧-proj₂
+                (assume {Γ = Γ} (¬ φ ∧ ¬ ψ))))
+            (assume {Γ = Γ , ¬ φ ∧ ¬ ψ}  ψ))))
+      (weaken (¬ φ ∧ ¬ ψ) seq))
+
+
 ∨-dist₁ {Γ}{φ}{ψ}{ω} =
   ⇒-elim
     (⇒-intro
       (∨-elim {Γ = Γ}
         (∧-intro
-          (∨-intro₁ ψ (assume {Γ = Γ} φ))
-          (∨-intro₁ ω (assume {Γ = Γ} φ)))
+          (∨-intro₁ ψ
+            (assume {Γ = Γ} φ))
+          (∨-intro₁ ω
+            (assume {Γ = Γ} φ)))
         (∧-intro
-          (∨-intro₂ φ (∧-proj₁ (assume {Γ = Γ} (ψ ∧ ω))))
-          (∨-intro₂ φ (∧-proj₂ (assume {Γ = Γ} (ψ ∧ ω)))))))
+          (∨-intro₂ φ
+            (∧-proj₁
+              (assume {Γ = Γ} (ψ ∧ ω))))
+          (∨-intro₂ φ
+            (∧-proj₂
+              (assume {Γ = Γ} (ψ ∧ ω)))))))
+
 
 ∨-dist₂  {Γ}{φ}{ψ}{ω} seq =
   ⇒-elim
     (⇒-intro
       (∨-elim {Γ = Γ}
-        (∨-intro₁ (ψ ∧ ω) (assume {Γ = Γ} φ))
+        (∨-intro₁ (ψ ∧ ω)
+          (assume {Γ = Γ} φ))
         (⇒-elim
           (⇒-intro
             (∨-elim {Γ = Γ , ψ}
-              (∨-intro₁ (ψ ∧ ω) (assume {Γ = Γ , ψ} φ))
+              (∨-intro₁ (ψ ∧ ω)
+                (assume {Γ = Γ , ψ} φ))
               (∨-intro₂ φ
                 (∧-intro
-                  (weaken ω (assume {Γ = Γ} ψ))
+                  (weaken ω
+                    (assume {Γ = Γ} ψ))
                   (assume {Γ = Γ , ψ} ω)))))
-          (∧-proj₂ (weaken ψ seq)))))
+          (∧-proj₂
+            (weaken ψ seq)))))
     (∧-proj₁ seq)
 
 ∨-morgan₁ {Γ}{φ}{ψ} =
