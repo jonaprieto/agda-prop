@@ -11,13 +11,15 @@ open import Data.Prop.Syntax n
 open import Function using (_$_ ; _∘_ )
 
 
-∧-assoc   : ∀ {Γ} {φ ψ ω}
-          → Γ ⊢ φ ∧ (ψ ∧ ω)
-          → Γ ⊢ (φ ∧ ψ) ∧ ω
+∧-assoc : ∀ {Γ} {φ ψ ω}
+        → Γ ⊢ φ ∧ (ψ ∧ ω)
+        → Γ ⊢ (φ ∧ ψ) ∧ ω
 
-∧-comm    : ∀ {Γ} {φ ψ}
-          → Γ ⊢ φ ∧ ψ
-          → Γ ⊢ ψ ∧ φ
+
+∧-comm : ∀ {Γ} {φ ψ}
+       → Γ ⊢ φ ∧ ψ
+       → Γ ⊢ ψ ∧ φ
+
 
 ∧-dist₁ : ∀ {Γ} {φ ψ ω}
         → Γ ⊢ φ ∧ (ψ ∨ ω)
@@ -32,6 +34,7 @@ open import Function using (_$_ ; _∘_ )
 ∧-morgan₁ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ (φ ∧ ψ)
           → Γ ⊢ ¬ φ ∨ ¬ ψ
+
 
 ∧-morgan₂ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ φ ∨ ¬ ψ
@@ -50,10 +53,12 @@ open import Function using (_$_ ; _∘_ )
       ((∧-proj₁ ∘ ∧-proj₂) seq))
     ((∧-proj₂ ∘ ∧-proj₂) seq)
 
+
 ∧-comm {Γ}{φ}{ψ} seq =
   ∧-intro
     (∧-proj₂ seq)
     (∧-proj₁ seq)
+
 
 ∧-dist₁ {Γ}{φ}{ψ}{ω} seq =
   ⇒-elim (
@@ -112,6 +117,7 @@ open import Function using (_$_ ; _∘_ )
                   assume {Γ = Γ , ¬ (φ ∧ ψ)} $ ¬ (¬ φ ∨ ¬ ψ))
                 (∨-intro₂ (¬ φ)
                   (assume {Γ = Γ , ¬ (φ ∧ ψ) , ¬ (¬ φ ∨ ¬ ψ)} $ ¬ ψ )))))
+
 
 ∧-morgan₂ {Γ}{φ}{ψ} =
   ⇒-elim $
