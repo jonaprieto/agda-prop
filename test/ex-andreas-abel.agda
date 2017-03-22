@@ -70,3 +70,35 @@ ex5 {φ}{ψ} =
             assume {Γ = ∅} (¬ (φ ∨ ψ)))
           (∨-intro₂ φ $
             assume {Γ = ∅ , ¬ (φ ∨ ψ)} ψ))
+
+postulate
+  ¬¬EM : ∀ {Γ} {φ} → Γ ⊢ ¬ ¬ (φ ∨ ¬ φ)
+
+RAA⇒EM : ∀ {Γ} {φ} → Γ ⊢ φ ∨ ¬ φ
+RAA⇒EM {Γ}{φ} =
+  RAA
+    (¬-elim
+      (¬¬EM {Γ = Γ , ¬ (φ ∨ ¬ φ)} )
+      (assume {Γ = Γ} (¬ (φ ∨ ¬ φ))))
+
+EM⇒Pierce : ∀ {Γ} {φ ψ} → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
+EM⇒Pierce {Γ}{φ}{ψ} =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (⇒-intro
+          (weaken ((φ ⇒ ψ) ⇒ φ)
+            (assume {Γ = Γ} φ)))
+        (⇒-intro
+          (⇒-elim
+            (assume {Γ = Γ , ¬ φ} ((φ ⇒ ψ) ⇒ φ))
+              (⇒-intro
+                (⊥-elim
+                  ψ
+                  (¬-elim
+                  (weaken φ
+                    (weaken ((φ ⇒ ψ) ⇒ φ)
+                      (assume {Γ = Γ} (¬ φ))))
+                      (assume {Γ = Γ , ¬ φ , (φ ⇒ ψ) ⇒ φ} φ))))
+            ))))
+      PEM
