@@ -1,23 +1,26 @@
-------------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- Agda-Prop Library.
 -- Dec.
-------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
 open import Data.Nat using (ℕ)
 
 module Data.Prop.Dec (n : ℕ) where
 
-open import Data.Bool.Base using (Bool; false; true; not; T)
+------------------------------------------------------------------------------
+
 open import Data.Prop.Syntax n
-open import Data.Fin
-open import Data.Empty hiding (⊥)
+
+open import Data.Bool.Base using (Bool; false; true; not; T)
+open import Data.Fin       using (Fin ; zero ; suc)
+open import Data.Empty     hiding (⊥)
 
 open import Level
-open import Function using (_$_ ; _∘_)
+open import Function       using (_$_ ; _∘_)
 
 open import Relation.Binary.PropositionalEquality using (_≡_ ; refl ; cong)
 
-------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
 data ⊥₂ : Set where
 

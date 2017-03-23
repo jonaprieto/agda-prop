@@ -1,20 +1,23 @@
-------------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- Agda-Prop Library.
 -- Properties.
-------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
 open import Data.Nat using (ℕ)
 
 module Data.Prop.Properties (n : ℕ) where
 
-open import Data.Bool.Base using (Bool; false; true; not; T)
-open import Data.Fin
+------------------------------------------------------------------------------
 
 open import Data.Prop.Syntax n
 open import Data.Prop.Dec n
 
+open import Data.Bool.Base using (Bool; false; true; not; T)
+open import Data.Fin       using (Fin ; zero ; suc)
+
 open import Relation.Binary.PropositionalEquality using (_≡_ ; refl ; cong)
 
+------------------------------------------------------------------------------
 
 suc-injective : ∀ {o} {m n : Fin o} → Fin.suc m ≡ Fin.suc n → m ≡ n
 suc-injective refl = refl
@@ -161,4 +164,3 @@ subst : ∀ {Γ} {φ ψ}
       → φ ≡ ψ
       → Γ ⊢ φ → Γ ⊢ ψ
 subst refl o = o
-

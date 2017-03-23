@@ -1,6 +1,7 @@
+------------------------------------------------------------------------------
 -- Exercises from the course Type Theory CM0859 (Prof. Andreas Abel).
 -- http://www1.eafit.edu.co/asr/courses/type-theory-CM0859/exercises.pdf
-
+------------------------------------------------------------------------------
 
 open import Data.Prop 2 public
 
@@ -91,6 +92,7 @@ RAA⇒EM {Γ}{φ} =
       (¬¬EM {Γ = Γ , ¬ (φ ∨ ¬ φ)} )
       (assume {Γ = Γ} (¬ (φ ∨ ¬ φ))))
 
+
 EM⇒Pierce : ∀ {Γ} {φ ψ}
           → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
 
@@ -114,4 +116,3 @@ EM⇒Pierce {Γ}{φ}{ψ} =
                       (assume {Γ = Γ , ¬ φ , (φ ⇒ ψ) ⇒ φ} φ))))
             ))))
       PEM
-
