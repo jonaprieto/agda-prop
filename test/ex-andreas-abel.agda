@@ -102,3 +102,11 @@ EM⇒Pierce {Γ}{φ}{ψ} =
                       (assume {Γ = Γ , ¬ φ , (φ ⇒ ψ) ⇒ φ} φ))))
             ))))
       PEM
+
+negNegEM  : ∀ {φ} → ∅  ⊢ ¬ ¬ ( φ ∨ ¬ φ ) 
+negNegEM {φ} =
+  ¬-intro
+    (¬-elim
+      (assume {Γ = ∅} (¬ (φ ∨ ¬ φ)))
+      PEM)
+
