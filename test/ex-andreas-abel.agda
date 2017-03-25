@@ -1,6 +1,7 @@
+------------------------------------------------------------------------------
 -- Exercises from the course Type Theory CM0859 (Prof. Andreas Abel).
 -- http://www1.eafit.edu.co/asr/courses/type-theory-CM0859/exercises.pdf
-
+------------------------------------------------------------------------------
 
 open import Data.Prop 2 public
 
@@ -71,19 +72,29 @@ ex5 {φ}{ψ} =
           (∨-intro₂ φ $
             assume {Γ = ∅ , ¬ (φ ∨ ψ)} ψ))
 
-postulate
-  ¬¬EM : ∀ {Γ} {φ} → Γ ⊢ ¬ ¬ (φ ∨ ¬ φ)
-  Pierce : ∀ {Γ} {φ ψ} → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
-  RAA'  : ∀ {Γ} {φ} → Γ ⊢ ( ¬ φ ⇒ φ) ⇒ φ 
+¬¬EM : ∀ {Γ} {φ}
+     → Γ ⊢ ¬ ¬ (φ ∨ ¬ φ)
 
-RAA⇒EM : ∀ {Γ} {φ} → Γ ⊢ φ ∨ ¬ φ
+¬¬EM {Γ}{φ} =
+  ¬-intro $
+    ¬-elim
+      (assume {Γ = Γ} (¬ (φ ∨ ¬ φ)))
+      PEM
+
+
+RAA⇒EM : ∀ {Γ} {φ}
+       → Γ ⊢ φ ∨ ¬ φ
+
 RAA⇒EM {Γ}{φ} =
   RAA
     (¬-elim
       (¬¬EM {Γ = Γ , ¬ (φ ∨ ¬ φ)} )
       (assume {Γ = Γ} (¬ (φ ∨ ¬ φ))))
 
-EM⇒Pierce : ∀ {Γ} {φ ψ} → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
+
+EM⇒Pierce : ∀ {Γ} {φ ψ}
+          → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
+
 EM⇒Pierce {Γ}{φ}{ψ} =
   ⇒-elim
     (⇒-intro
@@ -105,12 +116,8 @@ EM⇒Pierce {Γ}{φ}{ψ} =
             ))))
       PEM
 
-negNegEM  : ∀ {φ} → ∅  ⊢ ¬ ¬ ( φ ∨ ¬ φ ) 
-negNegEM {φ} =
-  ¬-intro
-    (¬-elim
-      (assume {Γ = ∅} (¬ (φ ∨ ¬ φ)))
-      PEM)
+postulate
+  RAA'  : ∀ {Γ} {φ} → Γ ⊢ ( ¬ φ ⇒ φ) ⇒ φ 
 
 RAA'⇒RAA : ∀ {φ} → ∅ ⊢ ¬ (¬ φ) ⇒ φ
 RAA'⇒RAA {φ} =
