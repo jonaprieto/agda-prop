@@ -3,14 +3,14 @@
 -- Theorems with different connectives.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ; zero; suc)
+open import Data.Nat using (ℕ)
 
 module Data.Prop.Theorems.Mixies (n : ℕ) where
 
 ------------------------------------------------------------------------------
 
 open import Data.Prop.Syntax n
-open import Function using (_$_)
+open import Function using ( _$_ )
 
 ------------------------------------------------------------------------------
 

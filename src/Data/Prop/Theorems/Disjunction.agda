@@ -10,10 +10,10 @@ module Data.Prop.Theorems.Disjunction (n : ℕ) where
 ------------------------------------------------------------------------------
 
 open import Data.Prop.Syntax n
-open import Data.Prop.Theorems.Conjunction n using (∧-morgan₁)
-open import Data.Prop.Theorems.Implication n using (th244e)
+open import Data.Prop.Theorems.Conjunction n using ( ∧-morgan₁ )
+open import Data.Prop.Theorems.Implication n using ( th244e )
 
-open import Function using (_$_ ; _∘_)
+open import Function                         using ( _$_; _∘_ )
 
 ------------------------------------------------------------------------------
 

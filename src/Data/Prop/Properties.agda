@@ -12,10 +12,10 @@ module Data.Prop.Properties (n : ℕ) where
 open import Data.Prop.Syntax n
 open import Data.Prop.Dec n
 
-open import Data.Bool.Base using (Bool; false; true; not; T)
-open import Data.Fin       using (Fin ; zero ; suc)
+open import Data.Bool.Base using ( Bool; false; true; not; T )
+open import Data.Fin       using ( Fin ; suc; zero )
 
-open import Relation.Binary.PropositionalEquality using (_≡_ ; refl ; cong)
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; cong )
 
 ------------------------------------------------------------------------------
 

@@ -8,7 +8,7 @@ open import Data.Nat using (ℕ)
 module Data.Prop.Theorems.Conjunction (n : ℕ) where
 
 open import Data.Prop.Syntax n
-open import Function using (_$_ ; _∘_ )
+open import Function using ( _$_ ; _∘_  )
 
 
 ∧-assoc : ∀ {Γ} {φ ψ ω}

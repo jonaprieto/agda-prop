@@ -3,20 +3,20 @@
 -- Syntax definitions.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ; zero; suc)
+open import Data.Nat using (ℕ)
 
 module Data.Prop.Syntax (n : ℕ) where
 
 ------------------------------------------------------------------------------
 
 open import Data.Bool
-  renaming (_∧_ to _&&_ ; _∨_ to _||_)
-  using (Bool ; true ; false ; not)
+  renaming ( _∧_ to _&&_; _∨_ to _||_ )
+  using    ( Bool; true; false; not )
 
-open import Data.Fin  using (Fin ; zero ; suc; #_)
-open import Data.List using (List ; [] ; _∷_ ; _++_ ; [_])
+open import Data.Fin  using ( Fin; #_ )
+open import Data.List using ( List ; [] ; _∷_ ; _++_ ; [_] )
 
-open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+open import Relation.Binary.PropositionalEquality using ( _≡_; refl )
 
 ------------------------------------------------------------------------------
 

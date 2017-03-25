@@ -23,7 +23,9 @@ And for the turnstile, we have a list of inference rules:
 
 ```agda
 data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
+
 -- Hyp.
+
   assume   : ∀ {Γ} → (φ : Prop)           → Γ , φ ⊢ φ
 
   axiom    : ∀ {Γ} → (φ : Prop)           → φ ∈ Γ
@@ -32,17 +34,20 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
   weaken   : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
                                           → Γ , ψ ⊢ φ
 -- Top and Bottom.
+
   ⊤-intro  : ∀ {Γ}                        → Γ ⊢ ⊤
 
   ⊥-elim   : ∀ {Γ} → (φ : Prop)           → Γ ⊢ ⊥
                                           → Γ ⊢ φ
 -- Negation.
+
   ¬-intro  : ∀ {Γ} {φ}                    → Γ , φ ⊢ ⊥
                                           → Γ ⊢ ¬ φ
 
   ¬-elim   : ∀ {Γ} {φ}                    → Γ ⊢ ¬ φ → Γ ⊢ φ
                                           → Γ ⊢ ⊥
 -- Conjunction.
+
   ∧-intro  : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ → Γ ⊢ ψ
                                           → Γ ⊢ φ ∧ ψ
 
@@ -52,6 +57,7 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
   ∧-proj₂  : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ ∧ ψ
                                           → Γ ⊢ ψ
 -- Disjunction.
+
   ∨-intro₁ : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
                                           → Γ ⊢ φ ∨ ψ
 
@@ -62,12 +68,14 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
                                           → Γ , ψ ⊢ χ
                                           → Γ , φ ∨ ψ ⊢ χ
 -- Implication.
+
   ⇒-intro  : ∀ {Γ} {φ ψ}                  → Γ , φ ⊢ ψ
                                           → Γ ⊢ φ ⇒ ψ
 
   ⇒-elim   : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ ⇒ ψ → Γ ⊢ φ
                                           → Γ ⊢ ψ
 -- Biconditional.
+
   ⇔-intro  : ∀ {Γ} {φ ψ}                  → Γ , φ ⊢ ψ
                                           → Γ , ψ ⊢ φ
                                           → Γ ⊢ φ ⇔ ψ
@@ -94,8 +102,7 @@ Clone this repository:
 $ git clone http://github.com/jonaprieto/agda-prop.git
 ```
 
-Add the path of this library to your library manager file, usually
-located in `~/.agda/libraries`. For instance, my file looks like:
+Add the path of this library to your library manager file, located in `~/.agda/libraries`. For instance, my file looks like:
 
 ```bash
 $ cat $HOME/.agda/libraries
@@ -155,17 +162,13 @@ ex3 {φ}{ψ}{ω} =
 
 ### References
 
-- Jonathan Prieto-Cubides and Alejandro Gomez-Londoño. 
+- Jonathan Prieto-Cubides and Alejandro Gomez-Londoño.
   [*A proof tool for translating TSTP proofs to Agda code*](https://github.com/jonaprieto/tstp2agda/tree/deep)
 
 - Leran Cai, Ambrus Kaposi, and Thorsten Altenkirch. *Formalising the Completeness
   Theorem of Classical Propositional Logic in Agda (Proof Pearl)*. The formalisation
-  is available at http://bitbucket.org/Leran/. It has been typechecked with Agda
-  version 2.4.2.2 and standard library 0.9.
-
-
+  is available at http://bitbucket.org/Leran/.
 
 ### Contributions
 
-There are postulates in `Data.Prop.Theorems` files waiting for a proof,
-they are welcomed.
+Postulates in `Data.Prop.Theorems` files are waiting for a proof.
