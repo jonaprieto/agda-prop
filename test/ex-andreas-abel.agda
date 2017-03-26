@@ -116,16 +116,21 @@ EM⇒Pierce {Γ}{φ}{ψ} =
             ))))
       PEM
 
-postulate
-  RAA'  : ∀ {Γ} {φ} → Γ ⊢ ( ¬ φ ⇒ φ) ⇒ φ 
 
-RAA'⇒RAA : ∀ {φ} → ∅ ⊢ ¬ (¬ φ) ⇒ φ
+postulate
+  RAA'  : ∀ {Γ} {φ}
+        → Γ ⊢ ( ¬ φ ⇒ φ) ⇒ φ
+
+
+RAA'⇒RAA : ∀ {φ}
+         → ∅ ⊢ ¬ (¬ φ) ⇒ φ
+
 RAA'⇒RAA {φ} =
   ⇒-intro
     (⇒-elim
       RAA'
       (⇒-intro
-        (⊥-elim 
+        (⊥-elim
           φ
           (¬-elim
             (weaken (¬ φ) (assume  {Γ = ∅ } ( ¬ (¬ φ))))
