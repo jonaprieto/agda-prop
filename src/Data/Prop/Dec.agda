@@ -3,9 +3,9 @@
 -- Dec.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ)
+open import Data.Nat using ( ℕ )
 
-module Data.Prop.Dec (n : ℕ) where
+module Data.Prop.Dec ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 

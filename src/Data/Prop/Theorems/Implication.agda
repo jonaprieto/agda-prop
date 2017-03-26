@@ -3,9 +3,9 @@
 -- Theorems of ⇒ connective.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ)
+open import Data.Nat using ( ℕ )
 
-module Data.Prop.Theorems.Implication (n : ℕ) where
+module Data.Prop.Theorems.Implication ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 

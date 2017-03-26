@@ -3,9 +3,9 @@
 -- Deep Embedding for Propositional Logic.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ)
+open import Data.Nat using ( ℕ )
 
-module Data.Prop (n : ℕ) where
+module Data.Prop ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 

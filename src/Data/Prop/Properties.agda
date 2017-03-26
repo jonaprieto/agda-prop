@@ -3,9 +3,9 @@
 -- Properties.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ)
+open import Data.Nat using ( ℕ )
 
-module Data.Prop.Properties (n : ℕ) where
+module Data.Prop.Properties ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 

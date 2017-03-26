@@ -3,9 +3,9 @@
 -- A compilation of propositional theorems.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ)
+open import Data.Nat using ( ℕ )
 
-module Data.Prop.Theorems (n : ℕ) where
+module Data.Prop.Theorems ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 

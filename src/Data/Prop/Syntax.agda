@@ -3,9 +3,9 @@
 -- Syntax definitions.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ)
+open import Data.Nat using ( ℕ )
 
-module Data.Prop.Syntax (n : ℕ) where
+module Data.Prop.Syntax ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
