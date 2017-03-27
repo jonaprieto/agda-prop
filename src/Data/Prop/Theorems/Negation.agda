@@ -18,6 +18,12 @@ open import Function using ( _$_ ; _∘_ )
         → Γ ⊢ ¬ φ
         → Γ ⊢ φ ⇒ ⊥
 
+postulate
+  ¬-equiv₂ : ∀ {Γ} {φ}
+           → Γ ⊢ φ ⇒ ⊥
+           → Γ ⊢ ¬ φ
+        
+
 ¬-⊤  : ∀ {Γ}
      → Γ ⊢ ¬ ⊤
      → Γ ⊢ ⊥
