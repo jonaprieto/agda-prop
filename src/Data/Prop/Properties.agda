@@ -76,7 +76,7 @@ eq (Var x) (Var x₁) with x ≟ x₁
 ... | yes refl = yes refl
 ... | no x≢x₁  = no (λ r → x≢x₁ (var-injective r))
 
--- equility with ⊤.
+-- Equality with ⊤.
 eq ⊤ (Var x)        = no λ()
 eq ⊤ ⊥              = no λ()
 eq ⊤ (ψ ∧ ψ₁)       = no λ()
@@ -86,7 +86,7 @@ eq ⊤ (ψ ⇔ ψ₁)      = no λ()
 eq ⊤ (¬ ψ)          = no λ()
 eq ⊤ ⊤              = yes refl
 
--- equility with ⊥.
+-- Equality with ⊥.
 eq ⊥ (Var x)        = no λ()
 eq ⊥ ⊤              = no λ()
 eq ⊥ (ψ ∧ ψ₁)       = no λ()
@@ -96,7 +96,7 @@ eq ⊥ (ψ ⇔ ψ₁)       = no λ()
 eq ⊥ (¬ ψ)          = no λ()
 eq ⊥ ⊥              = yes refl
 
--- equility with ∧.
+-- Equality with ∧.
 eq (φ ∧ φ₁) (Var x)  = no λ()
 eq (φ ∧ φ₁) ⊤        = no λ()
 eq (φ ∧ φ₁) ⊥        = no λ()
@@ -109,7 +109,7 @@ eq (φ ∧ φ₁) (ψ ∧ ψ₁) with eq φ ψ | eq φ₁ ψ₁
 ... | yes _    | no φ₁≢ψ₁ = no (λ r → φ₁≢ψ₁ (∧-injective₂ r))
 ... | no φ≢ψ   | _        = no (λ r → φ≢ψ   (∧-injective₁ r))
 
--- equility with ∨.
+-- Equality with ∨.
 eq (φ ∨ φ₁) (Var x)  = no λ()
 eq (φ ∨ φ₁) ⊤        = no λ()
 eq (φ ∨ φ₁) ⊥        = no λ()
@@ -122,7 +122,7 @@ eq (φ ∨ φ₁) (ψ ∨ ψ₁) with eq φ ψ | eq φ₁ ψ₁
 ... | yes _    | no  φ₁≢ψ₁ = no (λ r → φ₁≢ψ₁ (∨-injective₂ r))
 ... | no φ≢ψ   | _         = no (λ r → φ≢ψ   (∨-injective₁ r))
 
--- equility with ⇒.
+-- Equality with ⇒.
 eq (φ ⇒ φ₁) (Var x)  = no λ()
 eq (φ ⇒ φ₁) ⊤        = no λ()
 eq (φ ⇒ φ₁) ⊥        = no λ()
@@ -135,7 +135,7 @@ eq (φ ⇒ φ₁) (ψ ⇒ ψ₁) with eq φ ψ | eq φ₁ ψ₁
 ... | yes _    | no  φ₁≢ψ₁ = no (λ r → φ₁≢ψ₁ (⇒-injective₂ r))
 ... | no φ≢ψ   | _         = no (λ r → φ≢ψ   (⇒-injective₁ r))
 
--- equility with ⇔.
+-- Equality with ⇔.
 eq (φ ⇔ φ₁) (Var x)  = no λ()
 eq (φ ⇔ φ₁) ⊤        = no λ()
 eq (φ ⇔ φ₁) ⊥        = no λ()
@@ -148,7 +148,7 @@ eq (φ ⇔ φ₁) (ψ ⇔ ψ₁) with eq φ ψ | eq φ₁ ψ₁
 ... | yes _    | no  φ₁≢ψ₁ = no (λ r → φ₁≢ψ₁ (⇔-injective₂ r))
 ... | no φ≢ψ   | _         = no (λ r → φ≢ψ   (⇔-injective₁ r))
 
--- equility with ¬.
+-- Equality with ¬.
 eq (¬ φ) (Var x)  = no λ()
 eq (¬ φ) ⊤        = no λ()
 eq (¬ φ) ⊥        = no λ()
