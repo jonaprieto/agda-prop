@@ -20,16 +20,13 @@ open import Relation.Binary.PropositionalEquality using ( _≡_; refl )
 
 ------------------------------------------------------------------------------
 
-Type = Set
-
 -- Proposition data type.
 
-
-data Prop : Type where
+data Prop : Set where
   Var              : Fin n → Prop
   ⊤                : Prop
   ⊥                : Prop
-  _∧_ _∨_ _⇒_ _⇔_ : (φ ψ : Prop) → Prop
+  _∧_ _∨_ _⇒_ _⇔_  : (φ ψ : Prop) → Prop
   ¬_               : (φ : Prop) → Prop
 
 
@@ -39,12 +36,12 @@ infixr 7 _⇒_ _⇔_
 
 -- Context is a list (set) of hypotesis and axioms.
 
-Ctxt : Type
+Ctxt : Set
 Ctxt = List Prop
 
 infixl 5 _,_
 _,_ : Ctxt → Prop → Ctxt
-Γ , φ =  Γ ++ [ φ ]
+Γ , φ = Γ ++ [ φ ]
 
 ∅ : Ctxt
 ∅ = []
@@ -54,12 +51,12 @@ _⨆_ : Ctxt → Ctxt → Ctxt
 Γ ⨆ Δ = Γ ++ Δ
 
 infix 4 _∈_
-data _∈_ (φ : Prop) : Ctxt → Type where
+data _∈_ (φ : Prop) : Ctxt → Set where
   here  : ∀ {Γ} → φ ∈ Γ , φ
   there : ∀ {Γ} → (ψ : Prop) → φ ∈ Γ → φ ∈ Γ , ψ
   ⨆-ext : ∀ {Γ} → (Δ : Ctxt) → φ ∈ Γ → φ ∈ Γ ⨆ Δ
 
-_⊆_ : Ctxt → Ctxt → Type
+_⊆_ : Ctxt → Ctxt → Set
 Γ ⊆ Η = ∀ {φ} → φ ∈ Γ → φ ∈ Η
 
 ------------------------------------------------------------------------
@@ -67,7 +64,7 @@ _⊆_ : Ctxt → Ctxt → Type
 
 infix 3 _⊢_
 
-data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
+data _⊢_ : (Γ : Ctxt)(φ : Prop) → Set where
 
 -- Hyp.
 
@@ -125,11 +122,11 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
                                           → Γ , ψ ⊢ φ
                                           → Γ ⊢ φ ⇔ ψ
 
-  ⇔-elim₁ : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ → Γ ⊢ φ ⇔ ψ
+  ⇔-elim₁ : ∀ {Γ} {φ ψ}                   → Γ ⊢ φ → Γ ⊢ φ ⇔ ψ
                                           → Γ ⊢ ψ
 
   ⇔-elim₂ : ∀ {Γ} {φ ψ}                   → Γ ⊢ ψ → Γ ⊢ φ ⇔ ψ
-                                          →  Γ ⊢ φ
+                                          → Γ ⊢ φ
 
 ------------------------------------------------------------------------
 

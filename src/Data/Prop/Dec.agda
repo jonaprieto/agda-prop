@@ -15,9 +15,7 @@ open import Data.Bool.Base using  ( Bool; false; true; not; T )
 open import Data.Fin       using  ( Fin; suc; zero )
 open import Data.Empty     hiding (⊥)
 
-open import Level
 open import Function       using  ( _$_; _∘_ )
-
 open import Relation.Binary.PropositionalEquality using ( _≡_; refl; cong )
 
 ------------------------------------------------------------------------------
@@ -26,21 +24,21 @@ data ⊥₂ : Set where
 
 infix 3 ¬₂_
 
-¬₂_ : ∀ {ℓ} → Set ℓ → Set ℓ
+¬₂_ : Set → Set
 ¬₂ P = P → ⊥₂
 
 -- Decidable relations.
 
-data Dec {p} (P : Set p) : Set p where
+data Dec (P : Set) : Set where
   yes : ( p :    P) → Dec P
   no  : (¬p : ¬₂ P) → Dec P
 
-⌊_⌋ : ∀ {p} {P : Set p} → Dec P → Bool
+⌊_⌋ : {P : Set} → Dec P → Bool
 ⌊ yes _ ⌋ = true
 ⌊ no  _ ⌋ = false
 
-REL : ∀ {a b} → Set a → Set b → (ℓ : Level) → Set (a ⊔ b ⊔ Level.suc ℓ)
-REL A B ℓ = A → B → Set ℓ
+REL : Set → Set → Set₁
+REL A B = A → B → Set
 
-Decidable : ∀ {a b ℓ} {A : Set a} {B : Set b} → REL A B ℓ → Set _
+Decidable : {A : Set} {B : Set} → REL A B → Set
 Decidable _∼_ = ∀ x y → Dec (x ∼ y)

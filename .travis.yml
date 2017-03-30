@@ -11,7 +11,7 @@ before_install:
   - mkdir -p ~/.agda
   - echo /usr/local/lib/agda/standard-library.agda-lib >>~/.agda/libraries
   - echo standard-library >>~/.agda/defaults
-  
+
 script:
   - agda src/Data/Prop.agda
   - agda test/test.agda
