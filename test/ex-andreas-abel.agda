@@ -122,10 +122,10 @@ postulate
         → Γ ⊢ ( ¬ φ ⇒ φ) ⇒ φ
 
 
-RAA'⇒RAA : ∀ {φ}
-         → ∅ ⊢ ¬ (¬ φ) ⇒ φ
+RAA'⇒RAA : ∀ {Γ}{φ}
+         → Γ ⊢ ¬ (¬ φ) ⇒ φ
 
-RAA'⇒RAA {φ} =
+RAA'⇒RAA {Γ}{φ} =
   ⇒-intro
     (⇒-elim
       RAA'
@@ -133,6 +133,29 @@ RAA'⇒RAA {φ} =
         (⊥-elim
           φ
           (¬-elim
-            (weaken (¬ φ) (assume  {Γ = ∅ } ( ¬ (¬ φ))))
-            (assume  {Γ = ∅ , ¬ (¬ φ) } (¬ φ)))
+            (weaken (¬ φ) (assume  {Γ = Γ } ( ¬ (¬ φ))))
+            (assume  {Γ = Γ , ¬ (¬ φ) } (¬ φ)))
          )))
+
+postulate
+  Pierce : ∀ {Γ} {φ} {ψ}
+         → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
+
+Pierce⇒RAA' : ∀ {Γ}{φ}
+            → Γ ⊢ ( ¬ φ ⇒ φ ) ⇒ φ
+            
+Pierce⇒RAA' {Γ}{φ} =
+  ⇒-intro $
+    ⇒-elim
+      (Pierce {Γ = Γ , ¬ φ ⇒ φ} {φ = φ} {ψ = ⊥})
+      (⇒-intro $
+        ⇒-elim
+          (weaken (φ ⇒ ⊥) $
+            assume {Γ = Γ} ((¬ φ) ⇒ φ))
+          (¬-equiv₂ $
+            assume {Γ = Γ , (¬ φ) ⇒ φ}
+              (φ ⇒ ⊥)
+          )
+      )
+              
+
