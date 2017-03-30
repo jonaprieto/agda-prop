@@ -22,7 +22,7 @@ open import Function using ( _$_ ; _∘_ )
 ¬-equiv₂ : ∀ {Γ} {φ}
            → Γ ⊢ φ ⇒ ⊥
            → Γ ⊢ ¬ φ
-        
+
 
 ¬-⊤  : ∀ {Γ}
      → Γ ⊢ ¬ ⊤
@@ -43,9 +43,11 @@ open import Function using ( _$_ ; _∘_ )
      → Γ ⊢ ⊥
      → Γ ⊢ ¬ ⊤
 
+
 or-to-impl : ∀ {Γ} {φ ψ}
            → Γ ⊢ ¬ φ ∨ ψ
            → Γ ⊢ φ ⇒ ψ
+
 
 ------------------------------------------------------------------------------
 -- Proofs.
@@ -57,11 +59,13 @@ or-to-impl : ∀ {Γ} {φ ψ}
       (weaken φ seq)
       (assume {Γ = Γ} φ))
 
+
 ¬-equiv₂ {Γ}{φ} seq =
   ¬-intro
     (⇒-elim
       (weaken φ seq)
       (assume {Γ = Γ} φ))
+
 
 ¬-⊤ seq = ¬-elim seq ⊤-intro
 
