@@ -52,7 +52,6 @@ var-injective refl = refl
 ¬-injective : ∀ {φ ψ} → ¬ φ ≡ ¬ ψ → φ ≡ ψ
 ¬-injective refl = refl
 
-
 _≟_ : {n : ℕ} → Decidable {A = Fin n} _≡_
 zero  ≟ zero  = yes refl
 zero  ≟ suc y = no λ()
@@ -164,3 +163,4 @@ subst : ∀ {Γ} {φ ψ}
       → φ ≡ ψ
       → Γ ⊢ φ → Γ ⊢ ψ
 subst refl o = o
+

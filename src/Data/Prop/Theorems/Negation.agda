@@ -9,8 +9,12 @@ module Data.Prop.Theorems.Negation ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
+open import Data.Prop.Properties n
+  using ( ¬-injective ; subst )
 open import Data.Prop.Syntax n
-open import Function using ( _$_ ; _∘_ )
+
+open import Function                              using ( _$_ ; _∘_ )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
 
 ------------------------------------------------------------------------------
 
@@ -48,6 +52,10 @@ or-to-impl : ∀ {Γ} {φ ψ}
            → Γ ⊢ ¬ φ ∨ ψ
            → Γ ⊢ φ ⇒ ψ
 
+¬-inside : ∀ {Γ} {φ ψ}
+         → φ ≡ ψ
+         → Γ ⊢ ¬ φ
+         → Γ ⊢ ¬ ψ
 
 ------------------------------------------------------------------------------
 -- Proofs.
@@ -92,3 +100,13 @@ or-to-impl {Γ}{φ}{ψ} =
          (⇒-intro $
            weaken φ $
              assume {Γ = Γ} ψ)
+
+¬-inside {Γ}{φ}{ψ} φ≡ψ seq =
+  ¬-equiv₂
+    (⇒-intro
+      (⇒-elim
+        (¬-equiv
+          (weaken ψ seq))
+        (subst
+          (sym φ≡ψ)
+          (assume {Γ = Γ} ψ))))
