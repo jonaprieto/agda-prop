@@ -13,6 +13,5 @@ before_install:
   - echo standard-library >>~/.agda/defaults
 
 script:
-  - agda src/Data/Prop.agda
-  - agda test/test.agda
+  - make
 # EOF
