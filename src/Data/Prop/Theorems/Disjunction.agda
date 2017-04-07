@@ -10,7 +10,7 @@ module Data.Prop.Theorems.Disjunction ( n : ℕ ) where
 ------------------------------------------------------------------------------
 
 open import Data.Prop.Syntax n
-open import Data.Prop.Theorems.Conjunction n using ( ∧-morgan₁ )
+open import Data.Prop.Theorems.Conjunction n using ( ∧-dmorgan₁ )
 open import Data.Prop.Theorems.Implication n using ( th244e )
 
 open import Function                         using ( _$_; _∘_ )
@@ -47,15 +47,18 @@ open import Function                         using ( _$_; _∘_ )
         → Γ ⊢ ¬ (¬ φ ∧ ¬ ψ)
 
 
-∨-morgan₁ : ∀ {Γ} {φ ψ}
+∨-dmorgan₁ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ (φ ∨ ψ)
           → Γ ⊢ ¬ φ ∧ ¬ ψ
 
 
-∨-morgan₂ : ∀ {Γ} {φ ψ}
+∨-dmorgan₂ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ φ ∧ ¬ ψ
           → Γ ⊢ ¬ (φ ∨ ψ)
 
+postulate
+  ∨-dmorgan : ∀ {Γ} {φ ψ}
+           → Γ ⊢ ¬ (φ ∨ ψ) ⇔  ¬ φ ∧ ¬ ψ
 
 lem1 : ∀ {Γ} {φ ψ}
      → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
@@ -223,7 +226,7 @@ resolve₉ : ∀ {Γ} {φ}
     (∧-proj₁ seq)
 
 
-∨-morgan₁ {Γ}{φ}{ψ} =
+∨-dmorgan₁ {Γ}{φ}{ψ} =
   ⇒-elim $
     ⇒-intro $
       ∧-intro
@@ -241,7 +244,7 @@ resolve₉ : ∀ {Γ} {φ}
               assume {Γ = Γ , ¬ (φ ∨ ψ)} ψ))
 
 
-∨-morgan₂ {Γ}{φ}{ψ} seq =
+∨-dmorgan₂ {Γ}{φ}{ψ} seq =
   ¬-intro
     (∨-elim {Γ = Γ}
       (¬-elim
@@ -278,7 +281,7 @@ lem2 {Γ}{φ}{ψ} seq =
 
 resolve₀ {Γ} {L}{C}{D} seq₁ seq₂ =
  lem1 $
-   ∧-morgan₁ $
+   ∧-dmorgan₁ $
      ¬-intro $
        ¬-elim
          (lem2 {Γ = Γ , ¬ C ∧ ¬ D} $

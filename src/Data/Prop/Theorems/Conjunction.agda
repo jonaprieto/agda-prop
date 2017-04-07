@@ -31,15 +31,18 @@ open import Function using ( _$_ ; _∘_  )
          → Γ ⊢ φ ∧ (ψ ∨ ω)
 
 
-∧-morgan₁ : ∀ {Γ} {φ ψ}
+∧-dmorgan₁ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ (φ ∧ ψ)
           → Γ ⊢ ¬ φ ∨ ¬ ψ
 
 
-∧-morgan₂ : ∀ {Γ} {φ ψ}
+∧-dmorgan₂ : ∀ {Γ} {φ ψ}
           → Γ ⊢ ¬ φ ∨ ¬ ψ
           → Γ ⊢ ¬ (φ ∧ ψ)
 
+postulate
+  ∧-dmorgan : ∀ {Γ} {φ ψ}
+         → Γ ⊢ ¬ φ ∨ ¬ ψ ⇔ ¬ (φ ∧ ψ)
 
 ------------------------------------------------------------------------------
 -- Proofs.
@@ -97,7 +100,7 @@ open import Function using ( _$_ ; _∘_  )
 
 --- De Morgan's Law
 
-∧-morgan₁ {Γ}{φ}{ψ} =
+∧-dmorgan₁ {Γ}{φ}{ψ} =
   ⇒-elim $
     ⇒-intro $
       RAA $
@@ -119,7 +122,7 @@ open import Function using ( _$_ ; _∘_  )
                   (assume {Γ = Γ , ¬ (φ ∧ ψ) , ¬ (¬ φ ∨ ¬ ψ)} $ ¬ ψ )))))
 
 
-∧-morgan₂ {Γ}{φ}{ψ} =
+∧-dmorgan₂ {Γ}{φ}{ψ} =
   ⇒-elim $
     ⇒-intro $
       ∨-elim {Γ = Γ}

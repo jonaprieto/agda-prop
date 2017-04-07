@@ -10,12 +10,14 @@ module Data.Prop.Theorems.Mixies ( n : ℕ ) where
 ------------------------------------------------------------------------------
 
 open import Data.Prop.Theorems.Implication using ( th244e ; ⇒-equiv )
-open import Data.Prop.Theorems.Disjunction using ( ∨-morgan₁ )
+open import Data.Prop.Theorems.Disjunction using ( ∨-dmorgan₁ )
 
 open import Data.Prop.Syntax n
 open import Function using ( _$_ ; _∘_ )
 
 ------------------------------------------------------------------------------
+
+
 
 
 e245b : ∀ {Γ Δ} {φ ψ}
