@@ -63,7 +63,7 @@ suc x ≟ suc y with x ≟ y
 
 eq : (φ ψ : Prop) → Dec (φ ≡ ψ)
 
--- equality with Var.
+-- Equality with Var.
 eq (Var x) ⊤        = no λ()
 eq (Var x) ⊥        = no λ()
 eq (Var x) (ψ ∧ ψ₁) = no λ()
@@ -161,6 +161,7 @@ eq (¬ φ) (¬ ψ) with eq φ ψ
 
 subst : ∀ {Γ} {φ ψ}
       → φ ≡ ψ
-      → Γ ⊢ φ → Γ ⊢ ψ
+      → Γ ⊢ φ
+      → Γ ⊢ ψ
 subst refl o = o
 

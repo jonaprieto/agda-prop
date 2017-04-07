@@ -14,9 +14,12 @@ open import Data.Prop.Syntax n
 open import Function using ( _$_ )
 
 ------------------------------------------------------------------------------
+
+
 postulate
   ⇒-∨-equiv : ∀ {Γ} {φ ψ}
            → Γ ⊢ (φ ⇒ ψ) ⇔ (¬ φ ∨ ψ)
+
 
 thm-bicon₀ : ∀ {Γ} {φ ψ}
            → Γ ⊢ φ ⇔ ψ
