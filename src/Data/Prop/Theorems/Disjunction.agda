@@ -56,9 +56,8 @@ open import Function                         using ( _$_; _∘_ )
           → Γ ⊢ ¬ φ ∧ ¬ ψ
           → Γ ⊢ ¬ (φ ∨ ψ)
 
-postulate
-  ∨-dmorgan : ∀ {Γ} {φ ψ}
-           → Γ ⊢ ¬ (φ ∨ ψ) ⇔  ¬ φ ∧ ¬ ψ
+∨-dmorgan : ∀ {Γ} {φ ψ}
+          → Γ ⊢ ¬ (φ ∨ ψ) ⇔  ¬ φ ∧ ¬ ψ
 
 lem1 : ∀ {Γ} {φ ψ}
      → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
@@ -255,6 +254,13 @@ resolve₉ : ∀ {Γ} {φ}
         (weaken ψ
           (∧-proj₂ seq))
         (assume {Γ = Γ} ψ)))
+
+∨-dmorgan {Γ}{φ}{ψ} =
+  ⇔-intro
+    (∨-dmorgan₁
+      (assume {Γ = Γ} (¬ (φ ∨ ψ))))
+    (∨-dmorgan₂
+      (assume {Γ = Γ} (¬ φ ∧ ¬ ψ)))
 
 
 lem1 {Γ}{φ}{ψ} =
