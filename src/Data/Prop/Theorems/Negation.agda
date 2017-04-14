@@ -35,6 +35,11 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
   → Γ ⊢ ¬ φ
 ⇒⊥-to-¬ = ¬-equiv₂
 
+¬∨-to-⇒
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ φ ∨ ψ
+  → Γ ⊢ φ ⇒ ψ
+
 ¬⊤-to-⊥
   : ∀ {Γ}
   → Γ ⊢ ¬ ⊤
@@ -86,6 +91,20 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
           assume {Γ = Γ} $ ¬ (¬ φ))
         (assume {Γ = Γ , ¬ (¬ φ)} $ ¬ φ)))
     Γ⊢¬¬φ)
+
+¬∨-to-⇒ {Γ}{φ}{ψ} =
+  ⇒-elim $
+    ⇒-intro $
+      ∨-elim {Γ = Γ}
+        (⇒-intro $
+          ⊥-elim {Γ = Γ , ¬ φ , φ} ψ
+          (¬-elim
+            (weaken φ $
+              assume {Γ = Γ} (¬ φ))
+            (assume {Γ = Γ , ¬ φ} φ)))
+        (⇒-intro $
+          weaken φ $
+            assume {Γ = Γ} ψ)
 
 ¬⊤-to-⊥ Γ⊢¬⊤ = ¬-elim Γ⊢¬⊤ ⊤-intro
 
