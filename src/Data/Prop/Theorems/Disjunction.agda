@@ -218,7 +218,7 @@ resolve₉
             (∧-proj₂
               (assume {Γ = Γ} (ψ ∧ ω)))))))
 
-∨-dist₂  {Γ}{φ}{ψ}{ω} Γ⊢φ∨ψ∧φ∨ω =
+∨-dist₂  {Γ}{φ}{ψ}{ω} Γ⊢⟪φ∨ψ⟫∧⟪φ∨ω⟫ =
   ⇒-elim
     (⇒-intro
       (∨-elim {Γ = Γ}
@@ -235,8 +235,8 @@ resolve₉
                     (assume {Γ = Γ} ψ))
                   (assume {Γ = Γ , ψ} ω)))))
           (∧-proj₂
-            (weaken ψ Γ⊢φ∨ψ∧φ∨ω)))))
-    (∧-proj₁ Γ⊢φ∨ψ∧φ∨ω)
+            (weaken ψ Γ⊢⟪φ∨ψ⟫∧⟪φ∨ω⟫)))))
+    (∧-proj₁ Γ⊢⟪φ∨ψ⟫∧⟪φ∨ω⟫)
 
 ∨-dist {Γ}{φ}{ψ}{ω} =
   ⇔-intro
@@ -260,16 +260,16 @@ resolve₉
             (∨-intro₂ φ $
               assume {Γ = Γ , ¬ (φ ∨ ψ)} ψ))
 
-∨-dmorgan₂ {Γ}{φ}{ψ} seq =
+∨-dmorgan₂ {Γ}{φ}{ψ} Γ⊢¬φ∧¬ψ  =
   ¬-intro
     (∨-elim {Γ = Γ}
       (¬-elim
         (weaken φ
-          (∧-proj₁ seq))
+          (∧-proj₁ Γ⊢¬φ∧¬ψ ))
         (assume {Γ = Γ} φ))
       (¬-elim
         (weaken ψ
-          (∧-proj₂ seq))
+          (∧-proj₂ Γ⊢¬φ∧¬ψ ))
         (assume {Γ = Γ} ψ)))
 
 ∨-dmorgan {Γ}{φ}{ψ} =
@@ -288,16 +288,16 @@ lem1 {Γ}{φ}{ψ} =
         (∨-intro₂ φ $
           ⇒-elim vanDalen244e $ assume {Γ = Γ} $ ¬ ¬ ψ)
 
-lem2 {Γ}{φ}{ψ} Γ⊢φ∨ψ∧¬ψ =
+lem2 {Γ}{φ}{ψ} Γ⊢⟪φ∨ψ⟫∧¬ψ =
   ⇒-elim
     (⇒-intro $
       (∨-elim {Γ = Γ}
         (assume {Γ = Γ} φ)
         (⊥-elim φ
           (¬-elim
-            (weaken ψ (∧-proj₂ Γ⊢φ∨ψ∧¬ψ))
+            (weaken ψ (∧-proj₂ Γ⊢⟪φ∨ψ⟫∧¬ψ))
             (assume {Γ = Γ} ψ)))))
-    (∧-proj₁ Γ⊢φ∨ψ∧¬ψ)
+    (∧-proj₁ Γ⊢⟪φ∨ψ⟫∧¬ψ)
 
 resolve₀ {Γ}{φ}{ψ}{ω} Γ⊢φ∨ψ Γ⊢¬φ∨ω =
  lem1 $
@@ -315,9 +315,15 @@ resolve₀ {Γ}{φ}{ψ}{ω} Γ⊢φ∨ψ Γ⊢¬φ∨ω =
 
 resolve₁ = resolve₀ ∘ ∨-comm
 
-resolve₂ Γ⊢φ∨ψ Γ⊢ω∨¬φ = resolve₀ Γ⊢φ∨ψ (∨-comm Γ⊢ω∨¬φ)
+resolve₂ Γ⊢φ∨ψ Γ⊢ω∨¬φ =
+  resolve₀
+    Γ⊢φ∨ψ
+    (∨-comm Γ⊢ω∨¬φ)
 
-resolve₃ {Γ}{φ}{ψ}{ω} Γ⊢ψ∨φ Γ⊢ω∨¬φ = resolve₀ (∨-comm Γ⊢ψ∨φ) (∨-comm Γ⊢ω∨¬φ)
+resolve₃ {Γ}{φ}{ψ}{ω} Γ⊢ψ∨φ Γ⊢ω∨¬φ =
+  resolve₀
+    (∨-comm Γ⊢ψ∨φ)
+    (∨-comm Γ⊢ω∨¬φ)
 
 resolve₄ {Γ}{φ} {ψ} Γ⊢¬φ∨ψ Γ⊢φ =
  ⇒-elim
