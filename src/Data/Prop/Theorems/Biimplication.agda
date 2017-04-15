@@ -9,7 +9,8 @@ module Data.Prop.Theorems.Biimplication ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Prop.Theorems.Implication n using ( ⇒-to-¬∨ )
+open import Data.Prop.Theorems.Implication n
+  using ( ⇒-to-¬∨; ⇒⇒-to-∧⇒; ∧⇒-to-⇒⇒ )
 open import Data.Prop.Theorems.Negation n
   using ( ¬-equiv₁ ; ¬-equiv₂; ¬∨-to-⇒; ¬¬-equiv₁; ¬¬-equiv₂ )
 open import Data.Prop.Syntax n
@@ -75,6 +76,9 @@ thm-bicon₁
   : ∀ {Γ} {φ}
   → Γ ⊢ ¬ (¬ φ) ⇔ φ
 
+⇒⇒-⇔-∧⇒
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ (φ ⇒ (ψ ⇒ ω)) ⇔ ((φ ∧ ψ) ⇒ ω)
 
 ------------------------------------------------------------------------------
 -- Proofs.
@@ -149,3 +153,8 @@ thm-bicon₁ {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
   ⇔-intro
     (¬¬-equiv₁ (assume {Γ = Γ} (¬ (¬ φ))))
     (¬¬-equiv₂ (assume {Γ = Γ} φ))
+
+⇒⇒-⇔-∧⇒ {Γ}{φ}{ψ}{ω} =
+  ⇔-intro
+    (⇒⇒-to-∧⇒ (assume {Γ = Γ} (φ ⇒ ψ ⇒ ω)))
+    (∧⇒-to-⇒⇒ (assume {Γ = Γ} (φ ∧ ψ ⇒ ω)))

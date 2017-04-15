@@ -1,10 +1,10 @@
 # Data.Prop.Theorems
 
 - List of Theorems
-	- [Biimplication](#biimplication)
-	- [Conjunction](#conjunction)
-	- [Disjunction](#disjunction)
-	- [Negation](#negation)
+    - [Biimplication](#biimplication)
+    - [Conjunction](#conjunction)
+    - [Disjunction](#disjunction)
+    - [Negation](#negation)
 - [Mixies](#mixies)
 
 ## Biimplication
@@ -67,6 +67,11 @@ thm-bicon₁
 ¬¬-equiv
   : ∀ {Γ} {φ}
   → Γ ⊢ ¬ (¬ φ) ⇔ φ
+
+⇒⇒-⇔-∧⇒
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ (φ ⇒ (ψ ⇒ ω)) ⇔ ((φ ∧ ψ) ⇒ ω)
+
 ```
 
 ## Conjunction
@@ -268,19 +273,16 @@ vanDalen244e
   : ∀ {Γ} {φ}
   → Γ ⊢ ¬ (¬ φ) ⇒ φ
 
-strip₁
+⇒⇒-to-∧⇒
   : ∀ {Γ} {φ ψ ω}
   → Γ ⊢ φ ⇒ (ψ ⇒ ω)
   → Γ ⊢ (φ ∧ ψ) ⇒ ω
 
-strip₂
+∧⇒-to-⇒⇒
   : ∀ {Γ} {φ ψ ω}
   → Γ ⊢ (φ ∧ ψ) ⇒ ω
   → Γ ⊢ φ ⇒ (ψ ⇒ ω)
 
-strip
-  : ∀ {Γ} {φ ψ ω}
-  → Γ ⊢ (φ ⇒ (ψ ⇒ ω)) ⇔ ((φ ∧ ψ) ⇒ ω)
 ```
 
 ## Negation
