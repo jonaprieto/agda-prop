@@ -5,7 +5,7 @@
 	- [Conjunction](#conjunction)
 	- [Disjunction](#disjunction)
 	- [Negation](#negation)
-  - [Mixies](#mixies)
+- [Mixies](#mixies)
 
 ## Biimplication
 
@@ -283,19 +283,6 @@ strip
   → Γ ⊢ (φ ⇒ (ψ ⇒ ω)) ⇔ ((φ ∧ ψ) ⇒ ω)
 ```
 
-## Mixies
-
-```agda
-
-e245b : ∀ {Γ Δ} {φ ψ}
-      → Γ ⊢ φ → Δ , φ ⊢ ψ
-      → Γ ⨆ Δ ⊢ ψ
-
-¬⇒-to-∧¬ : ∀ {Γ} {φ ψ}
-       → Γ ⊢ ¬ (φ ⇒ ψ)
-       → Γ ⊢ φ ∧ ¬ ψ
-```
-
 ## Negation
 
 ```agda
@@ -352,4 +339,19 @@ e245b : ∀ {Γ Δ} {φ ψ}
   → Γ ⊢ ¬ φ
   → Γ ⊢ ¬ ψ
 ≡-¬-to-¬ = ¬-inside
+```
+
+## Mixies
+
+```agda
+
+e245b
+  : ∀ {Γ Δ} {φ ψ}
+  → Γ ⊢ φ → Δ , φ ⊢ ψ
+  → Γ ⨆ Δ ⊢ ψ
+
+¬⇒-to-∧¬
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ (φ ⇒ ψ)
+  → Γ ⊢ φ ∧ ¬ ψ
 ```
