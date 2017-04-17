@@ -12,6 +12,7 @@ module Data.Prop.Theorems.Negation ( n : ℕ ) where
 open import Data.Prop.Properties n
   using ( ¬-injective ; subst )
 open import Data.Prop.Syntax n
+open import Data.Prop.Theorems.Implication n      using ( subst⊢⇒₁ )
 
 open import Function                              using ( _$_ ; _∘_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
@@ -71,6 +72,12 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
   → Γ ⊢ ¬ φ
   → Γ ⊢ ¬ ψ
 ≡-¬-to-¬ = ¬-inside
+
+subst⊢¬
+  : ∀ {Γ} {φ ω}
+  → Γ ⊢ ω ⇒ φ
+  → Γ ⊢ ¬ φ
+  → Γ ⊢ ¬ ω
 
 ------------------------------------------------------------------------------
 -- Proofs.
@@ -135,3 +142,6 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
         (subst
           (sym φ≡ψ)
           (assume {Γ = Γ} ψ))))
+
+subst⊢¬ {Γ}{φ}{ω} Γ⊢ω⇒φ Γ⊢¬φ =
+  ⇒⊥-to-¬ (subst⊢⇒₁ Γ⊢ω⇒φ (¬-to-⇒⊥ Γ⊢¬φ))
