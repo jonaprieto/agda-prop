@@ -4,8 +4,9 @@
     - [Biimplication](#biimplication)
     - [Conjunction](#conjunction)
     - [Disjunction](#disjunction)
+    - [Implication](#implication)
     - [Negation](#negation)
-- [Mixies](#mixies)
+    - [Mixies](#mixies)
 
 ## Biimplication
 
@@ -273,6 +274,7 @@ subst⊢∨₂
   : ∀ {Γ} {φ ψ}
   → Γ ⊢ φ ∨ ψ
   → Γ ⊢ ¬ φ ⇒ ψ
+
 ```
 ## Implication
 
@@ -330,6 +332,11 @@ subst⊢⇒₂
   → Γ ⊢ φ ⇒ ψ
   → Γ ⊢ φ ⇒ ω
 
+⇒-trans
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ φ ⇒ ψ
+  → Γ ⊢ ψ ⇒ ω
+  → Γ ⊢ φ ⇒ ω
 ```
 
 ## Negation
