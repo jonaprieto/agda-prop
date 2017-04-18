@@ -42,7 +42,7 @@ open import Function using ( _$_ ; _∘_  )
   : ∀ {Γ} {φ ψ}
   → Γ ⊢ ¬ (φ ∧ ψ)
   → Γ ⊢ ¬ φ ∨ ¬ ψ
-¬-∧-to¬∨¬ = ∧-dmorgan₁
+¬∧-to-¬∨¬ = ∧-dmorgan₁
 
 ∧-dmorgan₂
   : ∀ {Γ} {φ ψ}
