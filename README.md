@@ -3,6 +3,19 @@
 This is an library to work with propositional logic based on a deep embedding.
 It contains a compilation of some useful theorems and properties to work with.
 
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Quick Start](#quick-start)
+	- [Requirements](#requirements)
+	- [Installation](#installation)
+- [Usage](#usage)
+	- [Theorems](#theorems)
+	- [Examples](#examples)
+	- [References](#references)
+	- [Contributions](#contributions)
+
+<!-- /TOC -->
+
 ## Quick Start
 
 This library provides us two data types: `Prop` and `_⊢_`.
@@ -89,10 +102,11 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
 
 See examples more below.
 
+
 ### Requirements
 
 * [Agda](https://github.com/agda/agda) version 2.5.1+
-* [Agda Standard Library](https://github.com/agda/agda-stdlib/)
+* [Agda Standard Library](https://github.com/agda/agda-stdlib/) compatible with your Agda version
 
 ### Installation
 
@@ -102,7 +116,7 @@ Clone this repository:
 $ git clone http://github.com/jonaprieto/agda-prop.git
 ```
 
-Add the path of this library to your library manager file, located in `~/.agda/libraries`. For instance, my file looks like:
+Add the path of this library to your library manager file, located in `~/.agda/libraries`. For instance, a valid file looks similar to this one:
 
 ```bash
 $ cat $HOME/.agda/libraries
@@ -110,36 +124,43 @@ $ cat $HOME/.agda/libraries
 /home/jonaprieto/agda-prop/agda-prop.agda-lib
 ```
 
-[Here](http://agda.readthedocs.io/en/latest/tools/package-system.html#installing-libraries)
-we can find more information about installing libraries in Agda.
+If you  need more instructions to install libraries for Agda, [Here](http://agda.readthedocs.io/en/latest/tools/package-system.html#installing-libraries)
+is a good link to start.
 
-### Usage Examples
+## Usage
+### Theorems
 
-As example, we type-checked natural deductions proofs of the exercises in the
+The theorems have a name based on their main connective, their purpose or their source.
+We added sub-indices for those theorems that differ a little with other one.
+
+* [List of Theorems][theorems]
+  * [Conjunction][CONJ]
+  * [Implication][IMPL]
+  * [Disjunction][DISJ]
+  * [Negation][NEG]
+  * [Biimplication][BICON]
+
+[theorems]: https://github.com/jonaprieto/agda-prop/tree/master/src/Data/Prop/Theorems
+[CONJ]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Conjunction.agda
+[IMPL]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Implication.agda
+[DISJ]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Disjunction.agda
+[NEG]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Negation.agda
+[BICON]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Biimplication.agda
+
+
+### Examples
+
+As example, we type-checked natural deduction proofs of some exercises from
 [Type Theory CM0859](http://www1.eafit.edu.co/asr/courses/type-theory-CM0859/exercises.pdf)
 course:
 
 ```agda
 -- $ cat test/ex-andreas-abel.agda
-
 open import Data.Prop 2 public
 
-ex1 : ∀ {φ}
-    → ∅ ⊢ φ ⇒ φ
-
-ex1 {φ} = ⇒-intro (assume {Γ = ∅} φ)
-
-ex2 : ∀ {φ ψ}
-    → ∅ ⊢ (φ ∧ (φ ⇒ ψ)) ⇒ ψ
-
-ex2 {φ}{ψ} =
-  ⇒-intro
-    (⇒-elim
-      (∧-proj₂ (assume {Γ = ∅} (φ ∧ (φ ⇒ ψ))))
-      (∧-proj₁ (assume {Γ = ∅}  (φ ∧ (φ ⇒ ψ)))))
-
-ex3 : ∀ {φ ψ ω}
-    → ∅ ⊢ (φ ∧ (ψ ∨ ω)) ⇒ ((φ ∧ ψ) ∨ (φ ∧ ω))
+ex3
+  : ∀ {φ ψ ω}
+  → ∅ ⊢ (φ ∧ (ψ ∨ ω)) ⇒ ((φ ∧ ψ) ∨ (φ ∧ ω))
 
 ex3 {φ}{ψ}{ω} =
   ⇒-intro
@@ -171,4 +192,4 @@ ex3 {φ}{ψ}{ω} =
 
 ### Contributions
 
-Postulates in `Data.Prop.Theorems` files are waiting for a proof.
+`Data.Prop.Theorems` modules contain some postulates waiting to be proved. Go ahead!

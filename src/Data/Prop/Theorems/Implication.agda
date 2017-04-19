@@ -10,61 +10,92 @@ module Data.Prop.Theorems.Implication ( n : ℕ ) where
 ------------------------------------------------------------------------------
 
 open import Data.Prop.Syntax n
-open import Function using ( _$_ )
+open import Function using ( _$_; _∘_; flip )
 
 ------------------------------------------------------------------------------
 
-⇒-equiv : ∀ {Γ} {φ ψ}
-        → Γ ⊢ φ ⇒ ψ
-        → Γ ⊢ ¬ φ ∨ ψ
+⇒-equiv
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ⇒ ψ
+  → Γ ⊢ ¬ φ ∨ ψ
+⇒-to-¬∨ = ⇒-equiv
 
+-- Theorems from the book:
 -- van Dalen 4th Edition. Chapter 2. Section 2.4.
--- Theorem 2.4.4
 
-th244a  : ∀ {Γ} {φ ψ}
-        → Γ ⊢ φ ⇒ (ψ ⇒ φ)
+vanDalen244a
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ⇒ (ψ ⇒ φ)
 
-th244b  : ∀ {Γ} {φ ψ}
-        → Γ ⊢ φ ⇒ (¬ φ ⇒ ψ)
+vanDalen244b
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ⇒ (¬ φ ⇒ ψ)
 
-th244c  : ∀ {Γ} {φ ψ ω}
-        → Γ ⊢ (φ ⇒ ψ) ⇒ ((ψ ⇒ ω) ⇒ (φ ⇒ ω))
+vanDalen244c
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ (φ ⇒ ψ) ⇒ ((ψ ⇒ ω) ⇒ (φ ⇒ ω))
 
-th244d  : ∀ {Γ} {φ ψ}
-        → Γ ⊢ (¬ ψ ⇒ ¬ φ) ⇒ (φ ⇒ ψ)
+vanDalen244d
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ ψ ⇒ ¬ φ
+  → Γ ⊢ φ ⇒ ψ
+¬⇒¬-to-⇒ = vanDalen244d
 
-th244e : ∀ {Γ} {φ}
-       → Γ ⊢ ¬ (¬ φ) ⇒ φ
+vanDalen244e
+  : ∀ {Γ} {φ}
+  → Γ ⊢ ¬ (¬ φ) ⇒ φ
 
+⇒⇒-to-∧⇒
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ φ ⇒ (ψ ⇒ ω)
+  → Γ ⊢ (φ ∧ ψ) ⇒ ω
 
-impl-15 : ∀ {Γ} {φ ψ ω}
-        → Γ ⊢ (φ ∧ ψ) ⇒ ω
-        → Γ ⊢ φ ⇒ (ψ ⇒ ω)
+∧⇒-to-⇒⇒
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ (φ ∧ ψ) ⇒ ω
+  → Γ ⊢ φ ⇒ (ψ ⇒ ω)
+
+subst⊢⇒₁
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ ω ⇒ φ
+  → Γ ⊢ φ ⇒ ψ
+  → Γ ⊢ ω ⇒ ψ
+
+subst⊢⇒₂
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ ψ ⇒ ω
+  → Γ ⊢ φ ⇒ ψ
+  → Γ ⊢ φ ⇒ ω
+
+⇒-trans
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ φ ⇒ ψ
+  → Γ ⊢ ψ ⇒ ω
+  → Γ ⊢ φ ⇒ ω
 
 ------------------------------------------------------------------------------
 -- Proofs.
 ------------------------------------------------------------------------------
 
-⇒-equiv {Γ} {φ}{ψ} seq =
-  ⇒-elim
+⇒-equiv {Γ}{φ}{ψ} Γ⊢φ⇒ψ =
+  (⇒-elim
     (⇒-intro
       (∨-elim {Γ = Γ}
         (∨-intro₂ (¬ φ)
           (⇒-elim
-            (weaken φ seq)
+            (weaken φ Γ⊢φ⇒ψ)
             (assume {Γ = Γ} φ)))
         (∨-intro₁ ψ
           (assume {Γ = Γ} (¬ φ)))))
-      PEM
+      PEM)
 
-th244a {Γ}{φ}{ψ} =
-  ⇒-intro $
-    ⇒-intro $
-      weaken {φ = φ} ψ $
-        assume {Γ = Γ} φ
+vanDalen244a {Γ}{φ}{ψ} =
+  (⇒-intro
+    (⇒-intro
+      (weaken {φ = φ} ψ
+        (assume {Γ = Γ} φ))))
 
-
-th244b {Γ}{φ}{ψ} =
+vanDalen244b {Γ}{φ}{ψ} =
   ⇒-intro $
     ⇒-intro $
       ⊥-elim {Γ = (Γ , φ , ¬ φ)} ψ $
@@ -72,8 +103,7 @@ th244b {Γ}{φ}{ψ} =
           (assume  {Γ = Γ , φ} (¬ φ))
           (weaken (¬ φ) (assume {Γ = Γ} φ))
 
-
-th244c {Γ}{φ}{ψ}{ω} =
+vanDalen244c {Γ}{φ}{ψ}{ω} =
   ⇒-intro $
     ⇒-intro $
       ⇒-intro $
@@ -87,32 +117,55 @@ th244c {Γ}{φ}{ψ}{ω} =
             (assume {Γ = Γ , φ ⇒ ψ , ψ ⇒ ω} φ))
 
 
-th244d {Γ}{φ}{ψ} =
-  ⇒-intro $
-    ⇒-intro $
-      RAA $
-        ¬-elim
-          (⇒-elim
+vanDalen244d {Γ}{φ}{ψ} Γ⊢¬ψ⇒¬φ =
+  (⇒-elim
+    (⇒-intro $
+      (⇒-intro $
+        RAA $
+          ¬-elim
+            (⇒-elim
+              (weaken (¬ ψ) $
+                weaken φ $
+                  assume {Γ = Γ} $ ¬ ψ  ⇒ ¬ φ)
+              (assume {Γ = Γ , ¬ ψ ⇒ ¬ φ , φ} $ ¬ ψ))
             (weaken (¬ ψ) $
-              weaken φ $
-                assume {Γ = Γ} $ ¬ ψ  ⇒ ¬ φ)
-            (assume {Γ = Γ , ¬ ψ ⇒ ¬ φ , φ} $ ¬ ψ))
-          (weaken (¬ ψ) $
-            assume {Γ = Γ , ¬ ψ ⇒ ¬ φ} φ)
+              assume {Γ = Γ , ¬ ψ ⇒ ¬ φ} φ)))
+      Γ⊢¬ψ⇒¬φ)
 
-
-th244e {Γ}{φ} =
+vanDalen244e {Γ}{φ} =
   ⇒-intro $ RAA
     (¬-elim
       (weaken (¬ φ) $
         assume {Γ = Γ} $ ¬ (¬ φ))
       (assume {Γ = Γ , ¬ (¬ φ)} $ ¬ φ))
 
-impl-15 {Γ}{φ}{ψ}{ω} seq =
+⇒⇒-to-∧⇒ {Γ}{φ}{ψ}{ω} Γ⊢φ⇒ψ⇒ω =
+  ⇒-intro
+    (⇒-elim
+      (⇒-elim
+        (weaken (φ ∧ ψ) Γ⊢φ⇒ψ⇒ω)
+        (∧-proj₁ (assume {Γ = Γ} (φ ∧ ψ))))
+      (∧-proj₂ (assume {Γ = Γ} (φ ∧ ψ))))
+
+∧⇒-to-⇒⇒ {Γ}{φ}{ψ}{ω} Γ⊢φ∧ψ⇒ω =
   ⇒-intro
     (⇒-intro
       (⇒-elim
-        (weaken ψ (weaken φ seq))
+        (weaken ψ (weaken φ Γ⊢φ∧ψ⇒ω))
         (∧-intro
           (weaken ψ (assume {Γ = Γ} φ))
           (assume {Γ = Γ , φ} ψ))))
+
+subst⊢⇒₁ {Γ}{φ}{ψ}{ω} Γ⊢ψ⇒ω Γ⊢φ⇒ψ =
+  ⇒-intro
+    (⇒-elim
+      (weaken ω Γ⊢φ⇒ψ)
+      (⇒-elim (weaken ω Γ⊢ψ⇒ω) (assume {Γ = Γ} ω)))
+
+subst⊢⇒₂ {Γ}{φ}{ψ}{ω} Γ⊢ω⇒φ Γ⊢φ⇒ψ =
+ ⇒-intro
+   (⇒-elim
+     (weaken φ Γ⊢ω⇒φ)
+     (⇒-elim (weaken φ Γ⊢φ⇒ψ) (assume {Γ = Γ} φ)))
+
+⇒-trans {Γ}{φ}{ψ}{ω} Γ⊢φ⇒ψ Γ⊢ψ⇒ω = subst⊢⇒₂ Γ⊢ψ⇒ω Γ⊢φ⇒ψ

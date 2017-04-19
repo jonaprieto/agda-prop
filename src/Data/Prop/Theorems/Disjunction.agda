@@ -11,121 +11,166 @@ module Data.Prop.Theorems.Disjunction ( n : ℕ ) where
 
 open import Data.Prop.Syntax n
 open import Data.Prop.Theorems.Conjunction n using ( ∧-dmorgan₁ )
-open import Data.Prop.Theorems.Implication n using ( th244e )
+open import Data.Prop.Theorems.Implication n using ( vanDalen244e )
 
 open import Function                         using ( _$_; _∘_ )
 
 ------------------------------------------------------------------------------
 
-∨-assoc₁ : ∀ {Γ} {φ ψ ω}
-         → Γ ⊢ (φ ∨ ψ) ∨ ω
-         → Γ ⊢ φ ∨ (ψ ∨ ω)
+∨-assoc₁
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ φ ∨ (ψ ∨ ω)
+  → Γ ⊢ (φ ∨ ψ) ∨ ω
 
+∨-assoc₂
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ (φ ∨ ψ) ∨ ω
+  → Γ ⊢ φ ∨ (ψ ∨ ω)
 
-∨-assoc₂ : ∀ {Γ} {φ ψ ω}
-         → Γ ⊢ φ ∨ (ψ ∨ ω)
-         → Γ ⊢ (φ ∨ ψ) ∨ ω
+∨-assoc
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ (φ ∨ (ψ ∨ ω)) ⇔ ((φ ∨ ψ) ∨ ω)
 
+∨-comm
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ∨ ψ
+  → Γ ⊢ ψ ∨ φ
 
-∨-comm  : ∀ {Γ} {φ ψ}
-        → Γ ⊢ φ ∨ ψ
-        → Γ ⊢ ψ ∨ φ
+∨-dist₁
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ φ ∨ (ψ ∧ ω)
+  → Γ ⊢ (φ ∨ ψ) ∧ (φ ∨ ω)
 
+∨-dist₂
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ (φ ∨ ψ) ∧ (φ ∨ ω)
+  → Γ ⊢ φ ∨ (ψ ∧ ω)
 
-∨-dist₁ : ∀ {Γ} {φ ψ ω}
-        → Γ ⊢ φ ∨ (ψ ∧ ω)
-        → Γ ⊢ (φ ∨ ψ) ∧ (φ ∨ ω)
+∨-dist
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ (φ ∨ (ψ ∧ ω)) ⇔ ((φ ∨ ψ) ∧ (φ ∨ ω))
 
+∨-equiv
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ∨ ψ
+  → Γ ⊢ ¬ (¬ φ ∧ ¬ ψ)
+∨-to-¬¬∧¬ = ∨-equiv
 
-∨-dist₂ : ∀ {Γ} {φ ψ ω}
-        → Γ ⊢ (φ ∨ ψ) ∧ (φ ∨ ω)
-        → Γ ⊢ φ ∨ (ψ ∧ ω)
+∨-dmorgan₁
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ (φ ∨ ψ)
+  → Γ ⊢ ¬ φ ∧ ¬ ψ
+¬∨-to-¬∧¬ = ∨-dmorgan₁
 
+∨-dmorgan₂
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ φ ∧ ¬ ψ
+  → Γ ⊢ ¬ (φ ∨ ψ)
+¬∧¬-to-¬∨ = ∨-dmorgan₂
 
-∨-equiv : ∀ {Γ} {φ ψ}
-        → Γ ⊢ φ ∨ ψ
-        → Γ ⊢ ¬ (¬ φ ∧ ¬ ψ)
+∨-dmorgan
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ (φ ∨ ψ) ⇔ (¬ φ ∧ ¬ ψ)
 
+lem1
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
+  → Γ ⊢ φ ∨ ψ
+¬¬∨¬¬-to-∨ = lem1
 
-∨-dmorgan₁ : ∀ {Γ} {φ ψ}
-          → Γ ⊢ ¬ (φ ∨ ψ)
-          → Γ ⊢ ¬ φ ∧ ¬ ψ
+lem2
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ (φ ∨ ψ) ∧ ¬ ψ
+  → Γ ⊢ φ
 
+resolve₀
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ φ ∨ ψ → Γ ⊢ ¬ φ ∨ ω
+  → Γ ⊢ ψ ∨ ω
 
-∨-dmorgan₂ : ∀ {Γ} {φ ψ}
-          → Γ ⊢ ¬ φ ∧ ¬ ψ
-          → Γ ⊢ ¬ (φ ∨ ψ)
+resolve₁
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ ψ ∨ φ → Γ ⊢ ¬ φ ∨ ω
+  → Γ ⊢ ψ ∨ ω
 
-postulate
-  ∨-dmorgan : ∀ {Γ} {φ ψ}
-           → Γ ⊢ ¬ (φ ∨ ψ) ⇔  ¬ φ ∧ ¬ ψ
+resolve₂
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ φ ∨ ψ → Γ ⊢ ω ∨ ¬ φ
+  → Γ ⊢ ψ ∨ ω
 
-lem1 : ∀ {Γ} {φ ψ}
-     → Γ ⊢ ¬ ¬ φ ∨ ¬ ¬ ψ
-     → Γ ⊢ φ ∨ ψ
+resolve₃
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ ψ ∨ φ → Γ ⊢ ω ∨ ¬ φ
+  → Γ ⊢ ψ ∨ ω
 
+resolve₄
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ φ ∨ ψ → Γ ⊢ φ
+  → Γ ⊢ ψ
 
-lem2 : ∀ {Γ} {φ ψ}
-     → Γ ⊢ (φ ∨ ψ) ∧ ¬ ψ
-     → Γ ⊢ φ
+resolve₅
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ψ ∨ ¬ φ
+  → Γ ⊢ φ
+  → Γ ⊢ ψ
 
+resolve₆
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ψ ∨ φ → Γ ⊢ ¬ φ
+  → Γ ⊢ ψ
 
-resolve₀ : ∀ {Γ} {L C D}
-         → Γ ⊢ L ∨ C → Γ ⊢ ¬ L ∨ D
-         → Γ ⊢ C ∨ D
+resolve₇
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ∨ ψ → Γ ⊢ ¬ φ
+  → Γ ⊢ ψ
 
+resolve₈
+  : ∀ {Γ} {φ}
+  → Γ ⊢ φ → Γ ⊢ ¬ φ
+  → Γ ⊢ ⊥
 
-resolve₁ : ∀ {Γ} {L C D}
-         → Γ ⊢ C ∨ L → Γ ⊢ ¬ L ∨ D
-         → Γ ⊢ C ∨ D
+resolve₉
+  : ∀ {Γ} {φ}
+  → Γ ⊢ ¬ φ → Γ ⊢ φ
+  → Γ ⊢ ⊥
 
+subst⊢∨₁
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ φ ⇒ ω
+  → Γ ⊢ φ ∨ ψ
+  → Γ ⊢ ω ∨ ψ
 
-resolve₂ : ∀ {Γ} {L C D}
-         → Γ ⊢ L ∨ C → Γ ⊢ D ∨ ¬ L
-         → Γ ⊢ C ∨ D
+subst⊢∨₂
+  : ∀ {Γ} {φ ψ ω}
+  → Γ ⊢ ψ ⇒ ω
+  → Γ ⊢ φ ∨ ψ
+  → Γ ⊢ φ ∨ ω
 
-
-resolve₃ : ∀ {Γ} {L C D}
-         → Γ ⊢ C ∨ L → Γ ⊢ D ∨ ¬ L
-         → Γ ⊢ C ∨ D
-
-
-resolve₄ : ∀ {Γ} {L C}
-         → Γ ⊢ ¬ L ∨ C → Γ ⊢ L
-         → Γ ⊢ C
-
-
-resolve₅ : ∀ {Γ} {L C}
-         → Γ ⊢ C ∨ ¬ L
-         → Γ ⊢ L
-         → Γ ⊢ C
-
-
-resolve₆ : ∀ {Γ} {L C}
-         → Γ ⊢ C ∨ L → Γ ⊢ ¬ L
-         → Γ ⊢ C
-
-
-resolve₇ : ∀ {Γ} {L C}
-        → Γ ⊢ L ∨ C → Γ ⊢ ¬ L
-        → Γ ⊢ C
-
-
-resolve₈ : ∀ {Γ} {φ}
-         → Γ ⊢ φ → Γ ⊢ ¬ φ
-         → Γ ⊢ ⊥
-
-
-resolve₉ : ∀ {Γ} {φ}
-         → Γ ⊢ ¬ φ → Γ ⊢ φ
-         → Γ ⊢ ⊥
-
+∨-to-¬⇒
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ∨ ψ
+  → Γ ⊢ ¬ φ ⇒ ψ
 
 ------------------------------------------------------------------------------
 -- Proofs.
 ------------------------------------------------------------------------------
 
 ∨-assoc₁ {Γ}{φ}{ψ}{ω} =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ ω
+          (∨-intro₁ ψ
+            (assume {Γ = Γ} φ)))
+        (⇒-elim
+          (⇒-intro
+            (∨-elim {Γ = Γ , ψ ∨ ω}
+              (∨-intro₁ ω
+                (∨-intro₂ φ (assume {Γ = Γ , ψ ∨ ω} ψ)))
+              (∨-intro₂ (φ ∨ ψ) (assume {Γ = Γ , ψ ∨ ω} ω))))
+          (assume {Γ = Γ} (ψ ∨ ω)))))
+
+∨-assoc₂ {Γ}{φ}{ψ}{ω} =
   ⇒-elim
     (⇒-intro
       (∨-elim {Γ = Γ}
@@ -142,22 +187,10 @@ resolve₉ : ∀ {Γ} {φ}
           (∨-intro₂ ψ
             (assume {Γ = Γ} ω)))))
 
-
-∨-assoc₂ {Γ}{φ}{ψ}{ω} =
-  ⇒-elim
-    (⇒-intro
-      (∨-elim {Γ = Γ}
-        (∨-intro₁ ω
-          (∨-intro₁ ψ
-            (assume {Γ = Γ} φ)))
-        (⇒-elim
-          (⇒-intro
-            (∨-elim {Γ = Γ , ψ ∨ ω}
-              (∨-intro₁ ω
-                (∨-intro₂ φ (assume {Γ = Γ , ψ ∨ ω} ψ)))
-              (∨-intro₂ (φ ∨ ψ) (assume {Γ = Γ , ψ ∨ ω} ω))))
-          (assume {Γ = Γ} (ψ ∨ ω)))))
-
+∨-assoc {Γ}{φ}{ψ}{ω} =
+  ⇔-intro
+    (∨-assoc₁ (assume {Γ = Γ} (φ ∨ (ψ ∨ ω))))
+    (∨-assoc₂ (assume {Γ = Γ} (φ ∨ ψ ∨ ω)))
 
 ∨-comm {Γ}{φ}{ψ} =
   ⇒-elim $
@@ -168,8 +201,7 @@ resolve₉ : ∀ {Γ} {φ}
         (∨-intro₁ φ $
            assume {Γ = Γ} ψ))
 
-
-∨-equiv {Γ}{φ}{ψ} seq =
+∨-equiv {Γ}{φ}{ψ} Γ⊢φ∨ψ =
   ¬-intro
     (⇒-elim
       (⇒-intro
@@ -184,8 +216,7 @@ resolve₉ : ∀ {Γ} {φ}
               (∧-proj₂
                 (assume {Γ = Γ} (¬ φ ∧ ¬ ψ))))
             (assume {Γ = Γ , ¬ φ ∧ ¬ ψ}  ψ))))
-      (weaken (¬ φ ∧ ¬ ψ) seq))
-
+      (weaken (¬ φ ∧ ¬ ψ) Γ⊢φ∨ψ))
 
 ∨-dist₁ {Γ}{φ}{ψ}{ω} =
   ⇒-elim
@@ -204,8 +235,7 @@ resolve₉ : ∀ {Γ} {φ}
             (∧-proj₂
               (assume {Γ = Γ} (ψ ∧ ω)))))))
 
-
-∨-dist₂  {Γ}{φ}{ψ}{ω} seq =
+∨-dist₂  {Γ}{φ}{ψ}{ω} Γ⊢⟪φ∨ψ⟫∧⟪φ∨ω⟫ =
   ⇒-elim
     (⇒-intro
       (∨-elim {Γ = Γ}
@@ -222,9 +252,13 @@ resolve₉ : ∀ {Γ} {φ}
                     (assume {Γ = Γ} ψ))
                   (assume {Γ = Γ , ψ} ω)))))
           (∧-proj₂
-            (weaken ψ seq)))))
-    (∧-proj₁ seq)
+            (weaken ψ Γ⊢⟪φ∨ψ⟫∧⟪φ∨ω⟫)))))
+    (∧-proj₁ Γ⊢⟪φ∨ψ⟫∧⟪φ∨ω⟫)
 
+∨-dist {Γ}{φ}{ψ}{ω} =
+  ⇔-intro
+    (∨-dist₁ (assume {Γ = Γ} (φ ∨ (ψ ∧ ω))))
+    (∨-dist₂ (assume {Γ = Γ} (φ ∨ ψ ∧ (φ ∨ ω))))
 
 ∨-dmorgan₁ {Γ}{φ}{ψ} =
   ⇒-elim $
@@ -243,92 +277,122 @@ resolve₉ : ∀ {Γ} {φ}
             (∨-intro₂ φ $
               assume {Γ = Γ , ¬ (φ ∨ ψ)} ψ))
 
-
-∨-dmorgan₂ {Γ}{φ}{ψ} seq =
+∨-dmorgan₂ {Γ}{φ}{ψ} Γ⊢¬φ∧¬ψ  =
   ¬-intro
     (∨-elim {Γ = Γ}
       (¬-elim
         (weaken φ
-          (∧-proj₁ seq))
+          (∧-proj₁ Γ⊢¬φ∧¬ψ ))
         (assume {Γ = Γ} φ))
       (¬-elim
         (weaken ψ
-          (∧-proj₂ seq))
+          (∧-proj₂ Γ⊢¬φ∧¬ψ ))
         (assume {Γ = Γ} ψ)))
 
+∨-dmorgan {Γ}{φ}{ψ} =
+  ⇔-intro
+    (∨-dmorgan₁
+      (assume {Γ = Γ} (¬ (φ ∨ ψ))))
+    (∨-dmorgan₂
+      (assume {Γ = Γ} (¬ φ ∧ ¬ ψ)))
 
 lem1 {Γ}{φ}{ψ} =
   ⇒-elim $
     ⇒-intro $
       ∨-elim {Γ = Γ}
         (∨-intro₁ ψ $
-          ⇒-elim th244e $ assume {Γ = Γ} $ ¬ ¬ φ)
+          ⇒-elim vanDalen244e $ assume {Γ = Γ} $ ¬ ¬ φ)
         (∨-intro₂ φ $
-          ⇒-elim th244e $ assume {Γ = Γ} $ ¬ ¬ ψ)
+          ⇒-elim vanDalen244e $ assume {Γ = Γ} $ ¬ ¬ ψ)
 
-
-lem2 {Γ}{φ}{ψ} seq =
+lem2 {Γ}{φ}{ψ} Γ⊢⟪φ∨ψ⟫∧¬ψ =
   ⇒-elim
     (⇒-intro $
       (∨-elim {Γ = Γ}
         (assume {Γ = Γ} φ)
         (⊥-elim φ
           (¬-elim
-            (weaken ψ (∧-proj₂ seq))
+            (weaken ψ (∧-proj₂ Γ⊢⟪φ∨ψ⟫∧¬ψ))
             (assume {Γ = Γ} ψ)))))
-    (∧-proj₁ seq)
+    (∧-proj₁ Γ⊢⟪φ∨ψ⟫∧¬ψ)
 
-
-resolve₀ {Γ} {L}{C}{D} seq₁ seq₂ =
+resolve₀ {Γ}{φ}{ψ}{ω} Γ⊢φ∨ψ Γ⊢¬φ∨ω =
  lem1 $
    ∧-dmorgan₁ $
      ¬-intro $
        ¬-elim
-         (lem2 {Γ = Γ , ¬ C ∧ ¬ D} $
+         (lem2 {Γ = Γ , ¬ ψ ∧ ¬ ω} $
            ∧-intro
-             (weaken (¬ C ∧ ¬ D) seq₂)
-             (∧-proj₂ $ assume {Γ = Γ} $ ¬ C ∧ ¬ D))
+             (weaken (¬ ψ ∧ ¬ ω) Γ⊢¬φ∨ω)
+             (∧-proj₂ $ assume {Γ = Γ} $ ¬ ψ ∧ ¬ ω))
          (lem2 $
            ∧-intro
-             (weaken (¬ C ∧ ¬ D) seq₁)
-             (∧-proj₁ $ assume {Γ = Γ} $ ¬ C ∧ ¬ D))
-
+             (weaken (¬ ψ ∧ ¬ ω) Γ⊢φ∨ψ)
+             (∧-proj₁ $ assume {Γ = Γ} $ ¬ ψ ∧ ¬ ω))
 
 resolve₁ = resolve₀ ∘ ∨-comm
 
+resolve₂ Γ⊢φ∨ψ Γ⊢ω∨¬φ =
+  resolve₀
+    Γ⊢φ∨ψ
+    (∨-comm Γ⊢ω∨¬φ)
 
-resolve₂ seq₁ seq₂ = resolve₀ seq₁ (∨-comm seq₂)
+resolve₃ {Γ}{φ}{ψ}{ω} Γ⊢ψ∨φ Γ⊢ω∨¬φ =
+  resolve₀
+    (∨-comm Γ⊢ψ∨φ)
+    (∨-comm Γ⊢ω∨¬φ)
 
-
-resolve₃ {Γ} {L}{C}{D} seq₁ seq₂ =  resolve₀ (∨-comm seq₁) (∨-comm seq₂)
-
-
-resolve₄ {Γ} {L} {C} seq₁ seq₂ =
+resolve₄ {Γ}{φ} {ψ} Γ⊢¬φ∨ψ Γ⊢φ =
  ⇒-elim
    (⇒-intro $
      ∨-elim {Γ = Γ}
-       (assume {Γ = Γ} C)
-       (assume {Γ = Γ} C))
-   (resolve₀ {Γ = Γ} {L = L} {C = C} {D = C}
-     (∨-intro₁ C seq₂)
-     seq₁)
-
+       (assume {Γ = Γ} ψ)
+       (assume {Γ = Γ} ψ))
+   (resolve₀ {Γ = Γ} {φ = φ} {ψ = ψ} {ω = ψ}
+     (∨-intro₁ ψ Γ⊢φ)
+     Γ⊢¬φ∨ψ)
 
 resolve₅ = resolve₄ ∘ ∨-comm
 
-
-resolve₆ {Γ} {L} {C} seq₁ seq₂ =
+resolve₆ {Γ}{φ}{ψ} Γ⊢ψ∨φ Γ⊢¬φ =
  ⇒-elim
    (⇒-intro $
      ∨-elim {Γ = Γ}
-       (assume {Γ = Γ}  C)
-       (assume {Γ = Γ} C))
-   (resolve₀ (∨-comm seq₁) (∨-intro₁ C seq₂))
+       (assume {Γ = Γ} ψ)
+       (assume {Γ = Γ} ψ))
+   (resolve₀ (∨-comm Γ⊢ψ∨φ) (∨-intro₁ ψ Γ⊢¬φ))
 
+resolve₇ {Γ}{φ}{ψ} Γ⊢φ∨ψ Γ⊢¬φ = resolve₆ (∨-comm Γ⊢φ∨ψ) Γ⊢¬φ
 
-resolve₇ {Γ} {L} {C} seq₁ seq₂ = resolve₆ (∨-comm seq₁) seq₂
-
-
-resolve₈ seq₁ seq₂ = ¬-elim seq₂ seq₁
+resolve₈ Γ⊢φ Γ⊢¬φ = ¬-elim Γ⊢¬φ Γ⊢φ
 
 resolve₉ = ¬-elim
+
+subst⊢∨₁ {Γ}{φ}{ψ}{ω} Γ⊢φ⇒ω Γ⊢φ∨ψ =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ ψ (⇒-elim (weaken φ Γ⊢φ⇒ω) (assume {Γ = Γ} φ)))
+        (∨-intro₂ ω (assume {Γ = Γ} ψ))))
+    Γ⊢φ∨ψ
+
+subst⊢∨₂ {Γ}{φ}{ψ}{ω} Γ⊢ψ⇒ω Γ⊢φ∨ψ =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ ω (assume {Γ = Γ} φ))
+        (∨-intro₂ φ (⇒-elim (weaken ψ Γ⊢ψ⇒ω) (assume {Γ = Γ} ψ)))))
+    Γ⊢φ∨ψ
+
+∨-to-¬⇒ {Γ}{φ}{ψ} Γ⊢φ∨ψ =
+  ⇒-intro
+    (⇒-elim
+      (⇒-intro
+        (∨-elim {Γ = Γ , ¬ φ}
+          (⊥-elim ψ
+            (¬-elim
+              (weaken φ
+                (assume {Γ = Γ} (¬ φ)))
+            (assume {Γ = Γ , ¬ φ} φ)))
+          (assume {Γ = Γ , ¬ φ} ψ)))
+      (weaken (¬ φ) Γ⊢φ∨ψ))

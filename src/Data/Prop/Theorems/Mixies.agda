@@ -10,47 +10,45 @@ module Data.Prop.Theorems.Mixies ( n : ℕ ) where
 ------------------------------------------------------------------------------
 
 open import Data.Prop.Theorems.Biimplication n
-  using ( thm-bicon₀; ⇒-∨-equiv )
+  using ( ⇔-¬-to-¬; ⇒-⇔-¬∨ )
 
 open import Data.Prop.Theorems.Disjunction n
   using ( ∨-dmorgan; ∨-dmorgan₁ )
 
 open import Data.Prop.Theorems.Implication n
-  using ( th244e; ⇒-equiv )
+  using ( vanDalen244e; ⇒-equiv )
 
 open import Data.Prop.Syntax n
 open import Function using ( _$_ ; _∘_ )
 
 ------------------------------------------------------------------------------
 
+e245b
+  : ∀ {Γ Δ} {φ ψ}
+  → Γ ⊢ φ → Δ , φ ⊢ ψ
+  → Γ ⨆ Δ ⊢ ψ
 
-e245b : ∀ {Γ Δ} {φ ψ}
-      → Γ ⊢ φ → Δ , φ ⊢ ψ
-      → Γ ⨆ Δ ⊢ ψ
-
-
-neg-⇒ : ∀ {Γ} {φ ψ}
-       → Γ ⊢ ¬ (φ ⇒ ψ)
-       → Γ ⊢ φ ∧ ¬ ψ
+¬⇒-to-∧¬
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ (φ ⇒ ψ)
+  → Γ ⊢ φ ∧ ¬ ψ
 
 ------------------------------------------------------------------------------
 -- Proofs.
 ------------------------------------------------------------------------------
 
-e245b {Γ}{Δ} seq₁ seq₂ =
+e245b {Γ}{Δ} Γ⊢φ Δ,φ⊢ψ =
   ⇒-elim
-    (weaken-Δ₂ Γ $ ⇒-intro seq₂)
-    (weaken-Δ₁ Δ seq₁)
+    (weaken-Δ₂ Γ $ ⇒-intro Δ,φ⊢ψ)
+    (weaken-Δ₁ Δ Γ⊢φ)
 
-
-neg-⇒ {Γ}{φ}{ψ} seq =
+¬⇒-to-∧¬ {Γ}{φ}{ψ} Γ⊢¬⟪φ⇒ψ⟫ =
   ∧-intro
-    (⇒-elim th244e (∧-proj₁ p2))
+    (⇒-elim vanDalen244e (∧-proj₁ p2))
     (∧-proj₂ p2)
   where
     p1 : Γ ⊢ ¬ (¬ φ ∨ ψ)
-    p1 = thm-bicon₀ ⇒-∨-equiv seq
+    p1 = ⇔-¬-to-¬ ⇒-⇔-¬∨ Γ⊢¬⟪φ⇒ψ⟫
 
     p2 : Γ ⊢ ¬ (¬ φ) ∧  ¬ ψ
     p2 = ∨-dmorgan₁ p1
-
