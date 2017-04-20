@@ -3,8 +3,8 @@
 ------------------------------------------------------------------------------
 
 open import Data.Prop 3 public
-
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl)
+open import Data.Prop.Properties 3 using ( subst )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl; sym)
 
 ------------------------------------------------------------------------------
 

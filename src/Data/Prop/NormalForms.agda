@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------
 -- Agda-Prop Library.
--- Conjunctive Normal Form.
+-- Normal Forms.
 ------------------------------------------------------------------------------
 
 open import Data.Nat using ( ℕ )
@@ -9,25 +9,29 @@ module Data.Prop.NormalForms (n : ℕ) where
 
 ------------------------------------------------------------------------------
 
+open import Data.Fin  using (Fin; #_)
+open import Data.List using ( List; [_]; [];  _++_; _∷_ ; concatMap; map )
+open import Data.Prop.Properties n using ( subst )
 open import Data.Prop.Syntax n
-open import Data.Fin using (Fin; #_)
-open import Data.List
 
-open import Function using ( _∘_ )
+open import Function using ( _∘_; _$_ )
+open import Relation.Binary.PropositionalEquality using ( _≡_; sym )
 
 ------------------------------------------------------------------------------
 
 data Literal : Set where
-  Var  : Fin n → Literal
+  Var  : Fin n   → Literal
   ¬l_  : Literal → Literal
 
 Clause : Set
 Clause = List Literal
 
+------------------------------------------------------------------------------
+-- Conjunctive Normal Form (CNF)
+------------------------------------------------------------------------------
+
 Cnf : Set
 Cnf = List Clause
-
-------------------------------------------------------------------------------
 
 varCnf_ : Literal → Cnf
 varCnf l = [ [ l ] ]
@@ -61,26 +65,26 @@ _⇒Cnf_ : (φ ψ : Cnf) → Cnf
 _⇔Cnf_ : (φ ψ : Cnf) → Cnf
 φ ⇔Cnf ψ = (φ ⇒Cnf ψ) ∧Cnf (ψ ⇒Cnf φ)
 
+
 toCnf : Prop → Cnf
-toCnf (Var x)  = varCnf Var x
-toCnf ⊤        = []
-toCnf ⊥        = [ [] ]
-toCnf (x ∧ x₁) = (toCnf x) ∧Cnf (toCnf x₁)
-toCnf (x ∨ x₁) = (toCnf x) ∨Cnf (toCnf x₁)
-toCnf (x ⇒ x₁) = (toCnf x) ⇒Cnf (toCnf x₁)
-toCnf (x ⇔ x₁) = (toCnf x) ⇔Cnf (toCnf x₁)
-toCnf (¬ x)    = ¬Cnf (toCnf x)
+toCnf (Var x) = varCnf Var x
+toCnf ⊤       = []
+toCnf ⊥       = [ [] ]
+toCnf (φ ∧ ψ) = toCnf φ ∧Cnf toCnf ψ
+toCnf (φ ∨ ψ) = toCnf φ ∨Cnf toCnf ψ
+toCnf (φ ⇒ ψ) = toCnf φ ⇒Cnf toCnf ψ
+toCnf (φ ⇔ ψ) = toCnf φ ⇔Cnf toCnf ψ
+toCnf (¬ φ)   = ¬Cnf (toCnf φ)
 
 toPropLiteral : Literal → Prop
-toPropLiteral (Var x) = Var x
-toPropLiteral (¬l lit) = Prop.¬ toPropLiteral lit
+toPropLiteral (Var x)  = Var x
+toPropLiteral (¬l lit) = ¬ toPropLiteral lit
 
 toPropClause : Clause → Prop
 toPropClause []       = ⊥
 toPropClause (l ∷ []) = toPropLiteral l
 toPropClause (l ∷ ls) = toPropLiteral l ∨ toPropClause ls
 
--- the output formula is left associative.
 toProp : Cnf → Prop
 toProp []         = ⊤
 toProp (fm ∷ [] ) = toPropClause fm
@@ -88,3 +92,13 @@ toProp (fm ∷ fms) = toPropClause fm ∧ toProp fms
 
 cnf : Prop → Prop
 cnf = toProp ∘ toCnf
+
+thm-cnf
+  : ∀ {Γ} {φ}
+  → cnf φ ≡ φ
+  → Γ ⊢ φ
+  → Γ ⊢ cnf φ
+
+thm-cnf cnfφ≡φ Γ⊢φ = subst (sym cnfφ≡φ) Γ⊢φ
+
+------------------------------------------------------------------------------
