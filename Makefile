@@ -19,3 +19,6 @@ clean :
 .PHONY : test
 test :
 	cd src/Data/ && agda Prop.agda --verbose=0
+	cd test/ && agda cnf.agda --verbose=0
+        cd test/ && agda ex-andreas-abel.agda --verbose=0 
+		
