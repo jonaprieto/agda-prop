@@ -15,8 +15,8 @@ open import Data.Bool
 
 open import Data.Fin  using ( Fin; #_ )
 open import Data.List using ( List ; [] ; _∷_ ; _++_ ; [_] )
-
-open import Relation.Binary.PropositionalEquality using ( _≡_; refl )
+open import Relation.Binary.PropositionalEquality
+  using ( _≡_; refl; cong; trans; sym; subst)
 
 ------------------------------------------------------------------------------
 
@@ -52,9 +52,11 @@ _⨆_ : Ctxt → Ctxt → Ctxt
 
 infix 4 _∈_
 data _∈_ (φ : Prop) : Ctxt → Set where
-  here  : ∀ {Γ} → φ ∈ Γ , φ
-  there : ∀ {Γ} → (ψ : Prop) → φ ∈ Γ → φ ∈ Γ , ψ
-  ⨆-ext : ∀ {Γ} → (Δ : Ctxt) → φ ∈ Γ → φ ∈ Γ ⨆ Δ
+  here   : ∀ {Γ} → φ ∈ Γ , φ
+  here₂  : ∀ {Γ} → φ ∈ φ ∷ Γ
+  there  : ∀ {Γ} → (ψ : Prop) → φ ∈ Γ → φ ∈ Γ , ψ
+  there₂ : ∀ {Γ} → (ψ : Prop) → φ ∈ Γ → φ ∈ ψ ∷ Γ
+  ⨆-ext  : ∀ {Γ} → (Δ : Ctxt) → φ ∈ Γ → φ ∈ Γ ⨆ Δ
 
 _⊆_ : Ctxt → Ctxt → Set
 Γ ⊆ Η = ∀ {φ} → φ ∈ Γ → φ ∈ Η
@@ -129,26 +131,10 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Set where
                                           → Γ ⊢ φ
 
 ------------------------------------------------------------------------
+-- Classical Propositional Logic
+------------------------------------------------------------------------
 
 postulate
-
   PEM   : ∀ {Γ} {φ}                       → Γ ⊢ φ ∨ ¬ φ
 
-  weaken-Δ₁ : ∀ {Γ} {φ} → (Δ : Ctxt)      → Γ ⊢ φ
-                                          → Γ ⨆ Δ ⊢ φ
-
-  weaken-Δ₂ :  ∀ {Γ} {φ} → (Δ : Ctxt)     → Γ ⊢ φ
-                                          → Δ ⨆ Γ ⊢ φ
-
-RAA
-  : ∀ {Γ} {φ}
-  → Γ , ¬ φ ⊢ ⊥
-  → Γ ⊢ φ
-
-RAA {Γ}{φ} Γ¬φ⊢⊥ =
-  ⇒-elim
-    (⇒-intro
-      (∨-elim {Γ = Γ}
-        (assume {Γ = Γ} φ)
-        (⊥-elim φ Γ¬φ⊢⊥)))
-    PEM
+------------------------------------------------------------------------
