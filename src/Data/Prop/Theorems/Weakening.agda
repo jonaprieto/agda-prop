@@ -5,7 +5,7 @@
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.SyntaxExtension ( n : ℕ ) where
+module Data.Prop.Theorems.Weakening ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
@@ -13,15 +13,11 @@ open import Data.Prop.Syntax n
 open import Data.Prop.Properties n using ( substΓ )
 
 open import Data.List using ( List ; [] ; _∷_ ; _++_ ; [_] )
+
 open import Relation.Binary.PropositionalEquality
   using ( _≡_; refl; cong; trans; sym)
 
 ------------------------------------------------------------------------------
-
-RAA
-  : ∀ {Γ} {φ}
-  → Γ , ¬ φ ⊢ ⊥
-  → Γ ⊢ φ
 
 weaken-Δ₁
   : ∀ {Γ} {φ}
@@ -38,14 +34,6 @@ weaken-Δ₂
 ------------------------------------------------------------------------------
 -- Proofs.
 ------------------------------------------------------------------------------
-
-RAA {Γ}{φ} Γ¬φ⊢⊥ =
-  ⇒-elim
-    (⇒-intro
-      (∨-elim {Γ = Γ}
-        (assume {Γ = Γ} φ)
-        (⊥-elim φ Γ¬φ⊢⊥)))
-    PEM
 
 weaken-Δ₁ {[]} {φ} [] Γ⊢φ = Γ⊢φ
 weaken-Δ₁ {x ∷ Γ} {φ} [] Γ⊢φ  = substΓ (sym p) Γ⊢φ

@@ -9,16 +9,16 @@ module Data.Prop.Theorems.Mixies ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
+open import Data.Prop.Syntax n
+open import Data.Prop.Theorems.Classical n
 open import Data.Prop.Theorems.Biimplication n
   using ( ⇔-¬-to-¬; ⇒-⇔-¬∨ )
-
 open import Data.Prop.Theorems.Disjunction n
   using ( ∨-dmorgan; ∨-dmorgan₁ )
-
 open import Data.Prop.Theorems.Implication n
   using ( vanDalen244e; ⇒-equiv )
+open import Data.Prop.Theorems.Weakening n
 
-open import Data.Prop.Syntax n
 open import Function using ( _$_ ; _∘_ )
 
 ------------------------------------------------------------------------------
