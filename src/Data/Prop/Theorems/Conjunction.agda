@@ -10,6 +10,8 @@ module Data.Prop.Theorems.Conjunction ( n : ℕ ) where
 ------------------------------------------------------------------------------
 
 open import Data.Prop.Syntax n
+open import Data.Prop.Theorems.Classical n
+
 open import Function using ( _$_ ; _∘_  )
 
 ------------------------------------------------------------------------------

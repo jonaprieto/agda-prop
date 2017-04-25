@@ -165,3 +165,8 @@ subst : ∀ {Γ} {φ ψ}
       → Γ ⊢ ψ
 subst refl o = o
 
+substΓ : ∀ {Γ Γ′} {φ}
+  → Γ ≡ Γ′
+  → Γ  ⊢ φ
+  → Γ′ ⊢ φ
+substΓ refl o = o

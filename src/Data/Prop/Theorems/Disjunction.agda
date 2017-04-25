@@ -10,6 +10,8 @@ module Data.Prop.Theorems.Disjunction ( n : ℕ ) where
 ------------------------------------------------------------------------------
 
 open import Data.Prop.Syntax n
+open import Data.Prop.Theorems.Classical n
+
 open import Data.Prop.Theorems.Conjunction n using ( ∧-dmorgan₁ )
 open import Data.Prop.Theorems.Implication n using ( vanDalen244e )
 

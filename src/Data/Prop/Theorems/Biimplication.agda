@@ -9,11 +9,13 @@ module Data.Prop.Theorems.Biimplication ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
+open import Data.Prop.Theorems.Classical n
 open import Data.Prop.Theorems.Implication n
   using ( ⇒-to-¬∨; ⇒⇒-to-∧⇒; ∧⇒-to-⇒⇒ )
 open import Data.Prop.Theorems.Negation n
   using ( ¬-equiv₁ ; ¬-equiv₂; ¬∨-to-⇒; ¬¬-equiv₁; ¬¬-equiv₂ )
 open import Data.Prop.Syntax n
+
 open import Function using ( _$_ )
 
 ------------------------------------------------------------------------------

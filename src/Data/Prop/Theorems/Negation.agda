@@ -12,6 +12,7 @@ module Data.Prop.Theorems.Negation ( n : ℕ ) where
 open import Data.Prop.Properties n
   using ( ¬-injective ; subst )
 open import Data.Prop.Syntax n
+open import Data.Prop.Theorems.Classical n
 open import Data.Prop.Theorems.Implication n      using ( subst⊢⇒₁ )
 
 open import Function                              using ( _$_ ; _∘_ )
