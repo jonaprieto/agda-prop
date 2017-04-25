@@ -1,7 +1,8 @@
 # Agda-Prop [![Build Status](https://travis-ci.org/jonaprieto/agda-prop.svg?branch=master)](https://travis-ci.org/jonaprieto/agda-prop) [![DOI](https://zenodo.org/badge/84277944.svg)](https://zenodo.org/badge/latestdoi/84277944)
 
-This is an library to work with propositional logic based on a deep embedding.
-It contains a compilation of some useful theorems and properties to work with.
+This is a library to work with Classical Propositional Logic based on a deep embedding.
+It also contains a compilation of useful theorems with their natural deduction proofs,
+and some properties ready to work with.
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
@@ -19,7 +20,7 @@ It contains a compilation of some useful theorems and properties to work with.
 ## Quick Start
 
 This library provides us two data types: `Prop` and `_⊢_`.
-We define the following constructors for Prop data type.
+We have the following constructors.
 
 ```agda
 data Prop : Type where
@@ -46,6 +47,9 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
 
   weaken   : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
                                           → Γ , ψ ⊢ φ
+					  
+  weaken₂  : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
+                                          → ψ ∷ Γ ⊢ φ
 -- Top and Bottom.
 
   ⊤-intro  : ∀ {Γ}                        → Γ ⊢ ⊤
@@ -100,9 +104,6 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
                                           →  Γ ⊢ φ
 ```
 
-See examples more below.
-
-
 ### Requirements
 
 * [Agda](https://github.com/agda/agda) version 2.5.1+
@@ -125,7 +126,7 @@ $ cat $HOME/.agda/libraries
 ```
 
 If you  need more instructions to install libraries for Agda, [Here](http://agda.readthedocs.io/en/latest/tools/package-system.html#installing-libraries)
-is a good link to start.
+is a good link to check.
 
 ## Usage
 ### Theorems
@@ -183,13 +184,10 @@ ex3 {φ}{ψ}{ω} =
 
 ### References
 
-- Jonathan Prieto-Cubides and Alejandro Gomez-Londoño.
-  [*A proof tool for translating TSTP proofs to Agda code*](https://github.com/jonaprieto/tstp2agda/tree/deep)
-
 - Leran Cai, Ambrus Kaposi, and Thorsten Altenkirch. *Formalising the Completeness
   Theorem of Classical Propositional Logic in Agda (Proof Pearl)*. The formalisation
   is available at http://bitbucket.org/Leran/.
-
+  
 ### Contributions
 
-`Data.Prop.Theorems` modules contain some postulates waiting to be proved. Go ahead!
+Some `Data.Prop.Theorems` modules contain postulates waiting to be proved. Go ahead!
