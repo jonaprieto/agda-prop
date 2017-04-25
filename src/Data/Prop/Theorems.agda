@@ -16,5 +16,6 @@ open import Data.Prop.Theorems.Disjunction n   public
 open import Data.Prop.Theorems.Implication n   public
 open import Data.Prop.Theorems.Mixies n        public
 open import Data.Prop.Theorems.Negation n      public
+open import Data.Prop.Theorems.Weakening n     public
 
 ------------------------------------------------------------------------------
