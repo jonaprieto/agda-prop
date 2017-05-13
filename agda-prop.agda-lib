@@ -1,4 +1,4 @@
-name : agda-prop
+name: agda-prop
 depend:
   standard-library
 include:
