@@ -65,7 +65,6 @@ _⇒Cnf_ : (φ ψ : Cnf) → Cnf
 _⇔Cnf_ : (φ ψ : Cnf) → Cnf
 φ ⇔Cnf ψ = (φ ⇒Cnf ψ) ∧Cnf (ψ ⇒Cnf φ)
 
-
 toCnf : Prop → Cnf
 toCnf (Var x) = varCnf Var x
 toCnf ⊤       = []
@@ -92,13 +91,5 @@ toProp (fm ∷ fms) = toPropClause fm ∧ toProp fms
 
 cnf : Prop → Prop
 cnf = toProp ∘ toCnf
-
-thm-cnf
-  : ∀ {Γ} {φ}
-  → cnf φ ≡ φ
-  → Γ ⊢ φ
-  → Γ ⊢ cnf φ
-
-thm-cnf cnfφ≡φ Γ⊢φ = subst (sym cnfφ≡φ) Γ⊢φ
 
 ------------------------------------------------------------------------------
