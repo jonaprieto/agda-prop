@@ -19,5 +19,4 @@ clean :
 .PHONY : test
 test :
 	agda src/Data/Prop.agda --verbose=0
-	agda test/cnf.agda --verbose=0
 	agda test/ex-andreas-abel.agda --verbose=0
