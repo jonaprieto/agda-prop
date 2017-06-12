@@ -23,81 +23,8 @@ open import Relation.Binary.PropositionalEquality using ( _≡_; sym )
 
 ------------------------------------------------------------------------------
 
-data Literal : Set where
-  Var  : Fin n   → Literal
-  ¬l_  : Literal → Literal
-
-Clause : Set
-Clause = List Literal
-
 ------------------------------------------------------------------------------
--- Conjunctive Normal Form (CNF)
-------------------------------------------------------------------------------
-
-Cnf : Set
-Cnf = List Clause
-
-varCnf_ : Literal → Cnf
-varCnf l = [ [ l ] ]
-
-_∧Cnf_ : (φ ψ : Cnf) → Cnf
-φ ∧Cnf ψ = φ ++ ψ
-
-_∨Cnf_ : (φ ψ : Cnf) → Cnf
-[]  ∨Cnf ψ       = ψ
-φ   ∨Cnf []      = []
-cls ∨Cnf (x ∷ ψ) = (cls ∨⋆ x) ∧Cnf (cls ∨Cnf ψ)
-  where
-    _∨⋆_ : Cnf → Clause → Cnf
-    xs ∨⋆ ys = concatMap (λ x → [ x ++ ys ]) xs
-
-¬Cnf₀_ : Literal → Literal
-¬Cnf₀ Var x    = ¬l Var x
-¬Cnf₀ (¬l lit) = lit
-
-¬Cnf₁ : Clause → Cnf
-¬Cnf₁ []  = []  -- ¬ ⊥ → ⊤
-¬Cnf₁ cls = map (λ lit → [ ¬Cnf₀ lit ]) cls
-
-¬Cnf : Cnf → Cnf
-¬Cnf [] = [ [] ]
-¬Cnf fm = concatMap (λ cl → ¬Cnf₁ cl) fm
-
-_⇒Cnf_ : (φ ψ : Cnf) → Cnf
-φ ⇒Cnf ψ = (¬Cnf φ) ∨Cnf ψ
-
-_⇔Cnf_ : (φ ψ : Cnf) → Cnf
-φ ⇔Cnf ψ = (φ ⇒Cnf ψ) ∧Cnf (ψ ⇒Cnf φ)
-
-toCnf : Prop → Cnf
-toCnf (Var x) = varCnf Var x
-toCnf ⊤       = []
-toCnf ⊥       = [ [] ]
-toCnf (φ ∧ ψ) = toCnf φ ∧Cnf toCnf ψ
-toCnf (φ ∨ ψ) = toCnf φ ∨Cnf toCnf ψ
-toCnf (φ ⇒ ψ) = toCnf φ ⇒Cnf toCnf ψ
-toCnf (φ ⇔ ψ) = toCnf φ ⇔Cnf toCnf ψ
-toCnf (¬ φ)   = ¬Cnf (toCnf φ)
-
-toPropLiteral : Literal → Prop
-toPropLiteral (Var x)  = Var x
-toPropLiteral (¬l lit) = ¬ toPropLiteral lit
-
-toPropClause : Clause → Prop
-toPropClause []       = ⊥
-toPropClause (l ∷ []) = toPropLiteral l
-toPropClause (l ∷ ls) = toPropLiteral l ∨ toPropClause ls
-
-toProp : Cnf → Prop
-toProp []         = ⊤
-toProp (fm ∷ [] ) = toPropClause fm
-toProp (fm ∷ fms) = toPropClause fm ∧ toProp fms
-
-cnf : Prop → Prop
-cnf = toProp ∘ toCnf
-
-------------------------------------------------------------------------------
--- NNF
+-- Negation Normal Form (NNF)
 ------------------------------------------------------------------------------
 
 data nView : Prop  → Set where
@@ -234,7 +161,7 @@ thm-nnf
 thm-nnf {Γ} {φ} Γ⊢φ = thm-nnf′ (ubsizetree φ) Γ⊢φ
 
 ------------------------------------------------------------------------------
--- DNF
+-- Disjunctive Normal Form (DNF)
 ------------------------------------------------------------------------------
 
 data dView : Prop → Set where
@@ -293,24 +220,35 @@ thm-dist-∧ {Γ} {.(φ ∧ (ψ ∨ ω))} Γ⊢φ∧⟨ψ∨ω⟩ | case₂ φ �
     (∧-proj₂ Γ⊢φ∧⟨ψ∨ω⟩)
 thm-dist-∧ {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 
+
+dist : Prop → Prop
+dist φ with d-view φ
+dist .(φ ∧ ψ) | conj φ ψ = dist-∧ (φ ∧ ψ)
+dist .(φ ∨ ψ) | disj φ ψ = dist φ ∨ dist ψ
+dist φ        | other .φ = φ
+
+thm-dist
+  : ∀ {Γ} {φ}
+  → Γ ⊢ φ
+  → Γ ⊢ dist φ
+
+thm-dist {Γ} {φ} Γ⊢φ with d-view φ
+thm-dist {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ = thm-dist-∧ Γ⊢φ∧ψ
+thm-dist {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ (dist ψ) (thm-dist (assume {Γ = Γ} φ)))
+        (∨-intro₂ (dist φ) (thm-dist (assume {Γ = Γ} ψ)))))
+    Γ⊢φ∨ψ
+thm-dist {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
+
 dnf : Prop → Prop
-dnf φ with d-view φ
-dnf .(φ ∧ ψ) | conj φ ψ = dist-∧ (φ ∧ ψ)
-dnf .(φ ∨ ψ) | disj φ ψ = dnf φ ∨ dnf ψ
-dnf φ        | other .φ = φ
+dnf = dist ∘ nnf
 
 thm-dnf
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
   → Γ ⊢ dnf φ
 
-thm-dnf {Γ} {φ} Γ⊢φ with d-view φ
-thm-dnf {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ = thm-dist-∧ Γ⊢φ∧ψ
-thm-dnf {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
-  ⇒-elim
-    (⇒-intro
-      (∨-elim {Γ = Γ}
-        (∨-intro₁ (dnf ψ) (thm-dnf (assume {Γ = Γ} φ)))
-        (∨-intro₂ (dnf φ) (thm-dnf (assume {Γ = Γ} ψ)))))
-    Γ⊢φ∨ψ
-thm-dnf {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
+thm-dnf = thm-dist ∘ thm-nnf
