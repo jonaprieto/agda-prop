@@ -232,3 +232,85 @@ thm-nnf
   → Γ ⊢ nnf φ
 
 thm-nnf {Γ} {φ} Γ⊢φ = thm-nnf′ (ubsizetree φ) Γ⊢φ
+
+------------------------------------------------------------------------------
+-- DNF
+------------------------------------------------------------------------------
+
+data dView : Prop → Set where
+  conj  : (φ ψ : Prop) → dView (φ ∧ ψ)
+  disj  : (φ ψ : Prop) → dView (φ ∨ ψ)
+  other : (φ : Prop)   → dView φ
+
+d-view : (φ : Prop) → dView φ
+d-view (φ ∧ ψ) = conj _ _
+d-view (φ ∨ ψ) = disj _ _
+d-view φ       = other _
+
+data dViewAux : Prop → Set where
+  case₁ : (φ ψ ω : Prop) → dViewAux ((φ ∨ ψ) ∧ ω)
+  case₂ : (φ ψ ω : Prop) → dViewAux (φ ∧ (ψ ∨ ω))
+  other : (φ : Prop)     → dViewAux φ
+
+d-view-aux : (φ : Prop) → dViewAux φ
+d-view-aux ((φ ∨ ψ) ∧ ω) = case₁ _ _ _
+d-view-aux (φ ∧ (ψ ∨ ω)) = case₂ _ _ _
+d-view-aux φ             = other _
+
+dist-∧ : Prop → Prop
+dist-∧ φ with d-view-aux φ
+dist-∧ .((φ ∨ ψ) ∧ ω) | case₁ φ ψ ω = dist-∧ (φ ∧ ω) ∨ dist-∧ (ψ ∧ ω)
+dist-∧ .(φ ∧ (ψ ∨ ω)) | case₂ φ ψ ω = dist-∧ (φ ∧ ψ) ∨ dist-∧ (φ ∧ ω)
+dist-∧ φ              | other .φ    = φ
+
+thm-dist-∧
+  : ∀ {Γ} {φ}
+  → Γ ⊢ φ
+  → Γ ⊢ dist-∧ φ
+
+thm-dist-∧ {Γ} {φ} Γ⊢φ with d-view-aux φ
+thm-dist-∧ {Γ} {.((φ ∨ ψ) ∧ ω)} Γ⊢⟨φ∨ψ⟩∧ω | case₁ φ ψ ω =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ (dist-∧ (ψ ∧ ω))
+          (thm-dist-∧
+            (∧-intro (assume {Γ = Γ} φ) (weaken φ (∧-proj₂ Γ⊢⟨φ∨ψ⟩∧ω)))))
+        (∨-intro₂ (dist-∧ (φ ∧ ω))
+          (thm-dist-∧
+            (∧-intro (assume {Γ = Γ} ψ) (weaken ψ (∧-proj₂ Γ⊢⟨φ∨ψ⟩∧ω)))))))
+     (∧-proj₁ Γ⊢⟨φ∨ψ⟩∧ω)
+thm-dist-∧ {Γ} {.(φ ∧ (ψ ∨ ω))} Γ⊢φ∧⟨ψ∨ω⟩ | case₂ φ ψ ω =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ (dist-∧ (φ ∧ ω))
+          (thm-dist-∧
+            (∧-intro (weaken ψ (∧-proj₁ Γ⊢φ∧⟨ψ∨ω⟩)) (assume {Γ = Γ} ψ))))
+        (∨-intro₂ (dist-∧ (φ ∧ ψ))
+          (thm-dist-∧
+            (∧-intro (weaken ω (∧-proj₁ Γ⊢φ∧⟨ψ∨ω⟩)) (assume {Γ = Γ} ω))))))
+    (∧-proj₂ Γ⊢φ∧⟨ψ∨ω⟩)
+thm-dist-∧ {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
+
+dnf : Prop → Prop
+dnf φ with d-view φ
+dnf .(φ ∧ ψ) | conj φ ψ = dist-∧ (φ ∧ ψ)
+dnf .(φ ∨ ψ) | disj φ ψ = dnf φ ∨ dnf ψ
+dnf φ        | other .φ = φ
+
+thm-dnf
+  : ∀ {Γ} {φ}
+  → Γ ⊢ φ
+  → Γ ⊢ dnf φ
+
+thm-dnf {Γ} {φ} Γ⊢φ with d-view φ
+thm-dnf {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ = thm-dist-∧ Γ⊢φ∧ψ
+thm-dnf {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ (dnf ψ) (thm-dnf (assume {Γ = Γ} φ)))
+        (∨-intro₂ (dnf φ) (thm-dnf (assume {Γ = Γ} ψ)))))
+    Γ⊢φ∨ψ
+thm-dnf {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
