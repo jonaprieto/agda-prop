@@ -279,9 +279,21 @@ thm-dist-∨
   → Γ ⊢ dist-∨ φ
 
 thm-dist-∨ {Γ} {φ} Γ⊢φ with c-view-aux φ
-thm-dist-∨ {Γ} {.(φ ∧ ψ ∨ ω)}   Γ⊢φ | case₁ φ ψ ω = {!!}
-thm-dist-∨ {Γ} {.(φ ∨ (ψ ∧ ω))} Γ⊢φ | case₂ φ ψ ω = {!!}
-thm-dist-∨ {Γ} {.φ}             Γ⊢φ | other φ     = {!!}
+thm-dist-∨ {Γ} {.((φ ∧ ψ) ∨ ω)} Γ⊢φ | case₁ φ ψ ω =
+  ∧-intro
+   (thm-dist-∨ (∧-proj₁ helper))
+   (thm-dist-∨ (∧-proj₂ helper))
+  where
+    helper : Γ ⊢ (φ ∨ ω) ∧ (ψ ∨ ω)
+    helper =
+      ∧-intro
+        (∨-comm  (∧-proj₁ (∨-dist₁ (∨-comm Γ⊢φ))))
+        (∨-comm (∧-proj₂ (∨-dist₁ (∨-comm Γ⊢φ))))
+thm-dist-∨ {Γ} {.(φ ∨ (ψ ∧ ω))} Γ⊢φ | case₂ φ ψ ω =
+  ∧-intro
+    (thm-dist-∨ (∧-proj₁ (∨-dist₁ Γ⊢φ)))
+    (thm-dist-∨ (∧-proj₂ (∨-dist₁ Γ⊢φ)))
+thm-dist-∨ {Γ} {.φ}             Γ⊢φ | other φ     = Γ⊢φ
 
 dist′ : Prop → Prop
 dist′ φ with d-view φ
@@ -289,11 +301,17 @@ dist′ .(φ ∧ ψ) | conj φ ψ = dist′ φ ∧ dist′ ψ
 dist′ .(φ ∨ ψ) | disj φ ψ = dist-∨ (φ ∨ ψ)
 dist′ φ        | other .φ = φ
 
-postulate
-  thm-dist′
+
+thm-dist′
     : ∀ {Γ} {φ}
     → Γ ⊢ φ
     → Γ ⊢ dist′ φ
+
+thm-dist′ {Γ} {φ} Γ⊢φ with d-view φ
+thm-dist′ {Γ} {.(φ ∧ ψ)} Γ⊢φ∧ψ | conj φ ψ =
+  ∧-intro (thm-dist′ (∧-proj₁ Γ⊢φ∧ψ)) (thm-dist′ (∧-proj₂ Γ⊢φ∧ψ))
+thm-dist′ {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ = thm-dist-∨ Γ⊢φ∨ψ
+thm-dist′ {Γ} {.φ} Γ⊢φ | other φ        = Γ⊢φ
 
 cnf : Prop → Prop
 cnf = dist′ ∘ nnf
