@@ -252,3 +252,55 @@ thm-dnf
   → Γ ⊢ dnf φ
 
 thm-dnf = thm-dist ∘ thm-nnf
+
+------------------------------------------------------------------------------
+-- Conjunctive Normal Forms (CNF)
+------------------------------------------------------------------------------
+
+data cViewAux : Prop → Set where
+  case₁ : (φ ψ ω : Prop) → cViewAux ((φ ∧ ψ) ∨ ω)
+  case₂ : (φ ψ ω : Prop) → cViewAux (φ ∨ (ψ ∧ ω))
+  other : (φ : Prop)     → cViewAux φ
+
+c-view-aux : (φ : Prop) → cViewAux φ
+c-view-aux ((φ ∧ ψ) ∨ ω) = case₁ _ _ _
+c-view-aux (φ ∨ (ψ ∧ ω)) = case₂ _ _ _
+c-view-aux φ             = other _
+
+dist-∨ : Prop → Prop
+dist-∨ φ with c-view-aux φ
+dist-∨ .((φ ∧ ψ) ∨ ω) | case₁ φ ψ ω = dist-∨ (φ ∨ ω) ∧ dist-∨ (ψ ∨ ω)
+dist-∨ .(φ ∨ (ψ ∧ ω)) | case₂ φ ψ ω = dist-∨ (φ ∨ ψ) ∧ dist-∨ (φ ∨ ω)
+dist-∨ φ              | other .φ    = φ
+
+thm-dist-∨
+  : ∀ {Γ} {φ}
+  → Γ ⊢ φ
+  → Γ ⊢ dist-∨ φ
+
+thm-dist-∨ {Γ} {φ} Γ⊢φ with c-view-aux φ
+thm-dist-∨ {Γ} {.(φ ∧ ψ ∨ ω)}   Γ⊢φ | case₁ φ ψ ω = {!!}
+thm-dist-∨ {Γ} {.(φ ∨ (ψ ∧ ω))} Γ⊢φ | case₂ φ ψ ω = {!!}
+thm-dist-∨ {Γ} {.φ}             Γ⊢φ | other φ     = {!!}
+
+dist′ : Prop → Prop
+dist′ φ with d-view φ
+dist′ .(φ ∧ ψ) | conj φ ψ = dist′ φ ∧ dist′ ψ
+dist′ .(φ ∨ ψ) | disj φ ψ = dist-∨ (φ ∨ ψ)
+dist′ φ        | other .φ = φ
+
+postulate
+  thm-dist′
+    : ∀ {Γ} {φ}
+    → Γ ⊢ φ
+    → Γ ⊢ dist′ φ
+
+cnf : Prop → Prop
+cnf = dist′ ∘ nnf
+
+thm-cnf
+  : ∀ {Γ} {φ}
+  → Γ ⊢ φ
+  → Γ ⊢ cnf φ
+
+thm-cnf = thm-dist′ ∘ thm-nnf
