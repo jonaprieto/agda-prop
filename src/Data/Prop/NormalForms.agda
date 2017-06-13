@@ -66,7 +66,7 @@ nnf′ (suc n) .(¬ (x ∨ y)) | ndisj x y  = nnf′ n ((¬ x) ∧ (¬ y))
 nnf′ (suc n) .(¬ (¬ x))   | nneg x     = nnf′ n x
 nnf′ (suc n) .(¬ ⊤)       | ntop       = ⊥
 nnf′ (suc n) .(¬ ⊥)       | nbot       = ⊤
-nnf′ (suc n) .(¬ (x ⇒ y)) | nimpl x y  = nnf′ n (¬ ((¬ x) ∨ y))
+nnf′ (suc n) .(¬ (x ⇒ y)) | nimpl x y  = nnf′ n (¬ (y ∨ (¬ x)))
 nnf′ (suc n) .(¬ (x ⇔ y)) | nbiim x y  = nnf′ n (¬ ((x ⇒ y) ∧ (y ⇒ x)))
 nnf′ (suc n) φ            | other .φ   = φ
 nnf′ zero φ               | _          = φ
@@ -102,8 +102,8 @@ thm-nnf′ {Γ} {.(¬ ⊥)} (suc n) Γ⊢¬⊥          | nbot       = ⊤-intro
 thm-nnf′ {Γ} {.(¬ (x ⇒ y))} (suc n) Γ⊢¬x⇒y  | nimpl x y  =
   thm-nnf′ n (subst⊢¬ helper Γ⊢¬x⇒y)
   where
-    helper : Γ ⊢ ¬ x ∨ y ⇒ (x ⇒ y)
-    helper = ⇒-intro (¬∨-to-⇒ (assume {Γ = Γ} (¬ x ∨ y)))
+    helper : Γ ⊢ y ∨ ¬ x ⇒ (x ⇒ y)
+    helper = ⇒-intro (¬∨-to-⇒ (∨-comm (assume {Γ = Γ} (y ∨ ¬ x))))
 thm-nnf′ {Γ} {.(¬ (x ⇔ y))} (suc n) Γ⊢¬x⇔y    | nbiim x y =
   thm-nnf′ n
     (subst⊢¬
