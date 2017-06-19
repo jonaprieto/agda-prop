@@ -70,3 +70,12 @@ c-view-aux : (φ : Prop) → cViewAux φ
 c-view-aux ((φ ∧ ψ) ∨ φ₃) = case₁ _ _ _
 c-view-aux (φ ∨ (ψ ∧ φ₃)) = case₂ _ _ _
 c-view-aux φ              = other _
+
+
+data ImplView : Prop → Set where
+  impl  : (φ₁ φ₂ : Prop) → ImplView (φ₁ ⇒ φ₂)
+  other : (φ : Prop)     → ImplView φ
+
+impl-view : (φ : Prop) → ImplView φ
+impl-view (φ₁ ⇒ φ₂) = impl _ _
+impl-view φ         = other _
