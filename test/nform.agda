@@ -15,13 +15,13 @@ r = Var (# 2)
 φ = ¬ ((p ∧ (p ⇒ q)) ⇒ q) -- (p ∧ q) ∨ (¬ r)
 
 cnfφ : Prop
-cnfφ = ¬ q ∧ (¬ p ∧ (¬ p ∨ q))
+cnfφ = ¬ q ∧ (p ∧ (¬ p ∨ q))
 
 postulate
  p1 : ∅ ⊢ φ
 
 p2 : ∅ ⊢ cnfφ
-p2 = {!!} -- thm-cnf p1
+p2 = thm-cnf p1 -- thm-cnf p1
 
 {-
 p3 : cnf φ ≡ cnfφ
