@@ -3,13 +3,12 @@
 -- Normal Forms.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ)
+open import Data.Nat using (ℕ; suc; zero; _+_;_*_)
 
 module Data.Prop.NormalForms (n : ℕ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Nat.Base public
 open import Data.Fin  using ( Fin; #_ )
 open import Data.List using ( List; [_]; [];  _++_; _∷_ ; concatMap; map )
 open import Data.Prop.Properties n using ( subst )
