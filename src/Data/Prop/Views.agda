@@ -41,6 +41,23 @@ n-view (¬ (φ₁ ⇔ φ₂)) = nbiim _ _
 n-view (¬ (¬ φ₁))    = nneg _
 n-view φ₁            = other _
 
+data ConjView : Prop → Set where
+  conj  : (φ₁ φ₂ : Prop) → ConjView (φ₁ ∧ φ₂)
+  other : (φ : Prop)     → ConjView φ
+
+conj-view : (φ : Prop) → ConjView φ
+conj-view (φ₁ ∧ φ₂) = conj _ _
+conj-view φ         = other _
+
+data DisjView : Prop → Set where
+  disj  : (φ₁ φ₂ : Prop) → DisjView (φ₁ ∨ φ₂)
+  other : (φ : Prop)     → DisjView φ
+
+disj-view : (φ : Prop) → DisjView φ
+disj-view (φ₁ ∨ φ₂) = disj _ _
+disj-view φ         = other _
+
+
 data dView : Prop → Set where
   conj  : (φ₁ φ₂ : Prop) → dView (φ₁ ∧ φ₂)
   disj  : (φ₁ φ₂ : Prop) → dView (φ₁ ∨ φ₂)
