@@ -9,9 +9,11 @@ module Data.Prop.SyntaxExperiment ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
+open import Data.Bool using (false; true)
 open import Data.Prop.Syntax n
 open import Data.Prop.Views n
 open import Data.Prop.Dec n
+open import Data.Prop.Properties n
 
 open import Data.List public
 
@@ -85,6 +87,38 @@ thm-right-assoc-∧
   → Γ ⊢ φ
   → Γ ⊢ right-assoc-∧ φ
 thm-right-assoc-∧ = ⊢∧-to-⊢ ∘ ⊢-to-⊢∧
+
+find-conjunct : List Prop → Prop → Prop
+find-conjunct [] x        = ⊤
+find-conjunct (x ∷ xs) y with ⌊ eq x y ⌋
+... | false = find-conjunct xs y
+... | true  = x
+
+thm-find-conjunct
+  : ∀ {Γ} {L}
+  → (ψ : Prop)
+  → Γ ⊢∧ L
+  → Γ ⊢ find-conjunct L ψ
+
+thm-find-conjunct {_} {[]} ψ Γ⊢∧L    = ⊤-intro
+thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L with ⌊ eq x ψ ⌋
+thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | false with Γ⊢∧L
+thm-find-conjunct {_} {x ∷ .[]} ψ Γ⊢∧L | false | thm-intro x₁ = ⊤-intro
+thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | false | ∧-intro x₁ w = thm-find-conjunct ψ w
+thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | true  = ∧-proj Γ⊢∧L
+
+thm-conjunct
+  : ∀ {Γ} {φ}
+  → (ψ : Prop)
+  → Γ ⊢ φ
+  → Γ ⊢ find-conjunct (toList φ) ψ
+thm-conjunct {_} ψ Γ⊢φ = thm-find-conjunct ψ (⊢-to-⊢∧ Γ⊢φ)
+
+toWeak : (Γ : List Prop) (ψ : Prop) → List Prop
+toWeak t f = t , f , f
+
+strip : ∀ {Γ} {φ} → (ψ : Prop) → Γ ⊢ φ → (toWeak Γ ψ) ⊢ φ
+strip ψ Γ⊢φ = (weaken ψ (weaken ψ Γ⊢φ))
 
 -- Bag Equivalance
 
