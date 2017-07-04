@@ -24,25 +24,37 @@ open import Relation.Binary.PropositionalEquality using (_≡_)
 
 data _⊢∧_ : Ctxt → List Prop → Set where
 
-  top-intro : ∀ {Γ}
-            → Γ ⊢∧ []
+  empty-intro : ∀ {Γ}
+              → Γ ⊢∧ []
 
-  thm-intro : ∀ {Γ} {φ}
-            → Γ ⊢ φ
-            → Γ ⊢∧ [ φ ]
-
-  ∧-intro   : ∀ {Γ} {φ} {L}
+  ∷-intro   : ∀ {Γ} {φ} {L}
             → Γ ⊢ φ
             → Γ ⊢∧ L
             → Γ ⊢∧ (φ ∷ L)
 
-lemma-++
-  : ∀ {Γ} {L₁ L₂}
-  → Γ ⊢∧ L₁ → Γ ⊢∧ L₂
-  → Γ ⊢∧ (L₁ ++ L₂)
-lemma-++ top-intro Γ⊢∧L₁        = Γ⊢∧L₁
-lemma-++ (thm-intro x) Γ⊢∧L₁    = ∧-intro x Γ⊢∧L₁
-lemma-++ (∧-intro x thm1) Γ⊢∧L₁ = ∧-intro x (lemma-++ thm1 Γ⊢∧L₁)
+∷-proj₁
+  : ∀ {Γ} {φ} {L}
+  → Γ ⊢∧ (φ ∷ L)
+  → Γ ⊢ φ
+∷-proj₁ (∷-intro Γ⊢φ _) = Γ⊢φ
+
+∷-proj₂
+  : ∀ {Γ} {φ} {L}
+  → Γ ⊢∧ (φ ∷ L)
+  → Γ ⊢∧ L
+∷-proj₂ (∷-intro _ Γ⊢∧L) = Γ⊢∧L
+
+thm-intro
+  : ∀ {Γ} {φ}
+  → Γ ⊢ φ
+  → Γ ⊢∧ [ φ ]
+thm-intro {Γ} {φ} Γ⊢φ = ∷-intro Γ⊢φ empty-intro
+
+++-intro  : ∀ {Γ} {L₁ L₂}
+          → Γ ⊢∧ L₁ → Γ ⊢∧ L₂
+          → Γ ⊢∧ (L₁ ++ L₂)
+++-intro empty-intro th2 = th2
+++-intro (∷-intro x th1) th2 = ∷-intro x (++-intro th1 th2)
 
 toList : Prop → List Prop
 toList φ with conj-view φ
@@ -55,29 +67,21 @@ toList φ          | other .φ   = [ φ ]
   → Γ ⊢∧ toList φ
 
 ⊢-to-⊢∧ {_} {φ} Γ⊢φ with conj-view φ
-... | conj φ₁ φ₂ = lemma-++ (⊢-to-⊢∧ (∧-proj₁ Γ⊢φ)) (⊢-to-⊢∧ (∧-proj₂ Γ⊢φ))
-... | other .φ   = thm-intro Γ⊢φ
-
-∧-proj
-  : ∀ {Γ} {φ} {L}
-  → Γ ⊢∧ (φ ∷ L)
-  → Γ ⊢ φ
-
-∧-proj {_} {_} {.[]} (thm-intro Γ⊢φ)   = Γ⊢φ
-∧-proj {_} {_} {L}   (∧-intro Γ⊢φ thm) = Γ⊢φ
+... | conj φ₁ φ₂ = ++-intro (⊢-to-⊢∧ (∧-proj₁ Γ⊢φ)) (⊢-to-⊢∧ (∧-proj₂ Γ⊢φ))
+... | other .φ   = ∷-intro Γ⊢φ empty-intro
 
 toProp : List Prop → Prop
 toProp []       = ⊤
 toProp (φ ∷ []) = φ
-toProp (φ ∷ L)  = φ ∧ (toProp L)
+toProp (φ ∷ L)  = φ ∧ toProp L
 
 ⊢∧-to-⊢
   : ∀ {Γ} {L}
   → Γ ⊢∧ L
   → Γ ⊢ toProp L
 ⊢∧-to-⊢ {_} {[]}         _                 = ⊤-intro
-⊢∧-to-⊢ {_} {x ∷ []}     Γ⊢∧L              = ∧-proj Γ⊢∧L
-⊢∧-to-⊢ {_} {x ∷ _ ∷ _} (∧-intro Γ⊢φ Γ⊢∧L) = ∧-intro Γ⊢φ (⊢∧-to-⊢ Γ⊢∧L)
+⊢∧-to-⊢ {_} {_ ∷ []}     Γ⊢∧L              = ∷-proj₁ Γ⊢∧L
+⊢∧-to-⊢ {_} {x ∷ _ ∷ _} (∷-intro Γ⊢φ Γ⊢∧L) = ∧-intro Γ⊢φ (⊢∧-to-⊢ Γ⊢∧L)
 
 right-assoc-∧ : Prop → Prop
 right-assoc-∧  = toProp ∘ toList
@@ -87,6 +91,7 @@ thm-right-assoc-∧
   → Γ ⊢ φ
   → Γ ⊢ right-assoc-∧ φ
 thm-right-assoc-∧ = ⊢∧-to-⊢ ∘ ⊢-to-⊢∧
+
 
 find-conjunct : List Prop → Prop → Prop
 find-conjunct [] x        = ⊤
@@ -103,9 +108,8 @@ thm-find-conjunct
 thm-find-conjunct {_} {[]} ψ Γ⊢∧L    = ⊤-intro
 thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L with ⌊ eq x ψ ⌋
 thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | false with Γ⊢∧L
-thm-find-conjunct {_} {x ∷ .[]} ψ Γ⊢∧L | false | thm-intro x₁ = ⊤-intro
-thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | false | ∧-intro x₁ w = thm-find-conjunct ψ w
-thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | true  = ∧-proj Γ⊢∧L
+thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | false | ∷-intro x₁ w = thm-find-conjunct ψ w
+thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | true  = ∷-proj₁ Γ⊢∧L
 
 thm-conjunct
   : ∀ {Γ} {φ}
@@ -114,6 +118,7 @@ thm-conjunct
   → Γ ⊢ find-conjunct (toList φ) ψ
 thm-conjunct {_} ψ Γ⊢φ = thm-find-conjunct ψ (⊢-to-⊢∧ Γ⊢φ)
 
+{-
 toWeak : (Γ : List Prop) (ψ : Prop) → List Prop
 toWeak t f = t , f , f
 
@@ -157,3 +162,4 @@ strip ψ Γ⊢φ = (weaken ψ (weaken ψ Γ⊢φ))
 
 -- _≈Bag₂_ : List Prop → List Prop → Set
 -- xs ≈Bag₂ ys = ∀ x → x ∈₂ xs ↔ x ∈₂ ys
+-}
