@@ -75,10 +75,10 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
 ≡-¬-to-¬ = ¬-inside
 
 subst⊢¬
-  : ∀ {Γ} {φ ω}
-  → Γ ⊢ ω ⇒ φ
+  : ∀ {Γ} {φ γ}
+  → Γ ⊢ γ ⇒ φ
   → Γ ⊢ ¬ φ
-  → Γ ⊢ ¬ ω
+  → Γ ⊢ ¬ γ
 
 postulate
   ¬⇔-to-⇒¬∧⇒¬
@@ -155,5 +155,5 @@ postulate
           (sym φ≡ψ)
           (assume {Γ = Γ} ψ))))
 
-subst⊢¬ {Γ}{φ}{ω} Γ⊢ω⇒φ Γ⊢¬φ =
-  ⇒⊥-to-¬ (subst⊢⇒₁ Γ⊢ω⇒φ (¬-to-⇒⊥ Γ⊢¬φ))
+subst⊢¬ {Γ}{φ}{γ} Γ⊢γ⇒φ Γ⊢¬φ =
+  ⇒⊥-to-¬ (subst⊢⇒₁ Γ⊢γ⇒φ (¬-to-⇒⊥ Γ⊢¬φ))

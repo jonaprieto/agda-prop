@@ -47,7 +47,7 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
 
   weaken   : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
                                           → Γ , ψ ⊢ φ
-					  
+
   weaken₂  : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
                                           → ψ ∷ Γ ⊢ φ
 -- Top and Bottom.
@@ -160,25 +160,25 @@ course:
 open import Data.Prop 2 public
 
 ex3
-  : ∀ {φ ψ ω}
-  → ∅ ⊢ (φ ∧ (ψ ∨ ω)) ⇒ ((φ ∧ ψ) ∨ (φ ∧ ω))
+  : ∀ {φ ψ γ}
+  → ∅ ⊢ (φ ∧ (ψ ∨ γ)) ⇒ ((φ ∧ ψ) ∨ (φ ∧ γ))
 
-ex3 {φ}{ψ}{ω} =
+ex3 {φ}{ψ}{γ} =
   ⇒-intro
   (⇒-elim
     (⇒-intro
-      (∨-elim {Γ = ∅ , (φ ∧ (ψ ∨ ω))}
+      (∨-elim {Γ = ∅ , (φ ∧ (ψ ∨ γ))}
         (∨-intro₁
-          (φ ∧ ω)
+          (φ ∧ γ)
           (∧-intro
-            (∧-proj₁ (weaken ψ (assume {Γ = ∅} (φ ∧ (ψ ∨ ω)))))
-            (assume {Γ = ∅ , (φ ∧ (ψ ∨ ω)) } ψ)))
+            (∧-proj₁ (weaken ψ (assume {Γ = ∅} (φ ∧ (ψ ∨ γ)))))
+            (assume {Γ = ∅ , (φ ∧ (ψ ∨ γ)) } ψ)))
         (∨-intro₂
           (φ ∧ ψ)
           (∧-intro
-            (∧-proj₁ (weaken ω (assume {Γ = ∅} (φ ∧ (ψ ∨ ω)))))
-            (assume {Γ = ∅ , (φ ∧ (ψ ∨ ω))} ω )))))
-    (∧-proj₂ (assume {Γ = ∅} (φ ∧ (ψ ∨ ω)))))
+            (∧-proj₁ (weaken γ (assume {Γ = ∅} (φ ∧ (ψ ∨ γ)))))
+            (assume {Γ = ∅ , (φ ∧ (ψ ∨ γ))} γ )))))
+    (∧-proj₂ (assume {Γ = ∅} (φ ∧ (ψ ∨ γ)))))
 
 ```
 
@@ -187,7 +187,7 @@ ex3 {φ}{ψ}{ω} =
 - Leran Cai, Ambrus Kaposi, and Thorsten Altenkirch. *Formalising the Completeness
   Theorem of Classical Propositional Logic in Agda (Proof Pearl)*. The formalisation
   is available at http://bitbucket.org/Leran/.
-  
+
 ### Contributions
 
 Some `Data.Prop.Theorems` modules contain postulates waiting to be proved. Go ahead!

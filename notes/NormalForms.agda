@@ -133,11 +133,11 @@ cnf = toProp ∘ toCnf
 -- p2 : cnf ψ ≡ cnfψ
 -- p2 = refl
 
--- ω : Prop
--- ω = cnf (¬ cnfψ)
+-- γ : Prop
+-- γ = cnf (¬ cnfψ)
 
--- cnfω : Prop
--- cnfω = r ∧ (¬ p ∧ (r ∧ ¬ q))
+-- cnfγ : Prop
+-- cnfγ = r ∧ (¬ p ∧ (r ∧ ¬ q))
 
--- p3 : ω ≡ cnfω
+-- p3 : γ ≡ cnfγ
 -- p3 = refl
