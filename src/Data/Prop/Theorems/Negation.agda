@@ -80,11 +80,10 @@ subst⊢¬
   → Γ ⊢ ¬ φ
   → Γ ⊢ ¬ γ
 
-postulate
-  ¬⇔-to-⇒¬∧⇒¬
-    : ∀ {Γ} {φ₁ φ₂}
-    → Γ ⊢ ¬ (φ₁ ⇔ φ₂)
-    → Γ ⊢ (φ₁ ⇒ φ₂) ∧ (φ₂ ⇒ ¬ φ₁)
+¬⇔-to-⇒¬∧⇒¬
+  : ∀ {Γ} {φ₁ φ₂}
+  → Γ ⊢ ¬ (φ₁ ⇔ φ₂)
+  → Γ ⊢ (φ₁ ⇒ ¬ φ₂) ∧ (φ₂ ⇒ ¬ φ₁)
 
 ------------------------------------------------------------------------------
 -- Proofs.
@@ -152,3 +151,19 @@ postulate
 
 subst⊢¬ {Γ}{φ}{γ} Γ⊢γ⇒φ Γ⊢¬φ =
   ⇒⊥-to-¬ (subst⊢⇒₁ Γ⊢γ⇒φ (¬-to-⇒⊥ Γ⊢¬φ))
+
+¬⇔-to-⇒¬∧⇒¬ {Γ} {φ₁} {φ₂} thm =
+  ∧-intro
+    (⇒-intro
+      (¬-intro
+        (¬-elim
+          (weaken φ₂ $ weaken φ₁ thm)
+          (⇔-intro
+            (weaken φ₁ $ assume {Γ = Γ , φ₁} φ₂)
+            (weaken φ₂ $ weaken φ₂ $ assume {Γ = Γ} φ₁)))))
+    (⇒-intro
+      (¬-intro
+        (¬-elim (weaken φ₁ $ weaken φ₂ thm)
+          (⇔-intro
+            (weaken φ₁ $ weaken φ₁ $ assume {Γ = Γ} φ₂)
+            (weaken φ₂ $ assume {Γ = Γ , φ₂} φ₁)))))
