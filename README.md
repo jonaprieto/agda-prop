@@ -2,25 +2,22 @@
 
 This is a library to work with Classical Propositional Logic based on a deep embedding.
 It also contains a compilation of useful theorems with their natural deduction proofs,
-and some properties ready to work with and some algorithms like nnf, cnf, among others.
+and some properties ready to work with and some algorithms like NNF, CNF, among others.
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Quick Start](#quick-start)
-	- [Requirements](#requirements)
-	- [Installation](#installation)
 - [Library](#library)
 	- [Theorems](#theorems)
 	- [Examples](#examples)
 	- [References](#references)
-	- [Contributions](#contributions)
 
 <!-- /TOC -->
 
 ## Quick Start
 
-We define two data types, the formula data type `Prop` and the sequen or theroem
-data type `_⊢_`, that dependend of a *list* of hypotesis and the conclusion,
+We define two data types, the formula data type `Prop` and the theorem
+data type `_⊢_`, that depended of a *list* of hypothesis and the conclusion,
 a formula. The constructors are the following.
 
 ```agda
@@ -35,7 +32,7 @@ data Prop : Type where
   ¬_   : (φ : Prop) → Prop      -- Negation.
 ```
 
-The theroems use the following inference rules:
+The theorems use the following inference rules:
 
 ```agda
 data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
