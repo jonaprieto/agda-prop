@@ -14,8 +14,6 @@ open import Data.Prop.Theorems.Implication n
   using ( ⇒-to-¬∨; ⇒⇒-to-∧⇒; ∧⇒-to-⇒⇒ )
 open import Data.Prop.Theorems.Negation n
   using ( ¬-equiv₁ ; ¬-equiv₂; ¬∨-to-⇒; ¬¬-equiv₁; ¬¬-equiv₂ )
-open import Data.Prop.Theorems.Weakening n
-  using ( weaken-Δ₁ )
 
 open import Data.Prop.Syntax n
 
