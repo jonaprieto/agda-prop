@@ -2,11 +2,13 @@
 
 - List of Theorems
     - [Biimplication](#biimplication)
+    - [Classical](#classical)
     - [Conjunction](#conjunction)
     - [Disjunction](#disjunction)
     - [Implication](#implication)
     - [Negation](#negation)
     - [Mixies](#mixies)
+    - [Weakening](#weakening)
 
 ## Biimplication
 
@@ -25,16 +27,15 @@
   : ∀ {Γ} {φ ψ}
   → Γ ⊢ (φ ⇔ ψ) ⇔ ((φ ⇒ ψ) ∧ (ψ ⇒ φ))
 
-postulate
-  ⇔-assoc₁
-    : ∀ {Γ} {φ ψ γ}
-    → Γ ⊢ φ ⇔ (ψ ⇔ γ)
-    → Γ ⊢ (φ ⇔ ψ) ⇔ γ
+⇔-assoc₁
+  : ∀ {Γ} {φ ψ γ}
+  → Γ ⊢ φ ⇔ (ψ ⇔ γ)
+  → Γ ⊢ (φ ⇔ ψ) ⇔ γ
 
-  ⇔-assoc₂
-    : ∀ {Γ} {φ ψ γ}
-    → Γ ⊢ (φ ⇔ ψ) ⇔ γ
-    → Γ ⊢ φ ⇔ (ψ ⇔ γ)
+⇔-assoc₂
+  : ∀ {Γ} {φ ψ γ}
+  → Γ ⊢ (φ ⇔ ψ) ⇔ γ
+  → Γ ⊢ φ ⇔ (ψ ⇔ γ)
 
 ⇔-assoc
   : ∀ {Γ} {φ ψ γ}
@@ -80,6 +81,18 @@ thm-bicon₁
   → Γ ⊢ γ ⇔ ψ
 subst⊢⇔₁ = ⇔-trans
 
+```
+## Classical
+
+```agda
+postulate
+  PEM : ∀ {Γ} {φ}
+      → Γ ⊢ φ ∨ ¬ φ
+
+RAA
+  : ∀ {Γ} {φ}
+  → Γ , ¬ φ ⊢ ⊥
+  → Γ ⊢ φ
 ```
 
 ## Conjunction
@@ -141,6 +154,7 @@ subst⊢∧₂
 ## Disjunction.
 
 ```agda
+
 ∨-assoc₁
   : ∀ {Γ} {φ ψ γ}
   → Γ ⊢ φ ∨ (ψ ∨ γ)
@@ -279,6 +293,7 @@ subst⊢∨₂
 ## Implication
 
 ```agda
+
 ⇒-equiv
   : ∀ {Γ} {φ ψ}
   → Γ ⊢ φ ⇒ ψ
@@ -320,6 +335,11 @@ vanDalen244e
   → Γ ⊢ (φ ∧ ψ) ⇒ γ
   → Γ ⊢ φ ⇒ (ψ ⇒ γ)
 
+⇒∧⇒-to-⇒∧
+  : ∀ {Γ} {φ ψ γ}
+  → Γ ⊢ (φ ⇒ ψ) ∧ (φ ⇒ γ)
+  → Γ ⊢ φ ⇒ (ψ ∧ γ)
+
 subst⊢⇒₁
   : ∀ {Γ} {φ ψ γ}
   → Γ ⊢ γ ⇒ φ
@@ -337,11 +357,27 @@ subst⊢⇒₂
   → Γ ⊢ φ ⇒ ψ
   → Γ ⊢ ψ ⇒ γ
   → Γ ⊢ φ ⇒ γ
+
+```
+
+## Mixies
+
+```agda
+e245b
+  : ∀ {Γ Δ} {φ ψ}
+  → Γ ⊢ φ → Δ , φ ⊢ ψ
+  → Γ ⨆ Δ ⊢ ψ
+
+¬⇒-to-∧¬
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ¬ (φ ⇒ ψ)
+  → Γ ⊢ φ ∧ ¬ ψ
 ```
 
 ## Negation
 
 ```agda
+
 ¬-equiv₁
   : ∀ {Γ} {φ}
   → Γ ⊢ ¬ φ
@@ -402,19 +438,25 @@ subst⊢¬
   → Γ ⊢ ¬ φ
   → Γ ⊢ ¬ γ
 
+¬⇔-to-⇒¬∧⇒¬
+  : ∀ {Γ} {φ₁ φ₂}
+  → Γ ⊢ ¬ (φ₁ ⇔ φ₂)
+  → Γ ⊢ (φ₁ ⇒ ¬ φ₂) ∧ (φ₂ ⇒ ¬ φ₁)
+
 ```
 
-## Mixies
+## Weakening
 
 ```agda
+weaken-Δ₁
+  : ∀ {Γ} {φ}
+  → (Δ : Ctxt)
+  → Γ ⊢ φ
+  → Γ ⨆ Δ ⊢ φ
 
-e245b
-  : ∀ {Γ Δ} {φ ψ}
-  → Γ ⊢ φ → Δ , φ ⊢ ψ
-  → Γ ⨆ Δ ⊢ ψ
-
-¬⇒-to-∧¬
-  : ∀ {Γ} {φ ψ}
-  → Γ ⊢ ¬ (φ ⇒ ψ)
-  → Γ ⊢ φ ∧ ¬ ψ
+weaken-Δ₂
+  :  ∀ {Γ} {φ}
+  → (Δ : Ctxt)
+  → Γ ⊢ φ
+  → Δ ⨆ Γ ⊢ φ
 ```

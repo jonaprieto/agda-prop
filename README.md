@@ -2,14 +2,14 @@
 
 This is a library to work with Classical Propositional Logic based on a deep embedding.
 It also contains a compilation of useful theorems with their natural deduction proofs,
-and some properties ready to work with.
+and some properties ready to work with and some algorithms like nnf, cnf, among others.
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Quick Start](#quick-start)
 	- [Requirements](#requirements)
 	- [Installation](#installation)
-- [Usage](#usage)
+- [Library](#library)
 	- [Theorems](#theorems)
 	- [Examples](#examples)
 	- [References](#references)
@@ -19,8 +19,9 @@ and some properties ready to work with.
 
 ## Quick Start
 
-This library provides us two data types: `Prop` and `_⊢_`.
-We have the following constructors.
+We define two data types, the formula data type `Prop` and the sequen or theroem
+data type `_⊢_`, that dependend of a *list* of hypotesis and the conclusion,
+a formula. The constructors are the following.
 
 ```agda
 data Prop : Type where
@@ -33,7 +34,8 @@ data Prop : Type where
   _⇔_  : (φ ψ : Prop) → Prop    -- Biimplication.
   ¬_   : (φ : Prop) → Prop      -- Negation.
 ```
-And for the turnstile, we have a list of inference rules:
+
+The theroems use the following inference rules:
 
 ```agda
 data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
@@ -106,88 +108,89 @@ data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
 
 ### Requirements
 
-* [Agda](https://github.com/agda/agda) version 2.5.1+
-* [Agda Standard Library](https://github.com/agda/agda-stdlib/) compatible with your Agda version
+Tested with:
 
-### Installation
+* [Agda](https://github.com/agda/agda) version 2.5.2
+* [Agda Standard Library](https://github.com/agda/agda-stdlib/) v0.13
 
-Clone this repository:
 
-```
-$ git clone http://github.com/jonaprieto/agda-prop.git
-```
+## Library
 
-Add the path of this library to your library manager file, located in `~/.agda/libraries`. For instance, a valid file looks similar to this one:
 
-```bash
-$ cat $HOME/.agda/libraries
-/home/jonaprieto/agda-stdlib/standard-library.agda-lib
-/home/jonaprieto/agda-prop/agda-prop.agda-lib
-```
-
-If you  need more instructions to install libraries for Agda, [Here](http://agda.readthedocs.io/en/latest/tools/package-system.html#installing-libraries)
-is a good link to check.
-
-## Usage
 ### Theorems
 
 The theorems have a name based on their main connective, their purpose or their source.
 We added sub-indices for those theorems that differ a little with other one.
 
 * [List of Theorems][theorems]
-  * [Conjunction][CONJ]
-  * [Implication][IMPL]
-  * [Disjunction][DISJ]
-  * [Negation][NEG]
-  * [Biimplication][BICON]
+  * [Biimplication](BIIMPLICATION)
+  * [Classical](CLASSICAL)
+  * [Conjunction](CONJUNCTION)
+  * [Disjunction](DISJUNCTION)
+  * [Implication](IMPLICATION)
+  * [Negation](NEGATION)
+  * [Mixies](MIXIES)
+  * [Weakening](WEAKENING)
+
 
 [theorems]: https://github.com/jonaprieto/agda-prop/tree/master/src/Data/Prop/Theorems
-[CONJ]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Conjunction.agda
-[IMPL]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Implication.agda
-[DISJ]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Disjunction.agda
-[NEG]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Negation.agda
-[BICON]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Biimplication.agda
+[BIIMPLICATION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Biimplication.agda
+[CLASSICAL]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Classical.agda
+[CONJUNCTION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Conjunction.agda
+[DISJUNCTION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Disjunction.agda
+[IMPLICATION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Implication.agda
+[NEGATION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Negation.agda
+[MIXIES]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Mixies.agda
+[WEAKENING]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Weakening.agda
 
 
-### Examples
+### Additional Theorems
 
-As example, we type-checked natural deduction proofs of some exercises from
-[Type Theory CM0859](http://www1.eafit.edu.co/asr/courses/type-theory-CM0859/exercises.pdf)
-course:
+* [Normal Forms][theorems]
+  * [Negative Normal Form (NNF)](https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/NormalForms.agda#L120)
+  * [Disjunctive Normal Form (DNF)](https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/NormalForms.agda#L201)
+  * [Conjunctive Normal Form (CNF)](https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/NormalForms.agda#L261)
+
+
+### Example
+
 
 ```agda
--- $ cat test/ex-andreas-abel.agda
+$ cat test/ex-andreas-abel.agda
 open import Data.Prop 2 public
+...
 
-ex3
-  : ∀ {φ ψ γ}
-  → ∅ ⊢ (φ ∧ (ψ ∨ γ)) ⇒ ((φ ∧ ψ) ∨ (φ ∧ γ))
+EM⇒Pierce
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
 
-ex3 {φ}{ψ}{γ} =
-  ⇒-intro
-  (⇒-elim
+EM⇒Pierce {Γ}{φ}{ψ} =
+  ⇒-elim
     (⇒-intro
-      (∨-elim {Γ = ∅ , (φ ∧ (ψ ∨ γ))}
-        (∨-intro₁
-          (φ ∧ γ)
-          (∧-intro
-            (∧-proj₁ (weaken ψ (assume {Γ = ∅} (φ ∧ (ψ ∨ γ)))))
-            (assume {Γ = ∅ , (φ ∧ (ψ ∨ γ)) } ψ)))
-        (∨-intro₂
-          (φ ∧ ψ)
-          (∧-intro
-            (∧-proj₁ (weaken γ (assume {Γ = ∅} (φ ∧ (ψ ∨ γ)))))
-            (assume {Γ = ∅ , (φ ∧ (ψ ∨ γ))} γ )))))
-    (∧-proj₂ (assume {Γ = ∅} (φ ∧ (ψ ∨ γ)))))
+      (∨-elim {Γ = Γ}
+        (⇒-intro
+          (weaken ((φ ⇒ ψ) ⇒ φ)
+            (assume {Γ = Γ} φ)))
+        (⇒-intro
+          (⇒-elim
+            (assume {Γ = Γ , ¬ φ} ((φ ⇒ ψ) ⇒ φ))
+              (⇒-intro
+                (⊥-elim
+                  ψ
+                  (¬-elim
+                  (weaken φ
+                    (weaken ((φ ⇒ ψ) ⇒ φ)
+                      (assume {Γ = Γ} (¬ φ))))
+                      (assume {Γ = Γ , ¬ φ , (φ ⇒ ψ) ⇒ φ} φ))))
+            ))))
+      PEM -- ∀ {Γ} {φ}  → Γ ⊢ φ ∨ ¬ φ
+
+...
 
 ```
 
 ### References
 
-- Leran Cai, Ambrus Kaposi, and Thorsten Altenkirch. *Formalising the Completeness
-  Theorem of Classical Propositional Logic in Agda (Proof Pearl)*. The formalisation
-  is available at http://bitbucket.org/Leran/.
-
-### Contributions
-
-Some `Data.Prop.Theorems` modules contain postulates waiting to be proved. Go ahead!
+- Cai, L., Kaposi, A., & Altenkirch, T. (2015)
+Formalising the Completeness Theorem of Classical Propositional Logic in Agda.
+Retrieved from https://akaposi.github.io/proplogic.pdf
