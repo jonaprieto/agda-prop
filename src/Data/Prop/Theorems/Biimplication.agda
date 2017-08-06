@@ -14,6 +14,9 @@ open import Data.Prop.Theorems.Implication n
   using ( ⇒-to-¬∨; ⇒⇒-to-∧⇒; ∧⇒-to-⇒⇒ )
 open import Data.Prop.Theorems.Negation n
   using ( ¬-equiv₁ ; ¬-equiv₂; ¬∨-to-⇒; ¬¬-equiv₁; ¬¬-equiv₂ )
+open import Data.Prop.Theorems.Weakening n
+  using ( weaken-Δ₁ )
+
 open import Data.Prop.Syntax n
 
 open import Function using ( _$_ )
@@ -34,12 +37,12 @@ open import Function using ( _$_ )
   : ∀ {Γ} {φ ψ}
   → Γ ⊢ (φ ⇔ ψ) ⇔ ((φ ⇒ ψ) ∧ (ψ ⇒ φ))
 
-postulate
-  ⇔-assoc₁
-    : ∀ {Γ} {φ ψ γ}
-    → Γ ⊢ φ ⇔ (ψ ⇔ γ)
-    → Γ ⊢ (φ ⇔ ψ) ⇔ γ
+⇔-assoc₁
+  : ∀ {Γ} {φ ψ γ}
+  → Γ ⊢ φ ⇔ (ψ ⇔ γ)
+  → Γ ⊢ (φ ⇔ ψ) ⇔ γ
 
+postulate
   ⇔-assoc₂
     : ∀ {Γ} {φ ψ γ}
     → Γ ⊢ (φ ⇔ ψ) ⇔ γ
@@ -119,6 +122,66 @@ subst⊢⇔₁ = ⇔-trans
       (assume {Γ = Γ} (φ ⇔ ψ)))
     (⇔-equiv₂
       (assume {Γ = Γ} ((φ ⇒ ψ) ∧ (ψ ⇒ φ))))
+
+⇔-assoc₁ {Γ}{φ}{ψ}{γ} thm =
+  ⇔-intro
+    (RAA
+      (¬-elim
+        (¬-intro
+          (¬-elim
+            (¬-intro
+              (¬-elim
+                (weaken φ $ weaken (ψ ⇔ γ) $ assume {Γ = Γ , φ ⇔ ψ} (¬ γ))
+                (⇔-elim₁
+                  (⇔-elim₁
+                    (assume {Γ = Γ , φ ⇔ ψ , ¬ γ , ψ ⇔ γ} φ)
+                    (weaken φ $ weaken (ψ ⇔ γ)
+                        (weaken (¬ γ) $ assume {Γ = Γ} (φ ⇔ ψ))))
+                  (⇔-elim₁
+                    (assume {Γ = Γ , φ ⇔ ψ , ¬ γ , ψ ⇔ γ} φ)
+                    (weaken φ $ weaken (ψ ⇔ γ) $ weaken (¬ γ) $
+                      weaken (φ ⇔ ψ) thm)))))
+            (⇔-elim₂
+              (assume {Γ = Γ , φ ⇔ ψ , ¬ γ} (ψ ⇔ γ))
+              (weaken (ψ ⇔ γ) $ weaken (¬ γ) $ weaken (φ ⇔ ψ) thm))))
+        (⇔-intro
+          (⊥-elim γ
+            (¬-elim
+              (⊥-elim (¬ ψ)
+                (¬-elim
+                  (¬-intro -- ¬ φ
+                    (¬-elim
+                      (weaken φ $ weaken ψ $ assume {Γ = Γ , φ ⇔ ψ} (¬ γ))
+                      (⇔-elim₁
+                        (⇔-elim₁
+                          (assume {Γ = Γ , φ ⇔ ψ , ¬ γ , ψ} φ)
+                          (weaken φ
+                            (weaken ψ
+                              (weaken (¬ γ)
+                                (assume {Γ = Γ} (φ ⇔ ψ))))))
+                        (⇔-elim₁
+                          (assume {Γ = Γ , φ ⇔ ψ , ¬ γ , ψ} φ)
+                          (weaken φ $
+                            weaken ψ $ weaken (¬ γ) $ weaken (φ ⇔ ψ) thm)))))
+                  (⇔-elim₂ -- φ
+                    (assume {Γ = Γ , φ ⇔ ψ , ¬  γ} ψ)
+                    (weaken ψ (weaken (¬ γ) (assume {Γ = Γ} (φ ⇔ ψ)))))))
+              (assume {Γ = Γ , φ ⇔ ψ , ¬ γ} ψ)))
+          (⊥-elim ψ
+            (¬-elim
+              (weaken γ $ assume {Γ = Γ , φ ⇔ ψ} (¬ γ))
+              (assume {Γ = Γ , φ ⇔ ψ , ¬ γ} γ))))))
+    (⇔-intro
+      (⇔-elim₂
+        (weaken φ $ assume {Γ = Γ} γ)
+        (⇔-elim₁
+          (assume {Γ = Γ , γ} φ)
+          (weaken φ $ weaken γ thm)))
+      (⇔-elim₂
+        (⇔-intro
+          (weaken ψ $ weaken ψ $ assume {Γ = Γ} γ)
+          (weaken γ $ assume {Γ = Γ , γ} ψ))
+        (weaken ψ $ weaken γ thm)))
 
 ⇔-assoc {Γ}{φ}{ψ}{γ} =
   ⇔-intro
