@@ -9,8 +9,10 @@ module Data.Prop ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
+open import Data.Prop.Dec n         public
 open import Data.Prop.NormalForms n public
 open import Data.Prop.Syntax n      public
+open import Data.Prop.Properties n  public
 open import Data.Prop.Theorems n    public
 
 open import Data.Bool public
