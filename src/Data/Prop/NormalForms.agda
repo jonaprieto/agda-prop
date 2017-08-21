@@ -238,21 +238,29 @@ thm-dist-∨ {Γ} {.(φ ∨ (ψ ∧ γ))} Γ⊢φ | case₂ φ ψ γ =
     (thm-dist-∨ (∧-proj₂ (∨-dist₁ Γ⊢φ)))
 thm-dist-∨ {Γ} {.φ}             Γ⊢φ | other φ     = Γ⊢φ
 
+
 dist′ : Prop → Prop
 dist′ φ with d-view φ
 dist′ .(φ ∧ ψ) | conj φ ψ = dist′ φ ∧ dist′ ψ
-dist′ .(φ ∨ ψ) | disj φ ψ = dist-∨ (φ ∨ ψ)
+dist′ .(φ ∨ ψ) | disj φ ψ = dist-∨ ((dist′ φ) ∨ (dist′ ψ))
 dist′ φ        | other .φ = φ
 
 thm-dist′
-    : ∀ {Γ} {φ}
-    → Γ ⊢ φ
-    → Γ ⊢ dist′ φ
+  : ∀ {Γ} {φ}
+  → Γ ⊢ φ
+  → Γ ⊢ dist′ φ
 
 thm-dist′ {Γ} {φ} Γ⊢φ with d-view φ
 thm-dist′ {Γ} {.(φ ∧ ψ)} Γ⊢φ∧ψ | conj φ ψ =
   ∧-intro (thm-dist′ (∧-proj₁ Γ⊢φ∧ψ)) (thm-dist′ (∧-proj₂ Γ⊢φ∧ψ))
-thm-dist′ {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ = thm-dist-∨ Γ⊢φ∨ψ
+thm-dist′ {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
+  thm-dist-∨
+    (⇒-elim
+      (⇒-intro
+        (∨-elim {Γ = Γ}
+          (∨-intro₁ (dist′ ψ) (thm-dist′ (assume {Γ = Γ} φ)))
+          (∨-intro₂ (dist′ φ) (thm-dist′ (assume {Γ = Γ} ψ)))))
+      Γ⊢φ∨ψ)
 thm-dist′ {Γ} {.φ} Γ⊢φ         | other φ  = Γ⊢φ
 
 cnf : Prop → Prop

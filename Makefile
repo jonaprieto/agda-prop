@@ -20,3 +20,4 @@ clean :
 test :
 	agda src/Data/Prop.agda --verbose=0
 	agda test/ex-andreas-abel.agda --verbose=0
+	agda test/nform.agda --verbose=0

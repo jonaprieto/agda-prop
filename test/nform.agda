@@ -2,6 +2,7 @@ module nform where
 
 open import Data.Prop (3) public
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+
 p : Prop
 p = Var (# 0)
 
@@ -36,3 +37,9 @@ cnfψ = (¬ r ∨ p) ∧ (¬ r ∨ q)
 p5 : cnf ψ ≡ cnfψ
 p5 = refl
 -}
+
+to5   = (¬ p) ∨ ((¬ q) ∨ r)
+from5 = (¬ p) ∨ (r ∨ ((¬ q) ∧ p))
+
+test : ⌊ eq (cnf from5) to5 ⌋ ≡ false
+test = refl
