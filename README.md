@@ -113,33 +113,10 @@ Tested with:
 
 ## Library
 
-
-### Theorems
-
-The [theorems][theorems] have a name based on their main connective, their purpose or their source.
-We added sub-indices for those theorems that differ a little with other one.
-
-* [List of Theorems][theorems]
-  * [Biimplication](BIIMPLICATION)
-  * [Classical](CLASSICAL)
-  * [Conjunction](CONJUNCTION)
-  * [Disjunction](DISJUNCTION)
-  * [Implication](IMPLICATION)
-  * [Negation](NEGATION)
-  * [Mixies](MIXIES)
-  * [Weakening](WEAKENING)
-
-
-[theorems]: https://github.com/jonaprieto/agda-prop/tree/master/src/Data/Prop/Theorems
-[BIIMPLICATION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Biimplication.agda
-[CLASSICAL]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Classical.agda
-[CONJUNCTION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Conjunction.agda
-[DISJUNCTION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Disjunction.agda
-[IMPLICATION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Implication.agda
-[NEGATION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Negation.agda
-[MIXIES]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Mixies.agda
-[WEAKENING]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Weakening.agda
-
+We have a list of [theorems][theorems] for each connective and a mix of 
+them. Their names are based on their main connective, their purpose or 
+their source.  We added sub-indices for those theorems that differ a little with other one. If you need an specific theorem that you think
+we should include, open an issue.
 
 ### Additional Theorems
 
