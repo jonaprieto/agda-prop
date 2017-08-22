@@ -42,6 +42,13 @@ vanDalen244d
   → Γ ⊢ ¬ ψ ⇒ ¬ φ
   → Γ ⊢ φ ⇒ ψ
 ¬⇒¬-to-⇒ = vanDalen244d
+contraposition₁ = vanDalen244d
+
+contraposition₂
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ⇒ ψ
+  → Γ ⊢ ¬ ψ ⇒ ¬ φ
+⇒-to-¬⇒¬ = contraposition₂
 
 vanDalen244e
   : ∀ {Γ} {φ}
@@ -123,6 +130,14 @@ vanDalen244c {Γ}{φ}{ψ}{γ} =
                 assume {Γ = Γ} $ φ ⇒ ψ)
             (assume {Γ = Γ , φ ⇒ ψ , ψ ⇒ γ} φ))
 
+contraposition₂ {Γ}{φ}{ψ} Γ⊢φ⇒ψ =
+  ⇒-intro
+    (¬-intro
+      (¬-elim
+        (weaken φ (assume {Γ = Γ} (¬ ψ)))
+        (⇒-elim
+          (weaken φ (weaken (¬ ψ) Γ⊢φ⇒ψ))
+          (assume {Γ = Γ , ¬ ψ} φ))))
 
 vanDalen244d {Γ}{φ}{ψ} Γ⊢¬ψ⇒¬φ =
   (⇒-elim

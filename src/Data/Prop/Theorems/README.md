@@ -320,6 +320,13 @@ vanDalen244d
   → Γ ⊢ ¬ ψ ⇒ ¬ φ
   → Γ ⊢ φ ⇒ ψ
 ¬⇒¬-to-⇒ = vanDalen244d
+contraposition₁ = vanDalen244d
+
+contraposition₂
+  : ∀ {Γ} {φ ψ}
+  → Γ ⊢ φ ⇒ ψ
+  → Γ ⊢ ¬ ψ ⇒ ¬ φ
+⇒-to-¬⇒¬ = contraposition₂
 
 vanDalen244e
   : ∀ {Γ} {φ}
