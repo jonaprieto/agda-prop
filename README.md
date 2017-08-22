@@ -116,7 +116,7 @@ Tested with:
 
 ### Theorems
 
-The theorems have a name based on their main connective, their purpose or their source.
+The [theorems][theorems] have a name based on their main connective, their purpose or their source.
 We added sub-indices for those theorems that differ a little with other one.
 
 * [List of Theorems][theorems]
@@ -131,22 +131,22 @@ We added sub-indices for those theorems that differ a little with other one.
 
 
 [theorems]: https://github.com/jonaprieto/agda-prop/tree/master/src/Data/Prop/Theorems
-[BIIMPLICATION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Biimplication.agda
-[CLASSICAL]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Classical.agda
-[CONJUNCTION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Conjunction.agda
-[DISJUNCTION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Disjunction.agda
-[IMPLICATION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Implication.agda
-[NEGATION]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Negation.agda
-[MIXIES]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Mixies.agda
-[WEAKENING]:https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Weakening.agda
+[BIIMPLICATION]: https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Biimplication.agda
+[CLASSICAL]: https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Classical.agda
+[CONJUNCTION]: https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Conjunction.agda
+[DISJUNCTION]: https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Disjunction.agda
+[IMPLICATION]: https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Implication.agda
+[NEGATION]: https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Negation.agda
+[MIXIES]: https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Mixies.agda
+[WEAKENING]: https://raw.githubusercontent.com/jonaprieto/agda-prop/master/src/Data/Prop/Theorems/Weakening.agda
 
 
 ### Additional Theorems
 
 * [Normal Forms][theorems]
   * [Negative Normal Form (NNF)](https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/NormalForms.agda#L120)
-  * [Disjunctive Normal Form (DNF)](https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/NormalForms.agda#L201)
-  * [Conjunctive Normal Form (CNF)](https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/NormalForms.agda#L261)
+  * [Disjunctive Normal Form (DNF)](https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/NormalForms.agda#L202)
+  * [Conjunctive Normal Form (CNF)](https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/NormalForms.agda#L270)
 
 
 ### Example

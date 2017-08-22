@@ -151,7 +151,7 @@ subst⊢∧₂
   → Γ ⊢ φ ∧ γ
 
 ```
-## Disjunction.
+## Disjunction
 
 ```agda
 
