@@ -131,14 +131,14 @@ We added sub-indices for those theorems that differ a little with other one.
 
 
 [theorems]: https://github.com/jonaprieto/agda-prop/tree/master/src/Data/Prop/Theorems
-[BIIMPLICATION]:https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Biimplication.agda
-[CLASSICAL]:https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Classical.agda
-[CONJUNCTION]:https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Conjunction.agda
-[DISJUNCTION]:https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Disjunction.agda
-[IMPLICATION]:https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Implication.agda
-[NEGATION]:https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Negation.agda
-[MIXIES]:https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Mixies.agda
-[WEAKENING]:https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Weakening.agda
+[BIIMPLICATION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Biimplication.agda
+[CLASSICAL]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Classical.agda
+[CONJUNCTION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Conjunction.agda
+[DISJUNCTION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Disjunction.agda
+[IMPLICATION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Implication.agda
+[NEGATION]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Negation.agda
+[MIXIES]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Mixies.agda
+[WEAKENING]: https://github.com/jonaprieto/agda-prop/blob/master/src/Data/Prop/Theorems/Weakening.agda
 
 
 ### Additional Theorems
