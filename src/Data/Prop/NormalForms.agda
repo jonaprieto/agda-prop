@@ -175,7 +175,7 @@ thm-dist-∧ {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 
 dist : Prop → Prop
 dist φ with d-view φ
-dist .(φ ∧ ψ) | conj φ ψ = dist-∧ (φ ∧ ψ)
+dist .(φ ∧ ψ) | conj φ ψ = dist-∧ (dist φ ∧ dist ψ)
 dist .(φ ∨ ψ) | disj φ ψ = dist φ ∨ dist ψ
 dist φ        | other .φ = φ
 
@@ -185,7 +185,11 @@ thm-dist
   → Γ ⊢ dist φ
 
 thm-dist {Γ} {φ} Γ⊢φ with d-view φ
-thm-dist {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ = thm-dist-∧ Γ⊢φ∧ψ
+thm-dist {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ =
+  thm-dist-∧
+    (∧-intro
+      (thm-dist (∧-proj₁ Γ⊢φ∧ψ))
+      (thm-dist (∧-proj₂ Γ⊢φ∧ψ)))
 thm-dist {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
   ⇒-elim
     (⇒-intro
