@@ -118,6 +118,8 @@ them. Their names are based on their main connective, their purpose or
 their source.  We added sub-indices for those theorems that differ a little with other one. If you need an specific theorem that you think
 we should include, open an issue.
 
+[theorems]: https://github.com/jonaprieto/agda-prop/tree/master/src/Data/Prop/Theorems
+
 ### Additional Theorems
 
 * [Normal Forms][theorems]
