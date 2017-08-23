@@ -99,10 +99,10 @@ impl-view φ         = other _
 
 
 data NegView : Prop → Set where
-  neg   : (φ : Prop) → NegView (¬ φ)
-  other : (φ : Prop) → NegView φ
+  neg : (φ : Prop) → NegView (¬ φ)
+  pos : (φ : Prop) → NegView φ
 
 neg-view : (φ : Prop) → NegView φ
 neg-view (¬ φ) = neg _
-neg-view φ     = other _
+neg-view φ     = pos _
 
