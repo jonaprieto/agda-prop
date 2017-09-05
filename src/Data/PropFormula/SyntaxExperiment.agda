@@ -94,7 +94,7 @@ thm-right-assoc-∧
 thm-right-assoc-∧ = ⊢∧-to-⊢ ∘ ⊢-to-⊢∧
 
 
-find-conjunct : List PropFormula → Prop → PropFormula
+find-conjunct : List PropFormula → PropFormula → PropFormula
 find-conjunct [] x        = ⊤
 find-conjunct (x ∷ xs) y with ⌊ eq x y ⌋
 ... | false = find-conjunct xs y
