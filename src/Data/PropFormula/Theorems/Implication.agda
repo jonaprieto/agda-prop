@@ -5,12 +5,12 @@
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.Theorems.Implication ( n : ℕ ) where
+module Data.PropFormula.Theorems.Implication ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Prop.Syntax n
-open import Data.Prop.Theorems.Classical n
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Theorems.Classical n
 
 open import Function using ( _$_; _∘_; flip )
 

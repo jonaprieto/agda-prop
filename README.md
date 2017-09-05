@@ -21,86 +21,86 @@ data type `_⊢_`, that depended of a *list* of hypothesis and the conclusion,
 a formula. The constructors are the following.
 
 ```agda
-data Prop : Type where
-  Var  : Fin n → Prop           -- Variables.
-  ⊤    : Prop                   -- Top (truth).
-  ⊥    : Prop                   -- Bottom (falsum).
-  _∧_  : (φ ψ : Prop) → Prop    -- Conjunction.
-  _∨_  : (φ ψ : Prop) → Prop    -- Disjunction.
-  _⇒_  : (φ ψ : Prop) → Prop    -- Implication.
-  _⇔_  : (φ ψ : Prop) → Prop    -- Biimplication.
-  ¬_   : (φ : Prop) → Prop      -- Negation.
+data PropFormula : Type where
+  Var  : Fin n → PropFormula           -- Variables.
+  ⊤    : PropFormula                   -- Top (truth).
+  ⊥    : PropFormula                   -- Bottom (falsum).
+  _∧_  : (φ ψ : PropFormula) → Prop    -- Conjunction.
+  _∨_  : (φ ψ : PropFormula) → Prop    -- Disjunction.
+  _⇒_  : (φ ψ : PropFormula) → Prop    -- Implication.
+  _⇔_  : (φ ψ : PropFormula) → Prop    -- Biimplication.
+  ¬_   : (φ : PropFormula)   → Prop    -- Negation.
 ```
 
 The theorems use the following inference rules:
 
 ```agda
-data _⊢_ : (Γ : Ctxt)(φ : Prop) → Type where
+data _⊢_ : (Γ : Ctxt)(φ : PropFormula) → Set where
 
 -- Hyp.
 
-  assume   : ∀ {Γ} → (φ : Prop)           → Γ , φ ⊢ φ
+  assume   : ∀ {Γ} → (φ : PropFormula)      → Γ , φ ⊢ φ
 
-  axiom    : ∀ {Γ} → (φ : Prop)           → φ ∈ Γ
-                                          → Γ ⊢ φ
+  axiom    : ∀ {Γ} → (φ : PropFormula)      → φ ∈ Γ
+                                            → Γ ⊢ φ
 
-  weaken   : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
-                                          → Γ , ψ ⊢ φ
+  weaken   : ∀ {Γ} {φ} → (ψ : PropFormula)  → Γ ⊢ φ
+                                            → Γ , ψ ⊢ φ
 
-  weaken₂  : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
-                                          → ψ ∷ Γ ⊢ φ
+  weaken₂   : ∀ {Γ} {φ} → (ψ : PropFormula) → Γ ⊢ φ
+                                            → ψ ∷ Γ ⊢ φ
 -- Top and Bottom.
 
-  ⊤-intro  : ∀ {Γ}                        → Γ ⊢ ⊤
+  ⊤-intro  : ∀ {Γ}                          → Γ ⊢ ⊤
 
-  ⊥-elim   : ∀ {Γ} → (φ : Prop)           → Γ ⊢ ⊥
-                                          → Γ ⊢ φ
+  ⊥-elim   : ∀ {Γ} → (φ : PropFormula)      → Γ ⊢ ⊥
+                                            → Γ ⊢ φ
 -- Negation.
 
-  ¬-intro  : ∀ {Γ} {φ}                    → Γ , φ ⊢ ⊥
-                                          → Γ ⊢ ¬ φ
+  ¬-intro  : ∀ {Γ} {φ}                      → Γ , φ ⊢ ⊥
+                                            → Γ ⊢ ¬ φ
 
-  ¬-elim   : ∀ {Γ} {φ}                    → Γ ⊢ ¬ φ → Γ ⊢ φ
-                                          → Γ ⊢ ⊥
+  ¬-elim   : ∀ {Γ} {φ}                      → Γ ⊢ ¬ φ → Γ ⊢ φ
+                                            → Γ ⊢ ⊥
 -- Conjunction.
 
-  ∧-intro  : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ → Γ ⊢ ψ
-                                          → Γ ⊢ φ ∧ ψ
+  ∧-intro  : ∀ {Γ} {φ ψ}                    → Γ ⊢ φ → Γ ⊢ ψ
+                                            → Γ ⊢ φ ∧ ψ
 
-  ∧-proj₁  : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ ∧ ψ
-                                          → Γ ⊢ φ
+  ∧-proj₁  : ∀ {Γ} {φ ψ}                    → Γ ⊢ φ ∧ ψ
+                                            → Γ ⊢ φ
 
-  ∧-proj₂  : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ ∧ ψ
-                                          → Γ ⊢ ψ
+  ∧-proj₂  : ∀ {Γ} {φ ψ}                    → Γ ⊢ φ ∧ ψ
+                                            → Γ ⊢ ψ
 -- Disjunction.
 
-  ∨-intro₁ : ∀ {Γ} {φ} → (ψ : Prop)       → Γ ⊢ φ
-                                          → Γ ⊢ φ ∨ ψ
+  ∨-intro₁ : ∀ {Γ} {φ} → (ψ : PropFormula)  → Γ ⊢ φ
+                                            → Γ ⊢ φ ∨ ψ
 
-  ∨-intro₂ : ∀ {Γ} {ψ} → (φ : Prop)       → Γ ⊢ ψ
-                                          → Γ ⊢ φ ∨ ψ
+  ∨-intro₂ : ∀ {Γ} {ψ} → (φ : PropFormula)  → Γ ⊢ ψ
+                                            → Γ ⊢ φ ∨ ψ
 
-  ∨-elim  : ∀ {Γ} {φ ψ χ}                 → Γ , φ ⊢ χ
-                                          → Γ , ψ ⊢ χ
-                                          → Γ , φ ∨ ψ ⊢ χ
+  ∨-elim  : ∀ {Γ} {φ ψ χ}                   → Γ , φ ⊢ χ
+                                            → Γ , ψ ⊢ χ
+                                            → Γ , φ ∨ ψ ⊢ χ
 -- Implication.
 
-  ⇒-intro  : ∀ {Γ} {φ ψ}                  → Γ , φ ⊢ ψ
-                                          → Γ ⊢ φ ⇒ ψ
+  ⇒-intro  : ∀ {Γ} {φ ψ}                    → Γ , φ ⊢ ψ
+                                            → Γ ⊢ φ ⇒ ψ
 
-  ⇒-elim   : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ ⇒ ψ → Γ ⊢ φ
-                                          → Γ ⊢ ψ
+  ⇒-elim   : ∀ {Γ} {φ ψ}                    → Γ ⊢ φ ⇒ ψ → Γ ⊢ φ
+                                            → Γ ⊢ ψ
 -- Biconditional.
 
-  ⇔-intro  : ∀ {Γ} {φ ψ}                  → Γ , φ ⊢ ψ
-                                          → Γ , ψ ⊢ φ
-                                          → Γ ⊢ φ ⇔ ψ
+  ⇔-intro  : ∀ {Γ} {φ ψ}                    → Γ , φ ⊢ ψ
+                                            → Γ , ψ ⊢ φ
+                                            → Γ ⊢ φ ⇔ ψ
 
-  ⇔-elim₁ : ∀ {Γ} {φ ψ}                  → Γ ⊢ φ → Γ ⊢ φ ⇔ ψ
-                                          → Γ ⊢ ψ
+  ⇔-elim₁ : ∀ {Γ} {φ ψ}                     → Γ ⊢ φ → Γ ⊢ φ ⇔ ψ
+                                            → Γ ⊢ ψ
 
-  ⇔-elim₂ : ∀ {Γ} {φ ψ}                   → Γ ⊢ ψ → Γ ⊢ φ ⇔ ψ
-                                          →  Γ ⊢ φ
+  ⇔-elim₂ : ∀ {Γ} {φ ψ}                     → Γ ⊢ ψ → Γ ⊢ φ ⇔ ψ
+                                            → Γ ⊢ φ
 ```
 
 ### Requirements
@@ -133,7 +133,7 @@ we should include, open an issue.
 
 ```agda
 $ cat test/ex-andreas-abel.agda
-open import Data.Prop 2 public
+open import Data.PropFormula 2 public
 ...
 
 EM⇒Pierce

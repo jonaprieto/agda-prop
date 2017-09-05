@@ -5,11 +5,11 @@
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.Dec ( n : ℕ ) where
+module Data.PropFormula.Dec ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Prop.Syntax n
+open import Data.PropFormula.Syntax n
 
 open import Data.Bool.Base using  ( Bool; false; true; not; T )
 open import Data.Fin       using  ( Fin; suc; zero )

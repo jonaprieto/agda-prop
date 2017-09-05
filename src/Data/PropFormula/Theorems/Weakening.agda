@@ -5,12 +5,12 @@
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.Theorems.Weakening ( n : ℕ ) where
+module Data.PropFormula.Theorems.Weakening ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Prop.Syntax n
-open import Data.Prop.Properties n using ( substΓ )
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Properties n using ( substΓ )
 
 open import Data.List using ( List ; [] ; _∷_ ; _++_ ; [_] )
 

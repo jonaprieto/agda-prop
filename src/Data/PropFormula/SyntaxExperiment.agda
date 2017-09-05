@@ -5,15 +5,16 @@
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.SyntaxExperiment ( n : ℕ ) where
+module Data.PropFormula.SyntaxExperiment ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
 open import Data.Bool using (false; true)
-open import Data.Prop.Syntax n
-open import Data.Prop.Views n
-open import Data.Prop.Dec n
-open import Data.Prop.Properties n
+
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Views n
+open import Data.PropFormula.Dec n
+open import Data.PropFormula.Properties n
 
 open import Data.List public
 
@@ -22,7 +23,7 @@ open import Relation.Binary.PropositionalEquality using (_≡_)
 
 ------------------------------------------------------------------------------
 
-data _⊢∧_ : Ctxt → List Prop → Set where
+data _⊢∧_ : Ctxt → List PropFormula → Set where
 
   empty-intro : ∀ {Γ}
               → Γ ⊢∧ []
@@ -56,7 +57,7 @@ thm-intro {Γ} {φ} Γ⊢φ = ∷-intro Γ⊢φ empty-intro
 ++-intro empty-intro th2 = th2
 ++-intro (∷-intro x th1) th2 = ∷-intro x (++-intro th1 th2)
 
-toList : Prop → List Prop
+toList : PropFormula → List PropFormula
 toList φ with conj-view φ
 toList .(φ₁ ∧ φ₂) | conj φ₁ φ₂ = toList φ₁ ++ toList φ₂
 toList φ          | other .φ   = [ φ ]
@@ -70,7 +71,7 @@ toList φ          | other .φ   = [ φ ]
 ... | conj φ₁ φ₂ = ++-intro (⊢-to-⊢∧ (∧-proj₁ Γ⊢φ)) (⊢-to-⊢∧ (∧-proj₂ Γ⊢φ))
 ... | other .φ   = ∷-intro Γ⊢φ empty-intro
 
-toProp : List Prop → Prop
+toProp : List PropFormula → PropFormula
 toProp []       = ⊤
 toProp (φ ∷ []) = φ
 toProp (φ ∷ L)  = φ ∧ toProp L
@@ -83,7 +84,7 @@ toProp (φ ∷ L)  = φ ∧ toProp L
 ⊢∧-to-⊢ {_} {_ ∷ []}     Γ⊢∧L              = ∷-proj₁ Γ⊢∧L
 ⊢∧-to-⊢ {_} {x ∷ _ ∷ _} (∷-intro Γ⊢φ Γ⊢∧L) = ∧-intro Γ⊢φ (⊢∧-to-⊢ Γ⊢∧L)
 
-right-assoc-∧ : Prop → Prop
+right-assoc-∧ : PropFormula → PropFormula
 right-assoc-∧  = toProp ∘ toList
 
 thm-right-assoc-∧
@@ -93,7 +94,7 @@ thm-right-assoc-∧
 thm-right-assoc-∧ = ⊢∧-to-⊢ ∘ ⊢-to-⊢∧
 
 
-find-conjunct : List Prop → Prop → Prop
+find-conjunct : List PropFormula → Prop → PropFormula
 find-conjunct [] x        = ⊤
 find-conjunct (x ∷ xs) y with ⌊ eq x y ⌋
 ... | false = find-conjunct xs y
@@ -101,7 +102,7 @@ find-conjunct (x ∷ xs) y with ⌊ eq x y ⌋
 
 thm-find-conjunct
   : ∀ {Γ} {L}
-  → (ψ : Prop)
+  → (ψ : PropFormula)
   → Γ ⊢∧ L
   → Γ ⊢ find-conjunct L ψ
 
@@ -113,16 +114,16 @@ thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | true  = ∷-proj₁ Γ⊢∧L
 
 thm-conjunct
   : ∀ {Γ} {φ}
-  → (ψ : Prop)
+  → (ψ : PropFormula)
   → Γ ⊢ φ
   → Γ ⊢ find-conjunct (toList φ) ψ
 thm-conjunct {_} ψ Γ⊢φ = thm-find-conjunct ψ (⊢-to-⊢∧ Γ⊢φ)
 
 {-
-toWeak : (Γ : List Prop) (ψ : Prop) → List Prop
+toWeak : (Γ : List PropFormula) (ψ : PropFormula) → List PropFormula
 toWeak t f = t , f , f
 
-strip : ∀ {Γ} {φ} → (ψ : Prop) → Γ ⊢ φ → (toWeak Γ ψ) ⊢ φ
+strip : ∀ {Γ} {φ} → (ψ : PropFormula) → Γ ⊢ φ → (toWeak Γ ψ) ⊢ φ
 strip ψ Γ⊢φ = (weaken ψ (weaken ψ Γ⊢φ))
 
 -- Bag Equivalance
@@ -138,12 +139,12 @@ strip ψ Γ⊢φ = (weaken ψ (weaken ψ Γ⊢φ))
 --     from-to : ∀ x → from (to x) ≡ x
 --     to-from : ∀ x → to (from x) ≡ x
 
--- lookup : (xs : List Prop) → Fin (length xs) → Prop
+-- lookup : (xs : List PropFormula) → Fin (length xs) → PropFormula
 -- lookup [] ()
 -- lookup (x ∷ xs) zero    = x
 -- lookup (x ∷ xs) (suc n) = lookup xs n
 
--- record _≈Bag_(xs ys : List Prop) : Set where
+-- record _≈Bag_(xs ys : List PropFormula) : Set where
 --   field
 --     bijection : Fin (length xs) ↔ Fin (length ys)
 --     related   : ∀ i → lookup xs i ≡ lookup ys (_↔_.to bijection i)
@@ -152,14 +153,14 @@ strip ψ Γ⊢φ = (weaken ψ (weaken ψ Γ⊢φ))
 --   left  : A → A + B
 --   right : B → A + B
 
--- Any : (Prop → Set) → List Prop → Set
+-- Any : (Prop → Set) → List PropFormula → Set
 -- Any P []       = ⊥₂
 -- Any P (x ∷ xs) = P x + Any P xs
 
 -- infix 4 _∈₂_
--- _∈₂_ : Prop → List Prop → Set
+-- _∈₂_ : PropFormula → List PropFormula → Set
 -- x ∈₂ xs = Any (λ y → x ≡ y) xs
 
--- _≈Bag₂_ : List Prop → List Prop → Set
+-- _≈Bag₂_ : List PropFormula → List PropFormula → Set
 -- xs ≈Bag₂ ys = ∀ x → x ∈₂ xs ↔ x ∈₂ ys
 -}

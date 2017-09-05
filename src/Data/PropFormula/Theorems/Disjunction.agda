@@ -5,17 +5,17 @@
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.Theorems.Disjunction ( n : ℕ ) where
+module Data.PropFormula.Theorems.Disjunction ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Prop.Syntax n
-open import Data.Prop.Theorems.Classical n
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Theorems.Classical n
 
-open import Data.Prop.Theorems.Conjunction n using ( ∧-dmorgan₁ )
-open import Data.Prop.Theorems.Implication n using ( vanDalen244e )
+open import Data.PropFormula.Theorems.Conjunction n using ( ∧-dmorgan₁ )
+open import Data.PropFormula.Theorems.Implication n using ( vanDalen244e )
 
-open import Function                         using ( _$_; _∘_ )
+open import Function using ( _$_; _∘_ )
 
 ------------------------------------------------------------------------------
 

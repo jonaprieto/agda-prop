@@ -5,18 +5,18 @@
 
 open import Data.Nat using (ℕ; suc; zero; _+_;_*_)
 
-module Data.Prop.NormalForms (n : ℕ) where
+module Data.PropFormula.NormalForms (n : ℕ) where
 
 ------------------------------------------------------------------------------
 
 open import Data.Fin  using ( Fin; #_ )
 open import Data.List using ( List; [_]; [];  _++_; _∷_ ; concatMap; map )
-open import Data.Prop.Properties n using ( subst )
-open import Data.Prop.Syntax n
-open import Data.Prop.Views  n
+open import Data.PropFormula.Properties n using ( subst )
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Views  n
 
 open import Relation.Nullary using (yes; no)
-open import Data.Prop.Theorems n
+open import Data.PropFormula.Theorems n
 
 open import Function using ( _∘_; _$_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_; sym )
@@ -27,7 +27,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_; sym )
 -- Negation Normal Form (NNF)
 ------------------------------------------------------------------------------
 
-nnf′ : ℕ → Prop → Prop
+nnf′ : ℕ → PropFormula → PropFormula
 nnf′ (suc n) φ
   with n-view φ
 ...  | conj φ₁ φ₂   = nnf′ n φ₁ ∧ nnf′ n φ₂
@@ -98,7 +98,7 @@ thm-nnf′ {Γ} {φ} zero Γ⊢φ = Γ⊢φ
 --     ubsizetree φ₁ + ubsizetree φ₂ + ubsizetree (¬ φ₁) + ubsizetree (¬ φ₂) + 3
 -- Unfortunately, the termination checker complains about this computation.
 
-ubsizetree : Prop → ℕ
+ubsizetree : PropFormula → ℕ
 ubsizetree φ with n-view φ
 ... | conj φ₁ φ₂   = ubsizetree φ₁ + ubsizetree φ₂ + 1
 ... | disj φ₁ φ₂   = ubsizetree φ₁ + ubsizetree φ₂ + 1
@@ -114,7 +114,7 @@ ubsizetree φ with n-view φ
   ubsizetree φ₁ + ubsizetree φ₂ + ubsizetree (¬ φ₁) + ubsizetree (¬ φ₂) + 8
 ... | other .φ     = 1
 
-nnf : Prop → Prop
+nnf : PropFormula → PropFormula
 nnf φ = nnf′ (ubsizetree φ) φ
 
 thm-nnf
@@ -128,7 +128,7 @@ thm-nnf {Γ} {φ} Γ⊢φ = thm-nnf′ (ubsizetree φ) Γ⊢φ
 -- Disjunctive Normal Form (DNF)
 ------------------------------------------------------------------------------
 
-dist-∧ : Prop → Prop
+dist-∧ : PropFormula → PropFormula
 dist-∧ φ with d-view-aux φ
 ... | case₁ φ₁ φ₂ φ₃ = dist-∧ (φ₁ ∧ φ₃) ∨ dist-∧ (φ₂ ∧ φ₃)
 ... | case₂ φ₁ φ₂ φ₃ = dist-∧ (φ₁ ∧ φ₂) ∨ dist-∧ (φ₁ ∧ φ₃)
@@ -173,7 +173,7 @@ thm-dist-∧ {Γ} {.(φ ∧ (ψ ∨ γ))} Γ⊢φ∧⟨ψ∨γ⟩ | case₂ φ �
 thm-dist-∧ {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 
 
-dist : Prop → Prop
+dist : PropFormula → PropFormula
 dist φ with d-view φ
 dist .(φ ∧ ψ) | conj φ ψ = dist-∧ (dist φ ∧ dist ψ)
 dist .(φ ∨ ψ) | disj φ ψ = dist φ ∨ dist ψ
@@ -199,7 +199,7 @@ thm-dist {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
     Γ⊢φ∨ψ
 thm-dist {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
 
-dnf : Prop → Prop
+dnf : PropFormula → PropFormula
 dnf = dist ∘ nnf
 
 thm-dnf
@@ -213,7 +213,7 @@ thm-dnf = thm-dist ∘ thm-nnf
 -- Conjunctive Normal Forms (CNF)
 ------------------------------------------------------------------------------
 
-dist-∨ : Prop → Prop
+dist-∨ : PropFormula → PropFormula
 dist-∨ φ with c-view-aux φ
 dist-∨ .((φ₁ ∧ φ₂) ∨ φ₃) | case₁ φ₁ φ₂ φ₃ = dist-∨ (φ₁ ∨ φ₃) ∧ dist-∨ (φ₂ ∨ φ₃)
 dist-∨ .(φ₁ ∨ (φ₂ ∧ φ₃)) | case₂ φ₁ φ₂ φ₃ = dist-∨ (φ₁ ∨ φ₂) ∧ dist-∨ (φ₁ ∨ φ₃)
@@ -243,7 +243,7 @@ thm-dist-∨ {Γ} {.(φ ∨ (ψ ∧ γ))} Γ⊢φ | case₂ φ ψ γ =
 thm-dist-∨ {Γ} {.φ}             Γ⊢φ | other φ     = Γ⊢φ
 
 
-dist′ : Prop → Prop
+dist′ : PropFormula → PropFormula
 dist′ φ with d-view φ
 dist′ .(φ ∧ ψ) | conj φ ψ = dist′ φ ∧ dist′ ψ
 dist′ .(φ ∨ ψ) | disj φ ψ = dist-∨ ((dist′ φ) ∨ (dist′ ψ))
@@ -267,7 +267,7 @@ thm-dist′ {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
       Γ⊢φ∨ψ)
 thm-dist′ {Γ} {.φ} Γ⊢φ         | other φ  = Γ⊢φ
 
-cnf : Prop → Prop
+cnf : PropFormula → PropFormula
 cnf = dist′ ∘ nnf
 
 thm-cnf

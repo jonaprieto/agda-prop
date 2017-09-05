@@ -5,12 +5,12 @@
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.Properties ( n : ℕ ) where
+module Data.PropFormula.Properties ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Prop.Syntax n
-open import Data.Prop.Dec n
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Dec n
 
 open import Data.Bool.Base using ( Bool; false; true; not; T )
 open import Data.Fin       using ( Fin ; suc; zero )
@@ -61,7 +61,7 @@ suc x ≟ suc y with x ≟ y
 ... | no  x≢y = no (λ r → x≢y (suc-injective r))
 
 
-eq : (φ ψ : Prop) → Dec (φ ≡ ψ)
+eq : (φ ψ : PropFormula) → Dec (φ ≡ ψ)
 
 -- Equality with Var.
 eq (Var x) ⊤        = no λ()

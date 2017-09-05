@@ -1,21 +1,21 @@
 module nform where
 
-open import Data.Prop (3) public
+open import Data.PropFormula (3) public
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 
-p : Prop
+p : PropFormula
 p = Var (# 0)
 
-q : Prop
+q : PropFormula
 q = Var (# 1)
 
-r : Prop
+r : PropFormula
 r = Var (# 2)
 
-φ : Prop
+φ : PropFormula
 φ = ¬ ((p ∧ (p ⇒ q)) ⇒ q) -- (p ∧ q) ∨ (¬ r)
 
-cnfφ : Prop
+cnfφ : PropFormula
 cnfφ = ¬ q ∧ (p ∧ (¬ p ∨ q))
 
 postulate
@@ -28,10 +28,10 @@ p2 = thm-cnf p1 -- thm-cnf p1
 p3 : cnf φ ≡ cnfφ
 p3 = refl
 
-ψ : Prop
+ψ : PropFormula
 ψ = (¬ r) ∨ (p ∧ q)
 
-cnfψ : Prop
+cnfψ : PropFormula
 cnfψ = (¬ r ∨ p) ∧ (¬ r ∨ q)
 
 p5 : cnf ψ ≡ cnfψ

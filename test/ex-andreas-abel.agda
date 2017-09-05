@@ -3,7 +3,7 @@
 -- http://www1.eafit.edu.co/asr/courses/type-theory-CM0859/exercises.pdf
 ------------------------------------------------------------------------------
 
-open import Data.Prop 2 public
+open import Data.PropFormula 2 public
 
 ex1 : ∀ {φ}
     → ∅ ⊢ φ ⇒ φ

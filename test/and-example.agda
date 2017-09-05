@@ -1,6 +1,6 @@
-open import Data.Prop 2
+open import Data.PropFormula 2
 
-⋀comm : ∀ {Γ}{φ ψ : Prop} → Γ ⊢ φ ∧ ψ ⇒ ψ ∧ φ
+⋀comm : ∀ {Γ}{φ ψ : PropFormula} → Γ ⊢ φ ∧ ψ ⇒ ψ ∧ φ
 ⋀comm {Γ} {φ = φ}{ψ} =
   ⇒-intro $
     ∧-intro

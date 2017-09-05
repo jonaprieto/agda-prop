@@ -1,15 +1,15 @@
 ------------------------------------------------------------------------------
 -- Agda-Prop Library.
---  Classical Propositional Logic.
+-- Classical Propositional Logic.
 ------------------------------------------------------------------------------
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.Theorems.Classical ( n : ℕ ) where
+module Data.PropFormula.Theorems.Classical ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Prop.Syntax n
+open import Data.PropFormula.Syntax n
 
 ------------------------------------------------------------------------------
 

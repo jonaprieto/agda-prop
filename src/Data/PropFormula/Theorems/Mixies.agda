@@ -5,19 +5,19 @@
 
 open import Data.Nat using ( ℕ )
 
-module Data.Prop.Theorems.Mixies ( n : ℕ ) where
+module Data.PropFormula.Theorems.Mixies ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.Prop.Syntax n
-open import Data.Prop.Theorems.Classical n
-open import Data.Prop.Theorems.Biimplication n
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Theorems.Classical n
+open import Data.PropFormula.Theorems.Biimplication n
   using ( ⇔-¬-to-¬; ⇒-⇔-¬∨ )
-open import Data.Prop.Theorems.Disjunction n
+open import Data.PropFormula.Theorems.Disjunction n
   using ( ∨-dmorgan; ∨-dmorgan₁ )
-open import Data.Prop.Theorems.Implication n
+open import Data.PropFormula.Theorems.Implication n
   using ( vanDalen244e; ⇒-equiv )
-open import Data.Prop.Theorems.Weakening n
+open import Data.PropFormula.Theorems.Weakening n
 
 open import Function using ( _$_ ; _∘_ )
 

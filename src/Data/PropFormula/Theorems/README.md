@@ -1,4 +1,4 @@
-# Data.Prop.Theorems
+# Data.PropFormula.Theorems
 
 - List of Theorems
     - [Biimplication](#biimplication)

@@ -5,18 +5,19 @@
 
 open import Data.Nat using (ℕ)
 
-module Data.Prop.NormalForms (n : ℕ) where
+module Data.PropFormula.NormalForms (n : ℕ) where
 
 ------------------------------------------------------------------------------
 
 open import Data.Nat.Base public
 open import Data.Fin  using ( Fin; #_ )
 open import Data.List using ( List; [_]; [];  _++_; _∷_ ; concatMap; map )
-open import Data.Prop.Properties n using ( subst )
-open import Data.Prop.Syntax n
+
+open import Data.PropFormula.Properties n using ( subst )
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Theorems n
 
 open import Relation.Nullary using (yes; no)
-open import Data.Prop.Theorems n
 
 open import Function using ( _∘_; _$_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_; sym )
@@ -69,7 +70,7 @@ _⇒Cnf_ : (φ ψ : Cnf) → Cnf
 _⇔Cnf_ : (φ ψ : Cnf) → Cnf
 φ ⇔Cnf ψ = (φ ⇒Cnf ψ) ∧Cnf (ψ ⇒Cnf φ)
 
-toCnf : Prop → Cnf
+toCnf : PropFormula → Cnf
 toCnf (Var x) = varCnf Var x
 toCnf ⊤       = []
 toCnf ⊥       = [ [] ]
@@ -79,65 +80,19 @@ toCnf (φ ⇒ ψ) = toCnf φ ⇒Cnf toCnf ψ
 toCnf (φ ⇔ ψ) = toCnf φ ⇔Cnf toCnf ψ
 toCnf (¬ φ)   = ¬Cnf (toCnf φ)
 
-toPropLiteral : Literal → Prop
+toPropLiteral : Literal → PropFormula
 toPropLiteral (Var x)  = Var x
 toPropLiteral (¬l lit) = ¬ toPropLiteral lit
 
-toPropClause : Clause → Prop
+toPropClause : Clause → PropFormula
 toPropClause []       = ⊥
 toPropClause (l ∷ []) = toPropLiteral l
 toPropClause (l ∷ ls) = toPropLiteral l ∨ toPropClause ls
 
-toProp : Cnf → Prop
+toProp : Cnf → PropFormula
 toProp []         = ⊤
 toProp (fm ∷ [] ) = toPropClause fm
 toProp (fm ∷ fms) = toPropClause fm ∧ toProp fms
 
-cnf : Prop → Prop
+cnf : PropFormula → PropFormula
 cnf = toProp ∘ toCnf
-
--- ------------------------------------------------------------------------------
--- -- test conjunctive normal forms.
--- ------------------------------------------------------------------------------
-
--- open import Data.Prop 3 public
--- open import Data.Prop.Properties 3 using ( subst )
--- open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl; sym)
-
--- -- Variables.
-
--- p : Prop
--- p = Var (# 0)
-
--- q : Prop
--- q = Var (# 1)
-
--- r : Prop
--- r = Var (# 2)
-
--- φ : Prop
--- φ = (p ∧ q) ∨ (¬ r)
-
--- cnfφ : Prop
--- cnfφ = (p ∨ ¬ r) ∧ (q ∨ ¬ r)
-
--- p1 : cnf φ ≡ cnfφ
--- p1 = refl
-
--- ψ : Prop
--- ψ = (¬ r) ∨ (p ∧ q)
-
--- cnfψ : Prop
--- cnfψ = (¬ r ∨ p) ∧ (¬ r ∨ q)
-
--- p2 : cnf ψ ≡ cnfψ
--- p2 = refl
-
--- γ : Prop
--- γ = cnf (¬ cnfψ)
-
--- cnfγ : Prop
--- cnfγ = r ∧ (¬ p ∧ (r ∧ ¬ q))
-
--- p3 : γ ≡ cnfγ
--- p3 = refl
