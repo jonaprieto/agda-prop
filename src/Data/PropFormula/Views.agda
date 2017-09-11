@@ -21,10 +21,10 @@ data nView : PropFormula  → Set where
   nconj  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ∧ φ₂))
   ndisj  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ∨ φ₂))
   nneg   : (φ₁ : PropFormula)    → nView (¬ ¬ φ₁)
-  ntop   : nView (¬ ⊤)
-  nbot   : nView (¬ ⊥)
   nimpl  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ⇒ φ₂))
   nbiim  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ⇔ φ₂))
+  ntop   : nView (¬ ⊤)
+  nbot   : nView (¬ ⊥)
   other  : (φ₁ : PropFormula)    → nView φ₁
 
 n-view : (φ : PropFormula) → nView φ
@@ -32,13 +32,13 @@ n-view (φ₁ ∧ φ₂)     = conj _ _
 n-view (φ₁ ∨ φ₂)     = disj _ _
 n-view (φ₁ ⇒ φ₂)     = impl _ _
 n-view (φ₁ ⇔ φ₂)     = biimpl _ _
-n-view (¬ ⊤)         = ntop
-n-view (¬ ⊥)         = nbot
 n-view (¬ (φ₁ ∧ φ₂)) = nconj _ _
 n-view (¬ (φ₁ ∨ φ₂)) = ndisj _ _
 n-view (¬ (φ₁ ⇒ φ₂)) = nimpl _ _
 n-view (¬ (φ₁ ⇔ φ₂)) = nbiim _ _
 n-view (¬ (¬ φ₁))    = nneg _
+n-view (¬ ⊤)         = ntop
+n-view (¬ ⊥)         = nbot
 n-view φ₁            = other _
 
 data ConjView : PropFormula → Set where

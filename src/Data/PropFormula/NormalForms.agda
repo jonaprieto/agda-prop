@@ -3,7 +3,7 @@
 -- Normal Forms.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ; suc; zero; _+_;_*_)
+open import Data.Nat using (ℕ; suc; zero; _+_;_*_) renaming (_⊔_ to max )
 
 module Data.PropFormula.NormalForms (n : ℕ) where
 
@@ -11,6 +11,7 @@ module Data.PropFormula.NormalForms (n : ℕ) where
 
 open import Data.Fin  using ( Fin; #_ )
 open import Data.List using ( List; [_]; [];  _++_; _∷_ ; concatMap; map )
+
 open import Data.PropFormula.Properties n using ( subst )
 open import Data.PropFormula.Syntax n
 open import Data.PropFormula.Views  n
@@ -37,10 +38,10 @@ nnf′ (suc n) φ
 ...  | nconj φ₁ φ₂  = nnf′ n ((¬ φ₁) ∨ (¬ φ₂))
 ...  | ndisj φ₁ φ₂  = nnf′ n ((¬ φ₁) ∧ (¬ φ₂))
 ...  | nneg φ₁      = nnf′ n φ₁
-...  | ntop         = ⊥
-...  | nbot         = ⊤
 ...  | nimpl φ₁ φ₂  = nnf′ n (¬ (φ₂ ∨ (¬ φ₁)))
 ...  | nbiim φ₁ φ₂  = nnf′ n (¬ ((φ₁ ⇒ φ₂) ∧ (φ₂ ⇒ φ₁)))
+...  | ntop         = ⊥
+...  | nbot         = ⊤
 ...  | other .φ     = φ
 nnf′ zero φ         = φ
 
@@ -73,8 +74,6 @@ thm-nnf′ {Γ} {φ} (suc n) Γ⊢φ
 ...  | nconj φ₁ φ₂  = thm-nnf′ n (¬∧-to-¬∨¬ Γ⊢φ)
 ...  | ndisj φ₁ φ₂  = thm-nnf′ n (¬∨-to-¬∧¬ Γ⊢φ)
 ...  | nneg φ₁      = thm-nnf′ n (¬¬-equiv₁ Γ⊢φ)
-...  | ntop         = ¬-elim Γ⊢φ ⊤-intro
-...  | nbot         = ⊤-intro
 ...  | nimpl φ₁ φ₂  = thm-nnf′ n (subst⊢¬ helper Γ⊢φ)
   where
     helper : Γ ⊢ φ₂ ∨ ¬ φ₁ ⇒ (φ₁ ⇒ φ₂)
@@ -86,43 +85,37 @@ thm-nnf′ {Γ} {φ} (suc n) Γ⊢φ
         (⇔-equiv₂
           (assume {Γ = Γ} ((φ₁ ⇒ φ₂) ∧ (φ₂ ⇒ φ₁)))))
           Γ⊢φ)
+...  | ntop       = ¬-elim Γ⊢φ ⊤-intro
+...  | nbot       = ⊤-intro
 ...  | other .φ   = Γ⊢φ
 thm-nnf′ {Γ} {φ} zero Γ⊢φ = Γ⊢φ
 
--- * ubsizetree function
--- This function pretends to be an upper bound for the size of the tree
--- associated to the recursion calls done by the nnf conversion algorithm.
--- To be precise about the number of calls in the recursion, we should use
--- the following definition instead of the one we are using:
--- ubsizetree .(φ₁ ⇒ φ₂) | impl φ₁ φ₂ =
---     ubsizetree φ₁ + ubsizetree φ₂ + ubsizetree (¬ φ₁) + ubsizetree (¬ φ₂) + 3
--- Unfortunately, the termination checker complains about this computation.
 
-ubsizetree : PropFormula → ℕ
-ubsizetree φ with n-view φ
-... | conj φ₁ φ₂   = ubsizetree φ₁ + ubsizetree φ₂ + 1
-... | disj φ₁ φ₂   = ubsizetree φ₁ + ubsizetree φ₂ + 1
-... | impl φ₁ φ₂   = 2 * ubsizetree φ₁ + ubsizetree φ₂ + 1
-... | biimpl φ₁ φ₂ = 2 * (ubsizetree φ₁ + ubsizetree φ₂) + 3
-... | nconj φ₁ φ₂  = ubsizetree (¬ φ₁) + ubsizetree (¬ φ₂) + 1
-... | ndisj φ₁ φ₂  = ubsizetree (¬ φ₁) + ubsizetree (¬ φ₂) + 1
-... | nneg φ₁      = ubsizetree (¬ φ₁) + 1
+nnf-cmeasure : PropFormula → ℕ
+nnf-cmeasure φ with n-view φ
+... | conj φ₁ φ₂   = nnf-cmeasure φ₁ + nnf-cmeasure φ₂ + 1
+... | disj φ₁ φ₂   = nnf-cmeasure φ₁ + nnf-cmeasure φ₂ + 1
+... | impl φ₁ φ₂   = 2 * nnf-cmeasure φ₁  + nnf-cmeasure φ₂ + 1
+... | biimpl φ₁ φ₂ = 2 * (nnf-cmeasure φ₁ + nnf-cmeasure φ₂) + 3
+... | nconj φ₁ φ₂  = nnf-cmeasure (¬ φ₁) + nnf-cmeasure (¬ φ₂) + 1
+... | ndisj φ₁ φ₂  = nnf-cmeasure (¬ φ₁) + nnf-cmeasure (¬ φ₂) + 1
+... | nneg φ₁      = nnf-cmeasure (¬ φ₁) + 1
+... | nimpl φ₁ φ₂  = nnf-cmeasure φ₁ + nnf-cmeasure (¬ φ₂) + 3
+... | nbiim φ₁ φ₂  = nnf-cmeasure φ₁ + nnf-cmeasure φ₂ +
+                     nnf-cmeasure (¬ φ₁) + nnf-cmeasure (¬ φ₂) + 8
 ... | ntop         = 1
 ... | nbot         = 1
-... | nimpl φ₁ φ₂  = ubsizetree φ₁ + ubsizetree (¬ φ₂) + 3
-... | nbiim φ₁ φ₂  =
-  ubsizetree φ₁ + ubsizetree φ₂ + ubsizetree (¬ φ₁) + ubsizetree (¬ φ₂) + 8
 ... | other .φ     = 1
 
 nnf : PropFormula → PropFormula
-nnf φ = nnf′ (ubsizetree φ) φ
+nnf φ = nnf′ (nnf-cmeasure φ) φ
 
 thm-nnf
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
   → Γ ⊢ nnf φ
 
-thm-nnf {Γ} {φ} Γ⊢φ = thm-nnf′ (ubsizetree φ) Γ⊢φ
+thm-nnf {Γ} {φ} Γ⊢φ = thm-nnf′ (nnf-cmeasure φ) Γ⊢φ
 
 ------------------------------------------------------------------------------
 -- Disjunctive Normal Form (DNF)
