@@ -91,31 +91,31 @@ thm-nnf′ {Γ} {φ} (suc n) Γ⊢φ
 thm-nnf′ {Γ} {φ} zero Γ⊢φ = Γ⊢φ
 
 
-nnf-cmeasure : PropFormula → ℕ
-nnf-cmeasure φ with n-view φ
-... | conj φ₁ φ₂   = nnf-cmeasure φ₁ + nnf-cmeasure φ₂ + 1
-... | disj φ₁ φ₂   = nnf-cmeasure φ₁ + nnf-cmeasure φ₂ + 1
-... | impl φ₁ φ₂   = 2 * nnf-cmeasure φ₁  + nnf-cmeasure φ₂ + 1
-... | biimpl φ₁ φ₂ = 2 * (nnf-cmeasure φ₁ + nnf-cmeasure φ₂) + 3
-... | nconj φ₁ φ₂  = nnf-cmeasure (¬ φ₁) + nnf-cmeasure (¬ φ₂) + 1
-... | ndisj φ₁ φ₂  = nnf-cmeasure (¬ φ₁) + nnf-cmeasure (¬ φ₂) + 1
-... | nneg φ₁      = nnf-cmeasure (¬ φ₁) + 1
-... | nimpl φ₁ φ₂  = nnf-cmeasure φ₁ + nnf-cmeasure (¬ φ₂) + 3
-... | nbiim φ₁ φ₂  = nnf-cmeasure φ₁ + nnf-cmeasure φ₂ +
-                     nnf-cmeasure (¬ φ₁) + nnf-cmeasure (¬ φ₂) + 8
+nnf-complexity : PropFormula → ℕ
+nnf-complexity φ with n-view φ
+... | conj φ₁ φ₂   = nnf-complexity φ₁ + nnf-complexity φ₂ + 1
+... | disj φ₁ φ₂   = nnf-complexity φ₁ + nnf-complexity φ₂ + 1
+... | impl φ₁ φ₂   = 2 * nnf-complexity φ₁  + nnf-complexity φ₂ + 1
+... | biimpl φ₁ φ₂ = 2 * (nnf-complexity φ₁ + nnf-complexity φ₂) + 3
+... | nconj φ₁ φ₂  = nnf-complexity (¬ φ₁) + nnf-complexity (¬ φ₂) + 1
+... | ndisj φ₁ φ₂  = nnf-complexity (¬ φ₁) + nnf-complexity (¬ φ₂) + 1
+... | nneg φ₁      = nnf-complexity (¬ φ₁) + 1
+... | nimpl φ₁ φ₂  = nnf-complexity φ₁ + nnf-complexity (¬ φ₂) + 3
+... | nbiim φ₁ φ₂  = nnf-complexity φ₁ + nnf-complexity φ₂ +
+                     nnf-complexity (¬ φ₁) + nnf-complexity (¬ φ₂) + 8
 ... | ntop         = 1
 ... | nbot         = 1
 ... | other .φ     = 1
 
 nnf : PropFormula → PropFormula
-nnf φ = nnf′ (nnf-cmeasure φ) φ
+nnf φ = nnf′ (nnf-complexity φ) φ
 
 thm-nnf
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
   → Γ ⊢ nnf φ
 
-thm-nnf {Γ} {φ} Γ⊢φ = thm-nnf′ (nnf-cmeasure φ) Γ⊢φ
+thm-nnf {Γ} {φ} Γ⊢φ = thm-nnf′ (nnf-complexity φ) Γ⊢φ
 
 ------------------------------------------------------------------------------
 -- Disjunctive Normal Form (DNF)
