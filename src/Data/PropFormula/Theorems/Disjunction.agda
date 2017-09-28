@@ -16,6 +16,7 @@ open import Data.PropFormula.Theorems.Conjunction n using ( ∧-dmorgan₁ )
 open import Data.PropFormula.Theorems.Implication n using ( vanDalen244e )
 
 open import Function using ( _$_; _∘_ )
+open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 ------------------------------------------------------------------------------
 
@@ -152,6 +153,20 @@ subst⊢∨₂
   : ∀ {Γ} {φ ψ}
   → Γ ⊢ φ ∨ ψ
   → Γ ⊢ ¬ φ ⇒ ψ
+
+-- A basic one.
+
+postulate
+  φ∨⊥-to-φ
+    : ∀ {Γ} {φ}
+    → Γ ⊢ φ ∨ ⊥
+    → Γ ⊢ φ
+
+  subst⊢∨₁≡
+    : ∀ {Γ} {φ ψ γ}
+    → φ ≡ γ
+    → Γ ⊢ φ ∨ ψ
+    → Γ ⊢ γ ∨ ψ
 
 ------------------------------------------------------------------------------
 -- Proofs.
