@@ -291,3 +291,50 @@ postulate
     : ∀ {Γ} {φ}
     → Γ ⊢ cnf φ
     → Γ ⊢ φ
+
+
+----------------------------------------------------------------------------
+-- Testing for a normal form.
+
+is∨ : PropFormula → Bool
+is∨ φ
+  with d-view φ
+is∨ .(φ₁ ∧ φ₂) | conj φ₁ φ₂ = false
+is∨ .(φ₁ ∨ φ₂) | disj φ₁ φ₂ = is∨ φ₁ and is∨ φ₂
+is∨ φ          | other .φ   = true
+
+is∧∨ : PropFormula → Bool
+is∧∨ φ
+  with d-view φ
+is∧∨ .(φ₁ ∧ φ₂) | conj φ₁ φ₂ = is∧∨ φ₁ and is∧∨ φ₂
+is∧∨ .(φ₁ ∨ φ₂) | disj φ₁ φ₂ = is∨ φ₁ and is∨ φ₂
+is∧∨ φ          | other .φ   = true
+
+is∧ : PropFormula → Bool
+is∧ φ
+  with d-view φ
+is∧ .(φ₁ ∧ φ₂) | conj φ₁ φ₂ = is∧ φ₁ and is∧ φ₂
+is∧ .(φ₁ ∨ φ₂) | disj φ₁ φ₂ = false
+is∧ φ          | other .φ   = true
+
+is∨∧ : PropFormula → Bool
+is∨∧ φ
+  with d-view φ
+is∨∧ .(φ₁ ∧ φ₂) | conj φ₁ φ₂ = is∧ φ₁ and is∧ φ₂
+is∨∧ .(φ₁ ∨ φ₂) | disj φ₁ φ₂ = is∨∧ φ₁ and is∨∧ φ₂
+is∨∧ φ          | other .φ   = true
+
+
+isNNF : PropFormula → Bool
+isNNF φ
+  with push-neg-view φ
+isNNF φ          | yes .φ     = false
+isNNF .(φ₁ ∧ φ₂) | no-∧ φ₁ φ₂ = isNNF φ₁ and isNNF φ₂
+isNNF .(φ₁ ∨ φ₂) | no-∨ φ₁ φ₂ = isNNF φ₁ and isNNF φ₂
+isNNF φ          | no .φ      = true
+
+isCNF : PropFormula → Bool
+isCNF φ = isNNF φ and is∧∨ φ
+
+isDNF : PropFormula → Bool
+isDNF φ = isNNF φ and is∨∧ φ

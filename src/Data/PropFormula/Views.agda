@@ -97,6 +97,14 @@ impl-view : (φ : PropFormula) → ImplView φ
 impl-view (φ₁ ⇒ φ₂) = impl _ _
 impl-view φ         = other _
 
+data BiimplView : PropFormula → Set where
+  biimpl  : (φ₁ φ₂ : PropFormula) → BiimplView (φ₁ ⇔ φ₂)
+  other : (φ : PropFormula)       → BiimplView φ
+
+biimpl-view : (φ : PropFormula) → BiimplView φ
+biimpl-view (φ₁ ⇔ φ₂) = biimpl _ _
+biimpl-view φ         = other _
+
 
 data NegView : PropFormula → Set where
   neg : (φ : PropFormula) → NegView (¬ φ)
@@ -105,4 +113,25 @@ data NegView : PropFormula → Set where
 neg-view : (φ : PropFormula) → NegView φ
 neg-view (¬ φ) = neg _
 neg-view φ     = pos _
+
+data PushNegView : PropFormula → Set where
+  yes  : (φ : PropFormula)     → PushNegView φ
+  no-∧ : (φ₁ φ₂ : PropFormula) → PushNegView (φ₁ ∧ φ₂)
+  no-∨ : (φ₁ φ₂ : PropFormula) → PushNegView (φ₁ ∨ φ₂)
+  no   : (φ : PropFormula)     → PushNegView φ
+
+push-neg-view : (φ : PropFormula) → PushNegView φ
+push-neg-view φ with n-view φ
+push-neg-view .(φ₁ ∧ φ₂)     | conj φ₁ φ₂   = no-∧ _ _
+push-neg-view .(φ₁ ∨ φ₂)     | disj φ₁ φ₂   = no-∨ _ _
+push-neg-view .(φ₁ ⇒ φ₂)     | impl φ₁ φ₂   = yes _
+push-neg-view .(φ₁ ⇔ φ₂)     | biimpl φ₁ φ₂ = yes _
+push-neg-view .(¬ (φ₁ ∧ φ₂)) | nconj φ₁ φ₂  = yes _
+push-neg-view .(¬ (φ₁ ∨ φ₂)) | ndisj φ₁ φ₂  = yes _
+push-neg-view .(¬ (¬ φ₁))    | nneg φ₁      = yes _
+push-neg-view .(¬ (φ₁ ⇒ φ₂)) | nimpl φ₁ φ₂  = yes _
+push-neg-view .(¬ (φ₁ ⇔ φ₂)) | nbiim φ₁ φ₂  = yes _
+push-neg-view .(¬ ⊤)         | ntop         = yes _
+push-neg-view .(¬ ⊥)         | nbot         = yes _
+push-neg-view φ              | other .φ     = no _
 
