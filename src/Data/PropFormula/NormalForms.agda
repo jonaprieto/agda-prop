@@ -9,6 +9,10 @@ module Data.PropFormula.NormalForms (n : ℕ) where
 
 ------------------------------------------------------------------------------
 
+open import Data.Bool.Base
+  using ( Bool; true; false; if_then_else_; not)
+  renaming (_∧_ to _and_; _∨_ to _or_)
+
 open import Data.Fin  using ( Fin; #_ )
 open import Data.List using ( List; [_]; [];  _++_; _∷_ ; concatMap; map )
 
@@ -269,3 +273,5 @@ thm-cnf
   → Γ ⊢ cnf φ
 
 thm-cnf = thm-dist′ ∘ thm-nnf
+
+-----
