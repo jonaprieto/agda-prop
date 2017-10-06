@@ -176,41 +176,41 @@ thm-dist-∧ {Γ} {.(φ ∧ (ψ ∨ γ))} Γ⊢φ∧⟨ψ∨γ⟩ | case₂ φ �
 thm-dist-∧ {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 
 
-dist : PropFormula → PropFormula
-dist φ with d-view φ
-dist .(φ ∧ ψ) | conj φ ψ = dist-∧ (dist φ ∧ dist ψ)
-dist .(φ ∨ ψ) | disj φ ψ = dist φ ∨ dist ψ
-dist φ        | other .φ = φ
+dnf-dist : PropFormula → PropFormula
+dnf-dist φ with d-view φ
+dnf-dist .(φ ∧ ψ) | conj φ ψ = dist-∧ (dnf-dist φ ∧ dnf-dist ψ)
+dnf-dist .(φ ∨ ψ) | disj φ ψ = dnf-dist φ ∨ dnf-dist ψ
+dnf-dist φ        | other .φ = φ
 
-thm-dist
+thm-dnf-dist
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
-  → Γ ⊢ dist φ
+  → Γ ⊢ dnf-dist φ
 
-thm-dist {Γ} {φ} Γ⊢φ with d-view φ
-thm-dist {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ =
+thm-dnf-dist {Γ} {φ} Γ⊢φ with d-view φ
+thm-dnf-dist {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ =
   thm-dist-∧
     (∧-intro
-      (thm-dist (∧-proj₁ Γ⊢φ∧ψ))
-      (thm-dist (∧-proj₂ Γ⊢φ∧ψ)))
-thm-dist {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
+      (thm-dnf-dist (∧-proj₁ Γ⊢φ∧ψ))
+      (thm-dnf-dist (∧-proj₂ Γ⊢φ∧ψ)))
+thm-dnf-dist {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
   ⇒-elim
     (⇒-intro
       (∨-elim {Γ = Γ}
-        (∨-intro₁ (dist ψ) (thm-dist (assume {Γ = Γ} φ)))
-        (∨-intro₂ (dist φ) (thm-dist (assume {Γ = Γ} ψ)))))
+        (∨-intro₁ (dnf-dist ψ) (thm-dnf-dist (assume {Γ = Γ} φ)))
+        (∨-intro₂ (dnf-dist φ) (thm-dnf-dist (assume {Γ = Γ} ψ)))))
     Γ⊢φ∨ψ
-thm-dist {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
+thm-dnf-dist {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
 
 dnf : PropFormula → PropFormula
-dnf = dist ∘ nnf
+dnf = dnf-dist ∘ nnf
 
 thm-dnf
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
   → Γ ⊢ dnf φ
 
-thm-dnf = thm-dist ∘ thm-nnf
+thm-dnf = thm-dnf-dist ∘ thm-nnf
 
 postulate
   thm-inv-dnf
@@ -252,39 +252,39 @@ thm-dist-∨ {Γ} {.(φ ∨ (ψ ∧ γ))} Γ⊢φ | case₂ φ ψ γ =
 thm-dist-∨ {Γ} {.φ}             Γ⊢φ | other φ     = Γ⊢φ
 
 
-dist′ : PropFormula → PropFormula
-dist′ φ with d-view φ
-dist′ .(φ ∧ ψ) | conj φ ψ = dist′ φ ∧ dist′ ψ
-dist′ .(φ ∨ ψ) | disj φ ψ = dist-∨ ((dist′ φ) ∨ (dist′ ψ))
-dist′ φ        | other .φ = φ
+cnf-dist : PropFormula → PropFormula
+cnf-dist φ with d-view φ
+cnf-dist .(φ ∧ ψ) | conj φ ψ = cnf-dist φ ∧ cnf-dist ψ
+cnf-dist .(φ ∨ ψ) | disj φ ψ = dist-∨ ((cnf-dist φ) ∨ (cnf-dist ψ))
+cnf-dist φ        | other .φ = φ
 
-thm-dist′
+thm-cnf-dist
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
-  → Γ ⊢ dist′ φ
+  → Γ ⊢ cnf-dist φ
 
-thm-dist′ {Γ} {φ} Γ⊢φ with d-view φ
-thm-dist′ {Γ} {.(φ ∧ ψ)} Γ⊢φ∧ψ | conj φ ψ =
-  ∧-intro (thm-dist′ (∧-proj₁ Γ⊢φ∧ψ)) (thm-dist′ (∧-proj₂ Γ⊢φ∧ψ))
-thm-dist′ {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
+thm-cnf-dist {Γ} {φ} Γ⊢φ with d-view φ
+thm-cnf-dist {Γ} {.(φ ∧ ψ)} Γ⊢φ∧ψ | conj φ ψ =
+  ∧-intro (thm-cnf-dist (∧-proj₁ Γ⊢φ∧ψ)) (thm-cnf-dist (∧-proj₂ Γ⊢φ∧ψ))
+thm-cnf-dist {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
   thm-dist-∨
     (⇒-elim
       (⇒-intro
         (∨-elim {Γ = Γ}
-          (∨-intro₁ (dist′ ψ) (thm-dist′ (assume {Γ = Γ} φ)))
-          (∨-intro₂ (dist′ φ) (thm-dist′ (assume {Γ = Γ} ψ)))))
+          (∨-intro₁ (cnf-dist ψ) (thm-cnf-dist (assume {Γ = Γ} φ)))
+          (∨-intro₂ (cnf-dist φ) (thm-cnf-dist (assume {Γ = Γ} ψ)))))
       Γ⊢φ∨ψ)
-thm-dist′ {Γ} {.φ} Γ⊢φ         | other φ  = Γ⊢φ
+thm-cnf-dist {Γ} {.φ} Γ⊢φ         | other φ  = Γ⊢φ
 
 cnf : PropFormula → PropFormula
-cnf = dist′ ∘ nnf
+cnf = cnf-dist ∘ nnf
 
 thm-cnf
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
   → Γ ⊢ cnf φ
 
-thm-cnf = thm-dist′ ∘ thm-nnf
+thm-cnf = thm-cnf-dist ∘ thm-nnf
 
 postulate
   thm-inv-cnf
