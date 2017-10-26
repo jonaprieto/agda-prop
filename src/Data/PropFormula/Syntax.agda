@@ -63,7 +63,7 @@ _⊆_ : Ctxt → Ctxt → Set
 
 infix 3 _⊢_
 
-data _⊢_ : (Γ : Ctxt)(φ : PropFormula) → Set where
+data _⊢_ : Ctxt → PropFormula → Set where
 
 -- Hyp.
 
