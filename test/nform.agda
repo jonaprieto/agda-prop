@@ -22,7 +22,7 @@ postulate
  p1 : ∅ ⊢ φ
 
 p2 : ∅ ⊢ cnfφ
-p2 = thm-cnf p1 -- thm-cnf p1
+p2 = cnf-lem p1 -- thm-cnf p1
 
 {-
 p3 : cnf φ ≡ cnfφ
