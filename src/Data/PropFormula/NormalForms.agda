@@ -183,6 +183,7 @@ dist-∧-lem {Γ} {.(φ ∧ (ψ ∨ γ))} Γ⊢φ∧⟨ψ∨γ⟩ | case₂ φ �
               (assume {Γ = Γ} γ))))))
     (∧-proj₂ Γ⊢φ∧⟨ψ∨γ⟩)
 dist-∧-lem {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
+--------------------------------------------------------------------------- ■
 
 
 -- Def.
@@ -213,6 +214,7 @@ dnf-dist-lem {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
         (∨-intro₂ (dnf-dist φ) (dnf-dist-lem (assume {Γ = Γ} ψ)))))
     Γ⊢φ∨ψ
 dnf-dist-lem {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
+--------------------------------------------------------------------------- ■
 
 -- Def.
 dnf : PropFormula → PropFormula
@@ -225,15 +227,9 @@ dnf-lem
   → Γ ⊢ dnf φ
 
 -- Proof.
-dnf-lem = dnf-dist-lem ∘ nnf-lem  -- ▪
+dnf-lem = dnf-dist-lem ∘ nnf-lem
+--------------------------------------------------------------------------- ■
 
-
-postulate
-  -- Lemma.
-  from-dnf-lem
-    : ∀ {Γ} {φ}
-    → Γ ⊢ dnf φ
-    → Γ ⊢ φ
 
 ------------------------------------------------------------------------------
 -- Conjunctive Normal Forms (CNF)
@@ -242,10 +238,11 @@ postulate
 -- Def.
 dist-∨ : PropFormula → PropFormula
 dist-∨ φ with c-view-aux φ
-dist-∨ .((φ₁ ∧ φ₂) ∨ φ₃) | case₁ φ₁ φ₂ φ₃ = dist-∨ (φ₁ ∨ φ₃) ∧ dist-∨ (φ₂ ∨ φ₃)
-dist-∨ .(φ₁ ∨ (φ₂ ∧ φ₃)) | case₂ φ₁ φ₂ φ₃ = dist-∨ (φ₁ ∨ φ₂) ∧ dist-∨ (φ₁ ∨ φ₃)
+dist-∨ .((φ₁ ∧ φ₂) ∨ φ₃) | case₁ φ₁ φ₂ φ₃ =
+  dist-∨ (φ₁ ∨ φ₃) ∧ dist-∨ (φ₂ ∨ φ₃)
+dist-∨ .(φ₁ ∨ (φ₂ ∧ φ₃)) | case₂ φ₁ φ₂ φ₃ =
+  dist-∨ (φ₁ ∨ φ₂) ∧ dist-∨ (φ₁ ∨ φ₃)
 dist-∨ φ                 | other .φ       = φ
-
 
 -- Lemma.
 dist-∨-lem
@@ -269,8 +266,14 @@ dist-∨-lem {Γ} {.(φ ∨ (ψ ∧ γ))} Γ⊢φ | case₂ φ ψ γ =
   ∧-intro
     (dist-∨-lem (∧-proj₁ (∨-dist₁ Γ⊢φ)))
     (dist-∨-lem (∧-proj₂ (∨-dist₁ Γ⊢φ)))
-dist-∨-lem {Γ} {.φ}  Γ⊢φ | other φ = Γ⊢φ  -- ▪
+dist-∨-lem {Γ} {.φ}  Γ⊢φ | other φ = Γ⊢φ
+--------------------------------------------------------------------------- ■
 
+postulate
+ from-dist-∨-lem
+   : ∀ {Γ} {φ}
+   → Γ ⊢ dist-∨ φ
+   → Γ ⊢ φ
 
 -- Def.
 cnf-dist : PropFormula → PropFormula
@@ -286,7 +289,8 @@ cnf-dist-lem
   → Γ ⊢ cnf-dist φ
 
 -- Proof.
-cnf-dist-lem {Γ} {φ} Γ⊢φ with d-view φ
+cnf-dist-lem {Γ} {φ} Γ⊢φ
+  with d-view φ
 cnf-dist-lem {Γ} {.(φ ∧ ψ)} Γ⊢φ∧ψ | conj φ ψ =
   ∧-intro (cnf-dist-lem (∧-proj₁ Γ⊢φ∧ψ)) (cnf-dist-lem (∧-proj₂ Γ⊢φ∧ψ))
 cnf-dist-lem {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
@@ -297,7 +301,32 @@ cnf-dist-lem {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
           (∨-intro₁ (cnf-dist ψ) (cnf-dist-lem (assume {Γ = Γ} φ)))
           (∨-intro₂ (cnf-dist φ) (cnf-dist-lem (assume {Γ = Γ} ψ)))))
       Γ⊢φ∨ψ)
-cnf-dist-lem {Γ} {.φ} Γ⊢φ | other φ  = Γ⊢φ  -- ▪
+cnf-dist-lem {Γ} {.φ} Γ⊢φ | other φ  = Γ⊢φ
+--------------------------------------------------------------------------- ■
+
+-- Lemma.
+from-cnf-dist-lem
+  : ∀ {Γ} {φ}
+  → Γ ⊢ cnf-dist φ
+  → Γ ⊢ φ
+
+-- Proof.
+from-cnf-dist-lem {Γ} {φ} Γ⊢cnfdist
+  with d-view φ
+from-cnf-dist-lem {Γ} {.(φ ∧ ψ)} Γ⊢cnfdistφ∧ψ | conj φ ψ =
+  ∧-intro
+    (from-cnf-dist-lem (∧-proj₁ Γ⊢cnfdistφ∧ψ))
+    (from-cnf-dist-lem (∧-proj₂ Γ⊢cnfdistφ∧ψ))
+from-cnf-dist-lem {Γ} {.(φ ∨ ψ)} Γ⊢cnfdistφ∨ψ | disj φ ψ =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ ψ (from-cnf-dist-lem (assume {Γ = Γ} (cnf-dist φ))))
+        (∨-intro₂ φ (from-cnf-dist-lem (assume {Γ = Γ} (cnf-dist ψ))))))
+    (from-dist-∨-lem Γ⊢cnfdistφ∨ψ)
+from-cnf-dist-lem {Γ} {.φ} Γ⊢φ | other φ  = Γ⊢φ
+--------------------------------------------------------------------------- ■
+
 
 -- Def.
 cnf : PropFormula → PropFormula
