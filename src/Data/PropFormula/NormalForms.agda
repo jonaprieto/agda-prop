@@ -341,13 +341,15 @@ cnf-lem
 -- Proof.
 cnf-lem = cnf-dist-lem ∘ nnf-lem  -- ▪
 
-postulate
-  -- Lemma.
-  from-cnf-thm
-    : ∀ {Γ} {φ}
-    → Γ ⊢ cnf φ
-    → Γ ⊢ φ
+-- Lemma.
+from-cnf-lem
+  : ∀ {Γ} {φ}
+  → Γ ⊢ cnf φ
+  → Γ ⊢ φ
 
+-- Proof.
+from-cnf-lem = from-nnf-lem ∘ from-cnf-dist-lem
+--------------------------------------------------------------------------- ■
 
 ----------------------------------------------------------------------------
 -- Testing for a normal form.
