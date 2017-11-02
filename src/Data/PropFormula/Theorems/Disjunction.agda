@@ -11,6 +11,7 @@ module Data.PropFormula.Theorems.Disjunction ( n : ℕ ) where
 
 open import Data.PropFormula.Syntax n
 open import Data.PropFormula.Theorems.Classical n
+open import Data.PropFormula.Properties n
 
 open import Data.PropFormula.Theorems.Conjunction n using ( ∧-dmorgan₁ )
 open import Data.PropFormula.Theorems.Implication n using ( vanDalen244e )
@@ -156,17 +157,16 @@ subst⊢∨₂
 
 -- A basic one.
 
-postulate
-  φ∨⊥-to-φ
-    : ∀ {Γ} {φ}
-    → Γ ⊢ φ ∨ ⊥
-    → Γ ⊢ φ
+φ∨⊥-to-φ
+ : ∀ {Γ} {φ}
+ → Γ ⊢ φ ∨ ⊥
+ → Γ ⊢ φ
 
-  subst⊢∨₁≡
-    : ∀ {Γ} {φ ψ γ}
-    → φ ≡ γ
-    → Γ ⊢ φ ∨ ψ
-    → Γ ⊢ γ ∨ ψ
+subst⊢∨₁≡
+  : ∀ {Γ} {φ ψ γ}
+  → φ ≡ γ
+  → Γ ⊢ φ ∨ ψ
+  → Γ ⊢ γ ∨ ψ
 
 ------------------------------------------------------------------------------
 -- Proofs.
@@ -413,3 +413,19 @@ subst⊢∨₂ {Γ}{φ}{ψ}{γ} Γ⊢ψ⇒γ Γ⊢φ∨ψ =
             (assume {Γ = Γ , ¬ φ} φ)))
           (assume {Γ = Γ , ¬ φ} ψ)))
       (weaken (¬ φ) Γ⊢φ∨ψ))
+
+φ∨⊥-to-φ {Γ} {φ} Γ⊢φ∨⊥ =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (assume {Γ = Γ} φ)
+        (⊥-elim φ (assume {Γ = Γ} ⊥))))
+    Γ⊢φ∨⊥
+
+subst⊢∨₁≡ {Γ} {φ}{ψ}{γ} φ≡γ Γ⊢φ∨ψ =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ ψ (subst φ≡γ {!assume {Γ = Γ} γ!}))
+        (∨-intro₂ γ (assume {Γ = Γ} ψ))))
+    Γ⊢φ∨ψ
