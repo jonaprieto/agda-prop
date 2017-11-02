@@ -426,6 +426,6 @@ subst⊢∨₁≡ {Γ} {φ}{ψ}{γ} φ≡γ Γ⊢φ∨ψ =
   ⇒-elim
     (⇒-intro
       (∨-elim {Γ = Γ}
-        (∨-intro₁ ψ (subst φ≡γ {!assume {Γ = Γ} γ!}))
+        (∨-intro₁ ψ (subst φ≡γ (assume {Γ = Γ} φ)))
         (∨-intro₂ γ (assume {Γ = Γ} ψ))))
     Γ⊢φ∨ψ
