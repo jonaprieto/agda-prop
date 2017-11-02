@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
--- Exercises from the course Type Theory CM0859 (Prof. Andreas Abel).
+-- Exercises for Type Theory CM0859 (Prof. Andreas Abel).
 -- http://www1.eafit.edu.co/asr/courses/type-theory-CM0859/exercises.pdf
 ------------------------------------------------------------------------------
 
