@@ -211,6 +211,13 @@ dnf-dist-lem {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
 dnf-dist-lem {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
+postulate
+  -- Lemma.
+  from-dnf-dist-lem
+    : ∀ {Γ} {φ}
+    → Γ ⊢ dnf-dist φ
+    → Γ ⊢ φ
+
 -- Def.
 dnf : PropFormula → PropFormula
 dnf = dnf-dist ∘ nnf
