@@ -1,6 +1,7 @@
 module nform where
 
 open import Data.PropFormula (3) public
+open import Data.PropFormula.NormalForms 3 public
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 
 p : PropFormula
