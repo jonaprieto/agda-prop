@@ -181,6 +181,12 @@ dist-∧-lem {Γ} {.(φ ∧ (ψ ∨ γ))} Γ⊢φ∧⟨ψ∨γ⟩ | case₂ φ �
 dist-∧-lem {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
+postulate
+  from-dist-∧-lem
+    : ∀ {Γ} {φ}
+    → Γ ⊢ dist-∧ φ
+    → Γ ⊢ φ
+
 -- Def.
 dnf-dist : PropFormula → PropFormula
 dnf-dist φ with d-view φ
@@ -211,12 +217,34 @@ dnf-dist-lem {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
 dnf-dist-lem {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
-postulate
-  -- Lemma.
-  from-dnf-dist-lem
-    : ∀ {Γ} {φ}
-    → Γ ⊢ dnf-dist φ
-    → Γ ⊢ φ
+-- Lemma.
+from-dnf-dist-lem
+  : ∀ {Γ} {φ}
+  → Γ ⊢ dnf-dist φ
+  → Γ ⊢ φ
+
+-- Proof.
+from-dnf-dist-lem {Γ} {φ} Γ⊢φ with d-view φ
+from-dnf-dist-lem {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ =
+  ∧-intro
+    (from-dnf-dist-lem {Γ = Γ} {φ = φ}
+      (∧-proj₁ (from-dist-∧-lem Γ⊢φ∧ψ)))
+    (from-dnf-dist-lem {Γ = Γ} {φ = ψ}
+      (∧-proj₂ {Γ = Γ} {φ = dnf-dist φ}
+        (from-dist-∧-lem Γ⊢φ∧ψ)))
+from-dnf-dist-lem {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
+  ⇒-elim
+    (⇒-intro
+      (∨-elim {Γ = Γ}
+        (∨-intro₁ ψ
+          (from-dnf-dist-lem (assume {Γ = Γ} (dnf-dist φ))))
+        (∨-intro₂ φ
+          (from-dnf-dist-lem (assume {Γ = Γ} (dnf-dist ψ))))))
+    Γ⊢φ∨ψ
+from-dnf-dist-lem {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
+--------------------------------------------------------------------------- ■
+
+
 
 -- Def.
 dnf : PropFormula → PropFormula
