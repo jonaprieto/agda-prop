@@ -25,13 +25,12 @@ open import Relation.Binary.PropositionalEquality using (_≡_)
 
 data _⊢∧_ : Ctxt → List PropFormula → Set where
 
-  empty-intro : ∀ {Γ}
-              → Γ ⊢∧ []
+  empty-intro : ∀ {Γ} → Γ ⊢∧ []
 
-  ∷-intro   : ∀ {Γ} {φ} {L}
-            → Γ ⊢ φ
-            → Γ ⊢∧ L
-            → Γ ⊢∧ (φ ∷ L)
+  ∷-intro     : ∀ {Γ} {φ} {L}
+              → Γ ⊢ φ
+              → Γ ⊢∧ L
+              → Γ ⊢∧ (φ ∷ L)
 
 ∷-proj₁
   : ∀ {Γ} {φ} {L}
@@ -45,11 +44,11 @@ data _⊢∧_ : Ctxt → List PropFormula → Set where
   → Γ ⊢∧ L
 ∷-proj₂ (∷-intro _ Γ⊢∧L) = Γ⊢∧L
 
-thm-intro
+intro-thm
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
   → Γ ⊢∧ [ φ ]
-thm-intro {Γ} {φ} Γ⊢φ = ∷-intro Γ⊢φ empty-intro
+intro-thm {Γ} {φ} Γ⊢φ = ∷-intro Γ⊢φ empty-intro
 
 ++-intro  : ∀ {Γ} {L₁ L₂}
           → Γ ⊢∧ L₁ → Γ ⊢∧ L₂
@@ -87,12 +86,11 @@ toProp (φ ∷ L)  = φ ∧ toProp L
 right-assoc-∧ : PropFormula → PropFormula
 right-assoc-∧  = toProp ∘ toList
 
-thm-right-assoc-∧
+right-assoc-∧-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
   → Γ ⊢ right-assoc-∧ φ
-thm-right-assoc-∧ = ⊢∧-to-⊢ ∘ ⊢-to-⊢∧
-
+right-assoc-∧-lem = ⊢∧-to-⊢ ∘ ⊢-to-⊢∧
 
 find-conjunct : List PropFormula → PropFormula → PropFormula
 find-conjunct [] x        = ⊤
@@ -100,24 +98,24 @@ find-conjunct (x ∷ xs) y with ⌊ eq x y ⌋
 ... | false = find-conjunct xs y
 ... | true  = x
 
-thm-find-conjunct
+find-conjunct-thm
   : ∀ {Γ} {L}
   → (ψ : PropFormula)
   → Γ ⊢∧ L
   → Γ ⊢ find-conjunct L ψ
 
-thm-find-conjunct {_} {[]} ψ Γ⊢∧L    = ⊤-intro
-thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L with ⌊ eq x ψ ⌋
-thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | false with Γ⊢∧L
-thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | false | ∷-intro x₁ w = thm-find-conjunct ψ w
-thm-find-conjunct {_} {x ∷ L} ψ Γ⊢∧L   | true  = ∷-proj₁ Γ⊢∧L
+find-conjunct-thm {_} {[]} ψ Γ⊢∧L    = ⊤-intro
+find-conjunct-thm {_} {x ∷ L} ψ Γ⊢∧L with ⌊ eq x ψ ⌋
+find-conjunct-thm {_} {x ∷ L} ψ Γ⊢∧L   | false with Γ⊢∧L
+find-conjunct-thm {_} {x ∷ L} ψ Γ⊢∧L   | false | ∷-intro x₁ w = find-conjunct-thm ψ w
+find-conjunct-thm {_} {x ∷ L} ψ Γ⊢∧L   | true  = ∷-proj₁ Γ⊢∧L
 
-thm-conjunct
+conjunct-thm
   : ∀ {Γ} {φ}
   → (ψ : PropFormula)
   → Γ ⊢ φ
   → Γ ⊢ find-conjunct (toList φ) ψ
-thm-conjunct {_} ψ Γ⊢φ = thm-find-conjunct ψ (⊢-to-⊢∧ Γ⊢φ)
+conjunct-thm {_} ψ Γ⊢φ = find-conjunct-thm ψ (⊢-to-⊢∧ Γ⊢φ)
 
 {-
 toWeak : (Γ : List PropFormula) (ψ : PropFormula) → List PropFormula

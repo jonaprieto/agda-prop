@@ -3,9 +3,11 @@
 -- Normal Forms.
 ------------------------------------------------------------------------------
 
-open import Data.Nat using (ℕ; suc; zero; _+_;_*_) renaming (_⊔_ to max )
+open import Data.Nat
+  using (suc; zero; _+_;_*_)
+  renaming (_⊔_ to max; ℕ to Nat )
 
-module Data.PropFormula.NormalForms (n : ℕ) where
+module Data.PropFormula.NormalForms (n : Nat) where
 
 ------------------------------------------------------------------------------
 
@@ -33,59 +35,59 @@ open import Relation.Binary.PropositionalEquality using ( _≡_; sym )
 ------------------------------------------------------------------------------
 
 -- Def.
-nnf₀ : ℕ → PropFormula → PropFormula
-nnf₀ (suc n) φ
+nnf₁ : Nat → PropFormula → PropFormula
+nnf₁ (suc n) φ
   with n-view φ
-...  | conj φ₁ φ₂   = nnf₀ n φ₁ ∧ nnf₀ n φ₂
-...  | disj φ₁ φ₂   = nnf₀ n φ₁ ∨ nnf₀ n φ₂
-...  | impl φ₁ φ₂   = nnf₀ n ((¬ φ₁) ∨ φ₂)
-...  | biimpl φ₁ φ₂ = nnf₀ n ((φ₁ ⇒ φ₂) ∧ (φ₂ ⇒ φ₁))
-...  | nconj φ₁ φ₂  = nnf₀ n ((¬ φ₁) ∨ (¬ φ₂))
-...  | ndisj φ₁ φ₂  = nnf₀ n ((¬ φ₁) ∧ (¬ φ₂))
-...  | nneg φ₁      = nnf₀ n φ₁
-...  | nimpl φ₁ φ₂  = nnf₀ n (¬ (φ₂ ∨ (¬ φ₁)))
-...  | nbiim φ₁ φ₂  = nnf₀ n (¬ ((φ₁ ⇒ φ₂) ∧ (φ₂ ⇒ φ₁)))
+...  | conj φ₁ φ₂   = nnf₁ n φ₁ ∧ nnf₁ n φ₂
+...  | disj φ₁ φ₂   = nnf₁ n φ₁ ∨ nnf₁ n φ₂
+...  | impl φ₁ φ₂   = nnf₁ n ((¬ φ₁) ∨ φ₂)
+...  | biimpl φ₁ φ₂ = nnf₁ n ((φ₁ ⇒ φ₂) ∧ (φ₂ ⇒ φ₁))
+...  | nconj φ₁ φ₂  = nnf₁ n ((¬ φ₁) ∨ (¬ φ₂))
+...  | ndisj φ₁ φ₂  = nnf₁ n ((¬ φ₁) ∧ (¬ φ₂))
+...  | nneg φ₁      = nnf₁ n φ₁
+...  | nimpl φ₁ φ₂  = nnf₁ n (¬ (φ₂ ∨ (¬ φ₁)))
+...  | nbiim φ₁ φ₂  = nnf₁ n (¬ ((φ₁ ⇒ φ₂) ∧ (φ₂ ⇒ φ₁)))
 ...  | ntop         = ⊥
 ...  | nbot         = ⊤
 ...  | other .φ     = φ
-nnf₀ zero φ         = φ
+nnf₁ zero φ         = φ
 
--- Lemma.
-nnf₀-lem
+-- Theorem.
+nnf₁-lem
   : ∀ {Γ} {φ}
-  → (n : ℕ)
+  → (n : Nat)
   → Γ ⊢ φ
-  → Γ ⊢ nnf₀ n φ
+  → Γ ⊢ nnf₁ n φ
 
 -- Proof.
-nnf₀-lem {Γ} {φ} (suc n) Γ⊢φ
+nnf₁-lem {Γ} {φ} (suc n) Γ⊢φ
   with n-view φ
 ...  | conj φ₁ φ₂ =
   ∧-intro
-    (nnf₀-lem n (∧-proj₁ Γ⊢φ))
-    (nnf₀-lem n (∧-proj₂ Γ⊢φ))
+    (nnf₁-lem n (∧-proj₁ Γ⊢φ))
+    (nnf₁-lem n (∧-proj₂ Γ⊢φ))
 ...  | disj φ₁ φ₂ =
   (⇒-elim
     (⇒-intro
      (∨-elim {Γ = Γ}
        (∨-intro₁
-         (nnf₀ n φ₂)
-         (nnf₀-lem n (assume {Γ = Γ} φ₁)))
+         (nnf₁ n φ₂)
+         (nnf₁-lem n (assume {Γ = Γ} φ₁)))
        (∨-intro₂
-         (nnf₀ n φ₁)
-         (nnf₀-lem n (assume {Γ = Γ} φ₂)))))
+         (nnf₁ n φ₁)
+         (nnf₁-lem n (assume {Γ = Γ} φ₂)))))
       Γ⊢φ)
-...  | impl φ₁ φ₂   = nnf₀-lem n (⇒-to-¬∨ Γ⊢φ)
-...  | biimpl φ₁ φ₂ = nnf₀-lem n (⇔-equiv₁ Γ⊢φ)
-...  | nconj φ₁ φ₂  = nnf₀-lem n (¬∧-to-¬∨¬ Γ⊢φ)
-...  | ndisj φ₁ φ₂  = nnf₀-lem n (¬∨-to-¬∧¬ Γ⊢φ)
-...  | nneg φ₁      = nnf₀-lem n (¬¬-equiv₁ Γ⊢φ)
-...  | nimpl φ₁ φ₂  = nnf₀-lem n (subst⊢¬ helper Γ⊢φ)
+...  | impl φ₁ φ₂   = nnf₁-lem n (⇒-to-¬∨ Γ⊢φ)
+...  | biimpl φ₁ φ₂ = nnf₁-lem n (⇔-equiv₁ Γ⊢φ)
+...  | nconj φ₁ φ₂  = nnf₁-lem n (¬∧-to-¬∨¬ Γ⊢φ)
+...  | ndisj φ₁ φ₂  = nnf₁-lem n (¬∨-to-¬∧¬ Γ⊢φ)
+...  | nneg φ₁      = nnf₁-lem n (¬¬-equiv₁ Γ⊢φ)
+...  | nimpl φ₁ φ₂  = nnf₁-lem n (subst⊢¬ helper Γ⊢φ)
   where
     helper : Γ ⊢ φ₂ ∨ ¬ φ₁ ⇒ (φ₁ ⇒ φ₂)
     helper = ⇒-intro (¬∨-to-⇒ (∨-comm (assume {Γ = Γ} (φ₂ ∨ ¬ φ₁))))
 ...  | nbiim φ₁ φ₂  =
-  nnf₀-lem n
+  nnf₁-lem n
     (subst⊢¬
       (⇒-intro
         (⇔-equiv₂
@@ -94,11 +96,11 @@ nnf₀-lem {Γ} {φ} (suc n) Γ⊢φ
 ...  | ntop       = ¬-elim Γ⊢φ ⊤-intro
 ...  | nbot       = ⊤-intro
 ...  | other .φ   = Γ⊢φ
-nnf₀-lem {Γ} {φ} zero Γ⊢φ = Γ⊢φ
+nnf₁-lem {Γ} {φ} zero Γ⊢φ = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
 -- Complexity measure.
-nnf-cm : PropFormula → ℕ
+nnf-cm : PropFormula → Nat
 nnf-cm φ with n-view φ
 ... | conj φ₁ φ₂   = nnf-cm φ₁ + nnf-cm φ₂ + 1
 ... | disj φ₁ φ₂   = nnf-cm φ₁ + nnf-cm φ₂ + 1
@@ -116,16 +118,16 @@ nnf-cm φ with n-view φ
 
 -- Def.
 nnf : PropFormula → PropFormula
-nnf φ = nnf₀ (nnf-cm φ) φ
+nnf φ = nnf₁ (nnf-cm φ) φ
 
--- Lemma.
+-- Theorem.
 nnf-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
   → Γ ⊢ nnf φ
 
 -- Proof.
-nnf-lem {Γ} {φ} Γ⊢φ = nnf₀-lem (nnf-cm φ) Γ⊢φ
+nnf-lem {Γ} {φ} Γ⊢φ = nnf₁-lem (nnf-cm φ) Γ⊢φ
 --------------------------------------------------------------------------- ■
 
 ------------------------------------------------------------------------------
@@ -139,7 +141,7 @@ dist-∧ φ with d-view-aux φ
 ... | case₂ φ₁ φ₂ φ₃ = dist-∧ (φ₁ ∧ φ₂) ∨ dist-∧ (φ₁ ∧ φ₃)
 ... | other .φ       = φ
 
--- Lemma.
+-- Theorem.
 dist-∧-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
@@ -181,7 +183,7 @@ dist-∧-lem {Γ} {.(φ ∧ (ψ ∨ γ))} Γ⊢φ∧⟨ψ∨γ⟩ | case₂ φ �
 dist-∧-lem {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
--- Lemma.
+-- Theorem.
 from-dist-∧-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ dist-∧ φ
@@ -217,7 +219,6 @@ from-dist-∧-lem {Γ} {.(φ ∧ (ψ ∨ γ))} Γ⊢φ∧⟨ψ∨γ⟩ | case₂
 from-dist-∧-lem {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
-
 -- Def.
 dnf-dist : PropFormula → PropFormula
 dnf-dist φ with d-view φ
@@ -225,7 +226,7 @@ dnf-dist .(φ ∧ ψ) | conj φ ψ = dist-∧ (dnf-dist φ ∧ dnf-dist ψ)
 dnf-dist .(φ ∨ ψ) | disj φ ψ = dnf-dist φ ∨ dnf-dist ψ
 dnf-dist φ        | other .φ = φ
 
--- Lemma.
+-- Theorem.
 dnf-dist-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
@@ -248,7 +249,7 @@ dnf-dist-lem {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
 dnf-dist-lem {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
--- Lemma.
+-- Theorem.
 from-dnf-dist-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ dnf-dist φ
@@ -281,7 +282,7 @@ from-dnf-dist-lem {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
 dnf : PropFormula → PropFormula
 dnf = dnf-dist ∘ nnf
 
--- Lemma.
+-- Theorem.
 dnf-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
@@ -304,7 +305,7 @@ dist-∨ .(φ₁ ∨ (φ₂ ∧ φ₃)) | case₂ φ₁ φ₂ φ₃ =
   dist-∨ (φ₁ ∨ φ₂) ∧ dist-∨ (φ₁ ∨ φ₃)
 dist-∨ φ                 | other .φ       = φ
 
--- Lemma.
+-- Theorem.
 dist-∨-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
@@ -329,7 +330,7 @@ dist-∨-lem {Γ} {.(φ ∨ (ψ ∧ γ))} Γ⊢φ | case₂ φ ψ γ =
 dist-∨-lem {Γ} {.φ}  Γ⊢φ | other φ = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
--- Lemma.
+-- Theorem.
 from-dist-∨-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ dist-∨ φ
@@ -359,7 +360,7 @@ cnf-dist .(φ ∧ ψ) | conj φ ψ = cnf-dist φ ∧ cnf-dist ψ
 cnf-dist .(φ ∨ ψ) | disj φ ψ = dist-∨ ((cnf-dist φ) ∨ (cnf-dist ψ))
 cnf-dist φ        | other .φ = φ
 
--- Lemma.
+-- Theorem.
 cnf-dist-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ φ
@@ -381,7 +382,7 @@ cnf-dist-lem {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
 cnf-dist-lem {Γ} {.φ} Γ⊢φ | other φ  = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
--- Lemma.
+-- Theorem.
 from-cnf-dist-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ cnf-dist φ
@@ -404,12 +405,11 @@ from-cnf-dist-lem {Γ} {.(φ ∨ ψ)} Γ⊢cnfdistφ∨ψ | disj φ ψ =
 from-cnf-dist-lem {Γ} {.φ} Γ⊢φ | other φ  = Γ⊢φ
 --------------------------------------------------------------------------- ■
 
-
 -- Def.
 cnf : PropFormula → PropFormula
 cnf = cnf-dist ∘ nnf
 
--- Lemma.
+-- Theorem.
 cnf-lem
   : ∀ {Γ} {φ}
   → Γ ⊢ φ

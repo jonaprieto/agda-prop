@@ -9,11 +9,11 @@ module Data.PropFormula.Properties ( n : ℕ ) where
 
 ------------------------------------------------------------------------------
 
-open import Data.PropFormula.Syntax n
-open import Data.PropFormula.Dec n
-
 open import Data.Bool.Base using ( Bool; false; true; not; T )
 open import Data.Fin       using ( Fin ; suc; zero )
+
+open import Data.PropFormula.Syntax n
+open import Data.PropFormula.Dec n
 
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; cong )
 
@@ -52,6 +52,7 @@ var-injective refl = refl
 ¬-injective : ∀ {φ ψ} → ¬ φ ≡ ¬ ψ → φ ≡ ψ
 ¬-injective refl = refl
 
+-- Def.
 _≟_ : {n : ℕ} → Decidable {A = Fin n} _≡_
 zero  ≟ zero  = yes refl
 zero  ≟ suc y = no λ()
@@ -61,6 +62,7 @@ suc x ≟ suc y with x ≟ y
 ... | no  x≢y = no (λ r → x≢y (suc-injective r))
 
 
+-- Def.
 eq : (φ ψ : PropFormula) → Dec (φ ≡ ψ)
 
 -- Equality with Var.
@@ -159,14 +161,18 @@ eq (¬ φ) (¬ ψ) with eq φ ψ
 ... | yes refl = yes refl
 ... | no φ≢ψ   = no (λ r → φ≢ψ (¬-injective r))
 
-subst : ∀ {Γ} {φ ψ}
-      → φ ≡ ψ
-      → Γ ⊢ φ
-      → Γ ⊢ ψ
+-- Theorem.
+subst
+  : ∀ {Γ} {φ ψ}
+  → φ ≡ ψ
+  → Γ ⊢ φ
+  → Γ ⊢ ψ
 subst refl o = o
 
-substΓ : ∀ {Γ Γ′} {φ}
-  → Γ ≡ Γ′
-  → Γ  ⊢ φ
-  → Γ′ ⊢ φ
+-- Theorem.
+substΓ
+  : ∀ {Γ₁ Γ₂} {φ}
+  → Γ₁ ≡ Γ₂
+  → Γ₁ ⊢ φ
+  → Γ₂ ⊢ φ
 substΓ refl o = o

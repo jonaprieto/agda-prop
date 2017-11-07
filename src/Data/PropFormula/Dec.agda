@@ -1,6 +1,5 @@
 ------------------------------------------------------------------------------
 -- Agda-Prop Library.
--- Dec.
 ------------------------------------------------------------------------------
 
 open import Data.Nat using ( ℕ )
@@ -22,10 +21,8 @@ open import Relation.Binary.PropositionalEquality using ( _≡_; refl; cong )
 
 data ⊥₂ : Set where
 
-
 ⊥₂-elim : ∀ {Whatever : Set} → ⊥₂ → Whatever
 ⊥₂-elim ()
-
 
 infix 3 ¬₂_
 

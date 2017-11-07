@@ -11,8 +11,8 @@ module Data.PropFormula ( n : ℕ ) where
 
 open import Data.PropFormula.Dec n         public
 open import Data.PropFormula.NormalForms n public
-open import Data.PropFormula.Syntax n      public
 open import Data.PropFormula.Properties n  public
+open import Data.PropFormula.Syntax n      public
 open import Data.PropFormula.Theorems n    public
 
 open import Data.Bool public
