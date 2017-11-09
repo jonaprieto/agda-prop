@@ -135,3 +135,21 @@ push-neg-view .(¬ ⊤)         | ntop         = yes _
 push-neg-view .(¬ ⊥)         | nbot         = yes _
 push-neg-view φ              | other .φ     = no _
 
+data LiteralView : PropFormula → Set where
+  yes : (φ : PropFormula) → LiteralView φ
+  no  : (φ : PropFormula) → LiteralView φ
+
+literal-view : (φ : PropFormula) → LiteralView φ
+literal-view φ with n-view φ
+literal-view .(φ₁ ∧ φ₂)     | conj φ₁ φ₂   = no _
+literal-view .(φ₁ ∨ φ₂)     | disj φ₁ φ₂   = no _
+literal-view .(φ₁ ⇒ φ₂)     | impl φ₁ φ₂   = no _
+literal-view .(φ₁ ⇔ φ₂)     | biimpl φ₁ φ₂ = no _
+literal-view .(¬ (φ₁ ∧ φ₂)) | nconj φ₁ φ₂  = no _
+literal-view .(¬ (φ₁ ∨ φ₂)) | ndisj φ₁ φ₂  = no _
+literal-view .(¬ (¬ φ₁))    | nneg φ₁      = no _
+literal-view .(¬ (φ₁ ⇒ φ₂)) | nimpl φ₁ φ₂  = no _
+literal-view .(¬ (φ₁ ⇔ φ₂)) | nbiim φ₁ φ₂  = no _
+literal-view .(¬ ⊤)         | ntop         = yes _
+literal-view .(¬ ⊥)         | nbot         = yes _
+literal-view φ              | other _      = yes _
