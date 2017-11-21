@@ -11,9 +11,9 @@ module Data.PropFormula.Theorems.Biimplication ( n : ℕ ) where
 
 open import Data.PropFormula.Theorems.Classical n
 open import Data.PropFormula.Theorems.Implication n
-  using ( ⇒-to-¬∨; ⇒⇒-to-∧⇒; ∧⇒-to-⇒⇒ )
+  using ( ⊃-to-¬∨; ⊃⊃-to-∧⊃; ∧⊃-to-⊃⊃ )
 open import Data.PropFormula.Theorems.Negation n
-  using ( ¬-equiv₁ ; ¬-equiv₂; ¬∨-to-⇒; ¬¬-equiv₁; ¬¬-equiv₂ )
+  using ( ¬-equiv₁ ; ¬-equiv₂; ¬∨-to-⊃; ¬¬-equiv₁; ¬¬-equiv₂ )
 
 open import Data.PropFormula.Syntax n
 
@@ -25,16 +25,16 @@ open import Function using ( _$_ )
 ⇔-equiv₁
   : ∀ {Γ} {φ ψ}
   → Γ ⊢ φ ⇔ ψ
-  → Γ ⊢ (φ ⇒ ψ) ∧ (ψ ⇒ φ)
+  → Γ ⊢ (φ ⊃ ψ) ∧ (ψ ⊃ φ)
 
 -- Proof.
 ⇔-equiv₁ {Γ}{φ}{ψ} Γ⊢φ⇔ψ =
   ∧-intro
-    (⇒-intro
+    (⊃-intro
       (⇔-elim₁
         (assume {Γ = Γ} φ)
         (weaken φ Γ⊢φ⇔ψ)))
-    (⇒-intro
+    (⊃-intro
       (⇔-elim₂
         (assume {Γ = Γ} ψ)
          (weaken ψ Γ⊢φ⇔ψ)))
@@ -43,24 +43,24 @@ open import Function using ( _$_ )
 -- Theorem.
 ⇔-equiv₂
   : ∀ {Γ} {φ ψ}
-  → Γ ⊢ (φ ⇒ ψ) ∧ (ψ ⇒ φ)
+  → Γ ⊢ (φ ⊃ ψ) ∧ (ψ ⊃ φ)
   → Γ ⊢ φ ⇔ ψ
 
 -- Proof.
-⇔-equiv₂ {Γ}{φ}{ψ} Γ⊢⟪φ⇒ψ⟫∧⟪ψ⇒φ⟫ =
+⇔-equiv₂ {Γ}{φ}{ψ} Γ⊢⟪φ⊃ψ⟫∧⟪ψ⊃φ⟫ =
   ⇔-intro
-    (⇒-elim
-      (weaken φ (∧-proj₁ Γ⊢⟪φ⇒ψ⟫∧⟪ψ⇒φ⟫))
+    (⊃-elim
+      (weaken φ (∧-proj₁ Γ⊢⟪φ⊃ψ⟫∧⟪ψ⊃φ⟫))
       (assume {Γ = Γ} φ))
-    (⇒-elim
-      (weaken ψ (∧-proj₂ Γ⊢⟪φ⇒ψ⟫∧⟪ψ⇒φ⟫))
+    (⊃-elim
+      (weaken ψ (∧-proj₂ Γ⊢⟪φ⊃ψ⟫∧⟪ψ⊃φ⟫))
       (assume {Γ = Γ} ψ))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
 ⇔-equiv
   : ∀ {Γ} {φ ψ}
-  → Γ ⊢ (φ ⇔ ψ) ⇔ ((φ ⇒ ψ) ∧ (ψ ⇒ φ))
+  → Γ ⊢ (φ ⇔ ψ) ⇔ ((φ ⊃ ψ) ∧ (ψ ⊃ φ))
 
 -- Proof.
 ⇔-equiv {Γ}{φ}{ψ} =
@@ -68,7 +68,7 @@ open import Function using ( _$_ )
     (⇔-equiv₁
       (assume {Γ = Γ} (φ ⇔ ψ)))
     (⇔-equiv₂
-      (assume {Γ = Γ} ((φ ⇒ ψ) ∧ (ψ ⇒ φ))))
+      (assume {Γ = Γ} ((φ ⊃ ψ) ∧ (ψ ⊃ φ))))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -228,16 +228,16 @@ open import Function using ( _$_ )
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
-⇒-⇔-¬∨
+⊃-⇔-¬∨
   : ∀ {Γ} {φ ψ}
-  → Γ ⊢ (φ ⇒ ψ) ⇔ (¬ φ ∨ ψ)
+  → Γ ⊢ (φ ⊃ ψ) ⇔ (¬ φ ∨ ψ)
 
 -- Proof.
 
-⇒-⇔-¬∨ {Γ}{φ}{ψ} =
+⊃-⇔-¬∨ {Γ}{φ}{ψ} =
   ⇔-intro
-    (⇒-to-¬∨ (assume {Γ = Γ} (φ ⇒ ψ)))
-    (¬∨-to-⇒ (assume {Γ = Γ} (¬ φ ∨ ψ)))
+    (⊃-to-¬∨ (assume {Γ = Γ} (φ ⊃ ψ)))
+    (¬∨-to-⊃ (assume {Γ = Γ} (¬ φ ∨ ψ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -250,7 +250,7 @@ bicon₀-thm
 -- Proof.
 bicon₀-thm {Γ}{φ}{ψ} Γ⊢φ⇔ψ Γ⊢¬ψ =
   ¬-equiv₂
-    (⇒-intro
+    (⊃-intro
       (¬-elim
         (weaken ψ Γ⊢¬ψ)
       (⇔-elim₂
@@ -268,7 +268,7 @@ bicon₁-thm
 -- Proof.
 bicon₁-thm {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
   ¬-equiv₂
-    (⇒-intro
+    (⊃-intro
       (¬-elim
         (⇔-elim₂
           (assume {Γ = Γ} ψ)
@@ -279,13 +279,13 @@ bicon₁-thm {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
 -- Theorem.
 ¬-equiv
   : ∀ {Γ} {φ}
-  → Γ ⊢ ¬ φ ⇔ (φ ⇒ ⊥)
+  → Γ ⊢ ¬ φ ⇔ (φ ⊃ ⊥)
 
 -- Proof.
 ¬-equiv {Γ}{φ} =
   ⇔-intro
     (¬-equiv₁ (assume {Γ = Γ} (¬ φ)))
-    (¬-equiv₂ (assume {Γ = Γ} (φ ⇒ ⊥)))
+    (¬-equiv₂ (assume {Γ = Γ} (φ ⊃ ⊥)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -301,15 +301,15 @@ bicon₁-thm {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
-⇒⇒-⇔-∧⇒
+⊃⊃-⇔-∧⊃
   : ∀ {Γ} {φ ψ γ}
-  → Γ ⊢ (φ ⇒ (ψ ⇒ γ)) ⇔ ((φ ∧ ψ) ⇒ γ)
+  → Γ ⊢ (φ ⊃ (ψ ⊃ γ)) ⇔ ((φ ∧ ψ) ⊃ γ)
 
 -- Proof.
-⇒⇒-⇔-∧⇒ {Γ}{φ}{ψ}{γ} =
+⊃⊃-⇔-∧⊃ {Γ}{φ}{ψ}{γ} =
   ⇔-intro
-    (⇒⇒-to-∧⇒ (assume {Γ = Γ} (φ ⇒ ψ ⇒ γ)))
-    (∧⇒-to-⇒⇒ (assume {Γ = Γ} (φ ∧ ψ ⇒ γ)))
+    (⊃⊃-to-∧⊃ (assume {Γ = Γ} (φ ⊃ ψ ⊃ γ)))
+    (∧⊃-to-⊃⊃ (assume {Γ = Γ} (φ ∧ ψ ⊃ γ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.

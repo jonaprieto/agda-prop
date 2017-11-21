@@ -27,7 +27,7 @@ data PropFormula : Type where
   ⊥    : PropFormula                   -- Bottom (falsum).
   _∧_  : (φ ψ : PropFormula) → Prop    -- Conjunction.
   _∨_  : (φ ψ : PropFormula) → Prop    -- Disjunction.
-  _⇒_  : (φ ψ : PropFormula) → Prop    -- Implication.
+  _⊃_  : (φ ψ : PropFormula) → Prop    -- Implication.
   _⇔_  : (φ ψ : PropFormula) → Prop    -- Biimplication.
   ¬_   : (φ : PropFormula)   → Prop    -- Negation.
 ```
@@ -85,10 +85,10 @@ data _⊢_ : (Γ : Ctxt)(φ : PropFormula) → Set where
                                             → Γ , φ ∨ ψ ⊢ χ
 -- Implication.
 
-  ⇒-intro  : ∀ {Γ} {φ ψ}                    → Γ , φ ⊢ ψ
-                                            → Γ ⊢ φ ⇒ ψ
+  ⊃-intro  : ∀ {Γ} {φ ψ}                    → Γ , φ ⊢ ψ
+                                            → Γ ⊢ φ ⊃ ψ
 
-  ⇒-elim   : ∀ {Γ} {φ ψ}                    → Γ ⊢ φ ⇒ ψ → Γ ⊢ φ
+  ⊃-elim   : ∀ {Γ} {φ ψ}                    → Γ ⊢ φ ⊃ ψ → Γ ⊢ φ
                                             → Γ ⊢ ψ
 -- Biconditional.
 
@@ -113,8 +113,8 @@ Tested with:
 
 ## Library
 
-We have a list of [theorems][theorems] for each connective and a mix of 
-them. Their names are based on their main connective, their purpose or 
+We have a list of [theorems][theorems] for each connective and a mix of
+them. Their names are based on their main connective, their purpose or
 their source.  We added sub-indices for those theorems that differ a little with other one. If you need an specific theorem that you think
 we should include, open an issue.
 
@@ -136,28 +136,28 @@ $ cat test/ex-andreas-abel.agda
 open import Data.PropFormula 2 public
 ...
 
-EM⇒Pierce
+EM⊃Pierce
   : ∀ {Γ} {φ ψ}
-  → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
+  → Γ ⊢ ((φ ⊃ ψ) ⊃ φ) ⊃ φ
 
-EM⇒Pierce {Γ}{φ}{ψ} =
-  ⇒-elim
-    (⇒-intro
+EM⊃Pierce {Γ}{φ}{ψ} =
+  ⊃-elim
+    (⊃-intro
       (∨-elim {Γ = Γ}
-        (⇒-intro
-          (weaken ((φ ⇒ ψ) ⇒ φ)
+        (⊃-intro
+          (weaken ((φ ⊃ ψ) ⊃ φ)
             (assume {Γ = Γ} φ)))
-        (⇒-intro
-          (⇒-elim
-            (assume {Γ = Γ , ¬ φ} ((φ ⇒ ψ) ⇒ φ))
-              (⇒-intro
+        (⊃-intro
+          (⊃-elim
+            (assume {Γ = Γ , ¬ φ} ((φ ⊃ ψ) ⊃ φ))
+              (⊃-intro
                 (⊥-elim
                   ψ
                   (¬-elim
                   (weaken φ
-                    (weaken ((φ ⇒ ψ) ⇒ φ)
+                    (weaken ((φ ⊃ ψ) ⊃ φ)
                       (assume {Γ = Γ} (¬ φ))))
-                      (assume {Γ = Γ , ¬ φ , (φ ⇒ ψ) ⇒ φ} φ))))
+                      (assume {Γ = Γ , ¬ φ , (φ ⊃ ψ) ⊃ φ} φ))))
             ))))
       PEM -- ∀ {Γ} {φ}  → Γ ⊢ φ ∨ ¬ φ
 

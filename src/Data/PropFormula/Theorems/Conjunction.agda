@@ -80,8 +80,8 @@ open import Function using ( _$_ ; _∘_  )
 
 -- Proof.
 ∧-dist₁ {Γ}{φ}{ψ}{γ} Γ⊢φ∧ψ∨γ =
-  ⇒-elim
-    (⇒-intro $
+  ⊃-elim
+    (⊃-intro $
       ∨-elim {Γ = Γ}
         (∨-intro₁ (φ ∧ γ)
           (∧-intro
@@ -102,8 +102,8 @@ open import Function using ( _$_ ; _∘_  )
 
 -- Proof.
 ∧-dist₂ {Γ}{φ}{ψ}{γ} =
-  ⇒-elim
-    (⇒-intro
+  ⊃-elim
+    (⊃-intro
       (∨-elim {Γ = Γ}
         (∧-intro
           (∧-proj₁
@@ -140,8 +140,8 @@ open import Function using ( _$_ ; _∘_  )
 
 -- Proof.
 ∧-dmorgan₁ {Γ}{φ}{ψ} =
-  ⇒-elim $
-    ⇒-intro $
+  ⊃-elim $
+    ⊃-intro $
       RAA $
         ¬-elim
           (weaken (¬ (¬ φ ∨ ¬ ψ)) $
@@ -170,8 +170,8 @@ open import Function using ( _$_ ; _∘_  )
 
 -- Proof.
 ∧-dmorgan₂ {Γ}{φ}{ψ} =
-  ⇒-elim $
-    ⇒-intro $
+  ⊃-elim $
+    ⊃-intro $
       ∨-elim {Γ = Γ}
         (¬-intro $
           ¬-elim
@@ -204,29 +204,29 @@ open import Function using ( _$_ ; _∘_  )
 -- Theorem.
 subst⊢∧₁
   : ∀ {Γ} {φ ψ γ}
-  → Γ ⊢ φ ⇒ γ
+  → Γ ⊢ φ ⊃ γ
   → Γ ⊢ φ ∧ ψ
   → Γ ⊢ γ ∧ ψ
 
 -- Proof.
-subst⊢∧₁ {Γ}{φ}{ψ} Γ⊢φ⇒ψ Γ⊢φ∧ψ =
+subst⊢∧₁ {Γ}{φ}{ψ} Γ⊢φ⊃ψ Γ⊢φ∧ψ =
   ∧-intro
-    (⇒-elim (∧-proj₁ (∧-intro Γ⊢φ⇒ψ Γ⊢φ∧ψ)) (∧-proj₁ Γ⊢φ∧ψ))
+    (⊃-elim (∧-proj₁ (∧-intro Γ⊢φ⊃ψ Γ⊢φ∧ψ)) (∧-proj₁ Γ⊢φ∧ψ))
     (∧-proj₂ Γ⊢φ∧ψ)
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
 subst⊢∧₂
   : ∀ {Γ} {φ ψ γ}
-  → Γ ⊢ ψ ⇒ γ
+  → Γ ⊢ ψ ⊃ γ
   → Γ ⊢ φ ∧ ψ
   → Γ ⊢ φ ∧ γ
 
 -- Proof.
-subst⊢∧₂ {Γ}{φ}{ψ} Γ⊢φ⇒ψ Γ⊢φ∧ψ =
+subst⊢∧₂ {Γ}{φ}{ψ} Γ⊢φ⊃ψ Γ⊢φ∧ψ =
   ∧-intro
     (∧-proj₁ Γ⊢φ∧ψ)
-    (⇒-elim Γ⊢φ⇒ψ (∧-proj₂ Γ⊢φ∧ψ))
+    (⊃-elim Γ⊢φ⊃ψ (∧-proj₂ Γ⊢φ∧ψ))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.

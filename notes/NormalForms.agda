@@ -64,11 +64,11 @@ cls ∨Cnf (x ∷ ψ) = (cls ∨⋆ x) ∧Cnf (cls ∨Cnf ψ)
 ¬Cnf [] = [ [] ]
 ¬Cnf fm = concatMap (λ cl → ¬Cnf₁ cl) fm
 
-_⇒Cnf_ : (φ ψ : Cnf) → Cnf
-φ ⇒Cnf ψ = (¬Cnf φ) ∨Cnf ψ
+_⊃Cnf_ : (φ ψ : Cnf) → Cnf
+φ ⊃Cnf ψ = (¬Cnf φ) ∨Cnf ψ
 
 _⇔Cnf_ : (φ ψ : Cnf) → Cnf
-φ ⇔Cnf ψ = (φ ⇒Cnf ψ) ∧Cnf (ψ ⇒Cnf φ)
+φ ⇔Cnf ψ = (φ ⊃Cnf ψ) ∧Cnf (ψ ⊃Cnf φ)
 
 toCnf : PropFormula → Cnf
 toCnf (Var x) = varCnf Var x
@@ -76,7 +76,7 @@ toCnf ⊤       = []
 toCnf ⊥       = [ [] ]
 toCnf (φ ∧ ψ) = toCnf φ ∧Cnf toCnf ψ
 toCnf (φ ∨ ψ) = toCnf φ ∨Cnf toCnf ψ
-toCnf (φ ⇒ ψ) = toCnf φ ⇒Cnf toCnf ψ
+toCnf (φ ⊃ ψ) = toCnf φ ⊃Cnf toCnf ψ
 toCnf (φ ⇔ ψ) = toCnf φ ⇔Cnf toCnf ψ
 toCnf (¬ φ)   = ¬Cnf (toCnf φ)
 

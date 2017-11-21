@@ -25,8 +25,8 @@ RAA
 
 -- Proof.
 RAA {Γ}{φ} Γ¬φ⊢⊥ =
-  ⇒-elim
-    (⇒-intro
+  ⊃-elim
+    (⊃-intro
       (∨-elim {Γ = Γ}
         (assume {Γ = Γ} φ)
         (⊥-elim φ Γ¬φ⊢⊥)))

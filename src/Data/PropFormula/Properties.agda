@@ -37,11 +37,11 @@ var-injective refl = refl
 ∨-injective₂ : ∀ {φ φ₁ ψ ψ₁} → (φ ∨ φ₁) ≡ (ψ ∨ ψ₁) → φ₁ ≡ ψ₁
 ∨-injective₂ refl = refl
 
-⇒-injective₁ : ∀ {φ φ₁ ψ ψ₁} → (φ ⇒ φ₁) ≡ (ψ ⇒ ψ₁) → φ ≡ ψ
-⇒-injective₁ refl = refl
+⊃-injective₁ : ∀ {φ φ₁ ψ ψ₁} → (φ ⊃ φ₁) ≡ (ψ ⊃ ψ₁) → φ ≡ ψ
+⊃-injective₁ refl = refl
 
-⇒-injective₂ : ∀ {φ φ₁ ψ ψ₁} → (φ ⇒ φ₁) ≡ (ψ ⇒ ψ₁) → φ₁ ≡ ψ₁
-⇒-injective₂ refl = refl
+⊃-injective₂ : ∀ {φ φ₁ ψ ψ₁} → (φ ⊃ φ₁) ≡ (ψ ⊃ ψ₁) → φ₁ ≡ ψ₁
+⊃-injective₂ refl = refl
 
 ⇔-injective₁ : ∀ {φ φ₁ ψ ψ₁} → (φ ⇔ φ₁) ≡ (ψ ⇔ ψ₁) → φ ≡ ψ
 ⇔-injective₁ refl = refl
@@ -70,7 +70,7 @@ eq (Var x) ⊤        = no λ()
 eq (Var x) ⊥        = no λ()
 eq (Var x) (ψ ∧ ψ₁) = no λ()
 eq (Var x) (ψ ∨ ψ₁) = no λ()
-eq (Var x) (ψ ⇒ ψ₁) = no λ()
+eq (Var x) (ψ ⊃ ψ₁) = no λ()
 eq (Var x) (ψ ⇔ ψ₁) = no λ()
 eq (Var x) (¬ ψ)    = no λ()
 eq (Var x) (Var x₁) with x ≟ x₁
@@ -82,7 +82,7 @@ eq ⊤ (Var x)        = no λ()
 eq ⊤ ⊥              = no λ()
 eq ⊤ (ψ ∧ ψ₁)       = no λ()
 eq ⊤ (ψ ∨ ψ₁)       = no λ()
-eq ⊤ (ψ ⇒ ψ₁)       = no λ()
+eq ⊤ (ψ ⊃ ψ₁)       = no λ()
 eq ⊤ (ψ ⇔ ψ₁)      = no λ()
 eq ⊤ (¬ ψ)          = no λ()
 eq ⊤ ⊤              = yes refl
@@ -92,7 +92,7 @@ eq ⊥ (Var x)        = no λ()
 eq ⊥ ⊤              = no λ()
 eq ⊥ (ψ ∧ ψ₁)       = no λ()
 eq ⊥ (ψ ∨ ψ₁)       = no λ()
-eq ⊥ (ψ ⇒ ψ₁)       = no λ()
+eq ⊥ (ψ ⊃ ψ₁)       = no λ()
 eq ⊥ (ψ ⇔ ψ₁)       = no λ()
 eq ⊥ (¬ ψ)          = no λ()
 eq ⊥ ⊥              = yes refl
@@ -102,7 +102,7 @@ eq (φ ∧ φ₁) (Var x)  = no λ()
 eq (φ ∧ φ₁) ⊤        = no λ()
 eq (φ ∧ φ₁) ⊥        = no λ()
 eq (φ ∧ φ₁) (ψ ∨ ψ₁) = no λ()
-eq (φ ∧ φ₁) (ψ ⇒ ψ₁) = no λ()
+eq (φ ∧ φ₁) (ψ ⊃ ψ₁) = no λ()
 eq (φ ∧ φ₁) (ψ ⇔ ψ₁) = no λ()
 eq (φ ∧ φ₁) (¬ ψ)    = no λ()
 eq (φ ∧ φ₁) (ψ ∧ ψ₁) with eq φ ψ | eq φ₁ ψ₁
@@ -115,7 +115,7 @@ eq (φ ∨ φ₁) (Var x)  = no λ()
 eq (φ ∨ φ₁) ⊤        = no λ()
 eq (φ ∨ φ₁) ⊥        = no λ()
 eq (φ ∨ φ₁) (ψ ∧ ψ₁) = no λ()
-eq (φ ∨ φ₁) (ψ ⇒ ψ₁) = no λ()
+eq (φ ∨ φ₁) (ψ ⊃ ψ₁) = no λ()
 eq (φ ∨ φ₁) (ψ ⇔ ψ₁) = no λ()
 eq (φ ∨ φ₁) (¬ ψ)    = no λ()
 eq (φ ∨ φ₁) (ψ ∨ ψ₁) with eq φ ψ | eq φ₁ ψ₁
@@ -123,18 +123,18 @@ eq (φ ∨ φ₁) (ψ ∨ ψ₁) with eq φ ψ | eq φ₁ ψ₁
 ... | yes _    | no  φ₁≢ψ₁ = no (λ r → φ₁≢ψ₁ (∨-injective₂ r))
 ... | no φ≢ψ   | _         = no (λ r → φ≢ψ   (∨-injective₁ r))
 
--- Equality with ⇒.
-eq (φ ⇒ φ₁) (Var x)  = no λ()
-eq (φ ⇒ φ₁) ⊤        = no λ()
-eq (φ ⇒ φ₁) ⊥        = no λ()
-eq (φ ⇒ φ₁) (ψ ∧ ψ₁) = no λ()
-eq (φ ⇒ φ₁) (ψ ∨ ψ₁) = no λ()
-eq (φ ⇒ φ₁) (ψ ⇔ ψ₁) = no λ()
-eq (φ ⇒ φ₁) (¬ ψ)    = no λ()
-eq (φ ⇒ φ₁) (ψ ⇒ ψ₁) with eq φ ψ | eq φ₁ ψ₁
+-- Equality with ⊃.
+eq (φ ⊃ φ₁) (Var x)  = no λ()
+eq (φ ⊃ φ₁) ⊤        = no λ()
+eq (φ ⊃ φ₁) ⊥        = no λ()
+eq (φ ⊃ φ₁) (ψ ∧ ψ₁) = no λ()
+eq (φ ⊃ φ₁) (ψ ∨ ψ₁) = no λ()
+eq (φ ⊃ φ₁) (ψ ⇔ ψ₁) = no λ()
+eq (φ ⊃ φ₁) (¬ ψ)    = no λ()
+eq (φ ⊃ φ₁) (ψ ⊃ ψ₁) with eq φ ψ | eq φ₁ ψ₁
 ... | yes refl | yes refl  = yes refl
-... | yes _    | no  φ₁≢ψ₁ = no (λ r → φ₁≢ψ₁ (⇒-injective₂ r))
-... | no φ≢ψ   | _         = no (λ r → φ≢ψ   (⇒-injective₁ r))
+... | yes _    | no  φ₁≢ψ₁ = no (λ r → φ₁≢ψ₁ (⊃-injective₂ r))
+... | no φ≢ψ   | _         = no (λ r → φ≢ψ   (⊃-injective₁ r))
 
 -- Equality with ⇔.
 eq (φ ⇔ φ₁) (Var x)  = no λ()
@@ -142,7 +142,7 @@ eq (φ ⇔ φ₁) ⊤        = no λ()
 eq (φ ⇔ φ₁) ⊥        = no λ()
 eq (φ ⇔ φ₁) (ψ ∧ ψ₁) = no λ()
 eq (φ ⇔ φ₁) (ψ ∨ ψ₁) = no λ()
-eq (φ ⇔ φ₁) (ψ ⇒ ψ₁) = no λ()
+eq (φ ⇔ φ₁) (ψ ⊃ ψ₁) = no λ()
 eq (φ ⇔ φ₁) (¬ ψ)    = no λ()
 eq (φ ⇔ φ₁) (ψ ⇔ ψ₁) with eq φ ψ | eq φ₁ ψ₁
 ... | yes refl | yes refl  = yes refl
@@ -155,7 +155,7 @@ eq (¬ φ) ⊤        = no λ()
 eq (¬ φ) ⊥        = no λ()
 eq (¬ φ) (ψ ∧ ψ₁) = no λ()
 eq (¬ φ) (ψ ∨ ψ₁) = no λ()
-eq (¬ φ) (ψ ⇒ ψ₁) = no λ()
+eq (¬ φ) (ψ ⊃ ψ₁) = no λ()
 eq (¬ φ) (ψ ⇔ ψ₁) = no λ()
 eq (¬ φ) (¬ ψ) with eq φ ψ
 ... | yes refl = yes refl

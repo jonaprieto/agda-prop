@@ -16,12 +16,12 @@ open import Data.PropFormula.Syntax n
 data nView : PropFormula  → Set where
   conj   : (φ₁ φ₂ : PropFormula) → nView (φ₁ ∧ φ₂)
   disj   : (φ₁ φ₂ : PropFormula) → nView (φ₁ ∨ φ₂)
-  impl   : (φ₁ φ₂ : PropFormula) → nView (φ₁ ⇒ φ₂)
+  impl   : (φ₁ φ₂ : PropFormula) → nView (φ₁ ⊃ φ₂)
   biimpl : (φ₁ φ₂ : PropFormula) → nView (φ₁ ⇔ φ₂)
   nconj  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ∧ φ₂))
   ndisj  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ∨ φ₂))
   nneg   : (φ₁ : PropFormula)    → nView (¬ ¬ φ₁)
-  nimpl  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ⇒ φ₂))
+  nimpl  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ⊃ φ₂))
   nbiim  : (φ₁ φ₂ : PropFormula) → nView (¬ (φ₁ ⇔ φ₂))
   ntop   : nView (¬ ⊤)
   nbot   : nView (¬ ⊥)
@@ -30,11 +30,11 @@ data nView : PropFormula  → Set where
 n-view : (φ : PropFormula) → nView φ
 n-view (φ₁ ∧ φ₂)     = conj _ _
 n-view (φ₁ ∨ φ₂)     = disj _ _
-n-view (φ₁ ⇒ φ₂)     = impl _ _
+n-view (φ₁ ⊃ φ₂)     = impl _ _
 n-view (φ₁ ⇔ φ₂)     = biimpl _ _
 n-view (¬ (φ₁ ∧ φ₂)) = nconj _ _
 n-view (¬ (φ₁ ∨ φ₂)) = ndisj _ _
-n-view (¬ (φ₁ ⇒ φ₂)) = nimpl _ _
+n-view (¬ (φ₁ ⊃ φ₂)) = nimpl _ _
 n-view (¬ (φ₁ ⇔ φ₂)) = nbiim _ _
 n-view (¬ (¬ φ₁))    = nneg _
 n-view (¬ ⊤)         = ntop
@@ -90,11 +90,11 @@ c-view-aux φ              = other _
 
 
 data ImplView : PropFormula → Set where
-  impl  : (φ₁ φ₂ : PropFormula) → ImplView (φ₁ ⇒ φ₂)
+  impl  : (φ₁ φ₂ : PropFormula) → ImplView (φ₁ ⊃ φ₂)
   other : (φ : PropFormula)     → ImplView φ
 
 impl-view : (φ : PropFormula) → ImplView φ
-impl-view (φ₁ ⇒ φ₂) = impl _ _
+impl-view (φ₁ ⊃ φ₂) = impl _ _
 impl-view φ         = other _
 
 data BiimplView : PropFormula → Set where
@@ -124,12 +124,12 @@ push-neg-view : (φ : PropFormula) → PushNegView φ
 push-neg-view φ with n-view φ
 push-neg-view .(φ₁ ∧ φ₂)     | conj φ₁ φ₂   = no-∧ _ _
 push-neg-view .(φ₁ ∨ φ₂)     | disj φ₁ φ₂   = no-∨ _ _
-push-neg-view .(φ₁ ⇒ φ₂)     | impl φ₁ φ₂   = yes _
+push-neg-view .(φ₁ ⊃ φ₂)     | impl φ₁ φ₂   = yes _
 push-neg-view .(φ₁ ⇔ φ₂)     | biimpl φ₁ φ₂ = yes _
 push-neg-view .(¬ (φ₁ ∧ φ₂)) | nconj φ₁ φ₂  = yes _
 push-neg-view .(¬ (φ₁ ∨ φ₂)) | ndisj φ₁ φ₂  = yes _
 push-neg-view .(¬ (¬ φ₁))    | nneg φ₁      = yes _
-push-neg-view .(¬ (φ₁ ⇒ φ₂)) | nimpl φ₁ φ₂  = yes _
+push-neg-view .(¬ (φ₁ ⊃ φ₂)) | nimpl φ₁ φ₂  = yes _
 push-neg-view .(¬ (φ₁ ⇔ φ₂)) | nbiim φ₁ φ₂  = yes _
 push-neg-view .(¬ ⊤)         | ntop         = yes _
 push-neg-view .(¬ ⊥)         | nbot         = yes _
@@ -143,12 +143,12 @@ literal-view : (φ : PropFormula) → LiteralView φ
 literal-view φ with n-view φ
 literal-view .(φ₁ ∧ φ₂)     | conj φ₁ φ₂   = no _
 literal-view .(φ₁ ∨ φ₂)     | disj φ₁ φ₂   = no _
-literal-view .(φ₁ ⇒ φ₂)     | impl φ₁ φ₂   = no _
+literal-view .(φ₁ ⊃ φ₂)     | impl φ₁ φ₂   = no _
 literal-view .(φ₁ ⇔ φ₂)     | biimpl φ₁ φ₂ = no _
 literal-view .(¬ (φ₁ ∧ φ₂)) | nconj φ₁ φ₂  = no _
 literal-view .(¬ (φ₁ ∨ φ₂)) | ndisj φ₁ φ₂  = no _
 literal-view .(¬ (¬ φ₁))    | nneg φ₁      = no _
-literal-view .(¬ (φ₁ ⇒ φ₂)) | nimpl φ₁ φ₂  = no _
+literal-view .(¬ (φ₁ ⊃ φ₂)) | nimpl φ₁ φ₂  = no _
 literal-view .(¬ (φ₁ ⇔ φ₂)) | nbiim φ₁ φ₂  = no _
 literal-view .(¬ ⊤)         | ntop         = yes _
 literal-view .(¬ ⊥)         | nbot         = yes _

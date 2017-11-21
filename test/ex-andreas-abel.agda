@@ -6,26 +6,26 @@
 open import Data.PropFormula 2 public
 
 ex1 : ∀ {φ}
-    → ∅ ⊢ φ ⇒ φ
+    → ∅ ⊢ φ ⊃ φ
 
-ex1 {φ} = ⇒-intro (assume {Γ = ∅} φ)
+ex1 {φ} = ⊃-intro (assume {Γ = ∅} φ)
 
 ex2 : ∀ {φ ψ}
-    → ∅ ⊢ (φ ∧ (φ ⇒ ψ)) ⇒ ψ
+    → ∅ ⊢ (φ ∧ (φ ⊃ ψ)) ⊃ ψ
 
 ex2 {φ}{ψ} =
-  ⇒-intro $
-    ⇒-elim
-      (∧-proj₂ $ assume {Γ = ∅} (φ ∧ (φ ⇒ ψ)))
-      (∧-proj₁ $ assume {Γ = ∅} (φ ∧ (φ ⇒ ψ)))
+  ⊃-intro $
+    ⊃-elim
+      (∧-proj₂ $ assume {Γ = ∅} (φ ∧ (φ ⊃ ψ)))
+      (∧-proj₁ $ assume {Γ = ∅} (φ ∧ (φ ⊃ ψ)))
 
 ex3 : ∀ {φ ψ γ}
-    → ∅ ⊢ (φ ∧ (ψ ∨ γ)) ⇒ ((φ ∧ ψ) ∨ (φ ∧ γ))
+    → ∅ ⊢ (φ ∧ (ψ ∨ γ)) ⊃ ((φ ∧ ψ) ∨ (φ ∧ γ))
 
 ex3 {φ}{ψ}{γ} =
-  ⇒-intro $
-    ⇒-elim
-      (⇒-intro $
+  ⊃-intro $
+    ⊃-elim
+      (⊃-intro $
         ∨-elim {Γ = ∅ , (φ ∧ (ψ ∨ γ))}
           (∨-intro₁ (φ ∧ γ) $
             ∧-intro
@@ -38,26 +38,26 @@ ex3 {φ}{ψ}{γ} =
     (∧-proj₂ $ assume {Γ = ∅} (φ ∧ (ψ ∨ γ)))
 
 ex4 : ∀ {φ ψ}
-    → ∅ ⊢ (¬ φ ∨ ψ) ⇒ (φ ⇒ ψ)
+    → ∅ ⊢ (¬ φ ∨ ψ) ⊃ (φ ⊃ ψ)
 
 ex4 {φ}{ψ} =
-  ⇒-intro $
+  ⊃-intro $
     ∨-elim {Γ = ∅}
-      (⇒-intro $
+      (⊃-intro $
         ⊥-elim {Γ = ∅ , ¬ φ , φ} ψ
           (¬-elim
             (weaken φ $
               assume {Γ = ∅} (¬ φ))
             (assume {Γ = ∅ , ¬ φ} φ)))
-      (⇒-intro $
+      (⊃-intro $
         weaken φ $
           assume {Γ = ∅} ψ)
 
 ex5 : ∀ {φ ψ}
-    → ∅ ⊢ ¬ (φ ∨ ψ) ⇒ (¬ φ ∧ ¬ ψ)
+    → ∅ ⊢ ¬ (φ ∨ ψ) ⊃ (¬ φ ∧ ¬ ψ)
 
 ex5 {φ}{ψ} =
-  ⇒-intro $
+  ⊃-intro $
     ∧-intro
       (¬-intro $
         ¬-elim
@@ -82,39 +82,39 @@ ex5 {φ}{ψ} =
       PEM
 
 
-RAA⇒EM
+RAA⊃EM
   : ∀ {Γ} {φ}
   → Γ ⊢ φ ∨ ¬ φ
 
-RAA⇒EM {Γ}{φ} =
+RAA⊃EM {Γ}{φ} =
   RAA
     (¬-elim
       (¬¬EM {Γ = Γ , ¬ (φ ∨ ¬ φ)} )
       (assume {Γ = Γ} (¬ (φ ∨ ¬ φ))))
 
 
-EM⇒Pierce
+EM⊃Pierce
   : ∀ {Γ} {φ ψ}
-  → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
+  → Γ ⊢ ((φ ⊃ ψ) ⊃ φ) ⊃ φ
 
-EM⇒Pierce {Γ}{φ}{ψ} =
-  ⇒-elim
-    (⇒-intro
+EM⊃Pierce {Γ}{φ}{ψ} =
+  ⊃-elim
+    (⊃-intro
       (∨-elim {Γ = Γ}
-        (⇒-intro
-          (weaken ((φ ⇒ ψ) ⇒ φ)
+        (⊃-intro
+          (weaken ((φ ⊃ ψ) ⊃ φ)
             (assume {Γ = Γ} φ)))
-        (⇒-intro
-          (⇒-elim
-            (assume {Γ = Γ , ¬ φ} ((φ ⇒ ψ) ⇒ φ))
-              (⇒-intro
+        (⊃-intro
+          (⊃-elim
+            (assume {Γ = Γ , ¬ φ} ((φ ⊃ ψ) ⊃ φ))
+              (⊃-intro
                 (⊥-elim
                   ψ
                   (¬-elim
                   (weaken φ
-                    (weaken ((φ ⇒ ψ) ⇒ φ)
+                    (weaken ((φ ⊃ ψ) ⊃ φ)
                       (assume {Γ = Γ} (¬ φ))))
-                      (assume {Γ = Γ , ¬ φ , (φ ⇒ ψ) ⇒ φ} φ))))
+                      (assume {Γ = Γ , ¬ φ , (φ ⊃ ψ) ⊃ φ} φ))))
             ))))
       PEM
 
@@ -122,17 +122,17 @@ EM⇒Pierce {Γ}{φ}{ψ} =
 postulate
   RAA'
     : ∀ {Γ} {φ}
-    → Γ ⊢ ( ¬ φ ⇒ φ) ⇒ φ
+    → Γ ⊢ ( ¬ φ ⊃ φ) ⊃ φ
 
 
-RAA'⇒RAA : ∀ {Γ}{φ}
-         → Γ ⊢ ¬ (¬ φ) ⇒ φ
+RAA'⊃RAA : ∀ {Γ}{φ}
+         → Γ ⊢ ¬ (¬ φ) ⊃ φ
 
-RAA'⇒RAA {Γ}{φ} =
-  ⇒-intro
-    (⇒-elim
+RAA'⊃RAA {Γ}{φ} =
+  ⊃-intro
+    (⊃-elim
       RAA'
-      (⇒-intro
+      (⊃-intro
         (⊥-elim
           φ
           (¬-elim
@@ -142,22 +142,22 @@ RAA'⇒RAA {Γ}{φ} =
 
 postulate
   Pierce : ∀ {Γ} {φ} {ψ}
-         → Γ ⊢ ((φ ⇒ ψ) ⇒ φ) ⇒ φ
+         → Γ ⊢ ((φ ⊃ ψ) ⊃ φ) ⊃ φ
 
-Pierce⇒RAA' : ∀ {Γ}{φ}
-            → Γ ⊢ ( ¬ φ ⇒ φ ) ⇒ φ
+Pierce⊃RAA' : ∀ {Γ}{φ}
+            → Γ ⊢ ( ¬ φ ⊃ φ ) ⊃ φ
 
-Pierce⇒RAA' {Γ}{φ} =
-  ⇒-intro $
-    ⇒-elim
-      (Pierce {Γ = Γ , ¬ φ ⇒ φ} {φ = φ} {ψ = ⊥})
-      (⇒-intro $
-        ⇒-elim
-          (weaken (φ ⇒ ⊥) $
-            assume {Γ = Γ} ((¬ φ) ⇒ φ))
+Pierce⊃RAA' {Γ}{φ} =
+  ⊃-intro $
+    ⊃-elim
+      (Pierce {Γ = Γ , ¬ φ ⊃ φ} {φ = φ} {ψ = ⊥})
+      (⊃-intro $
+        ⊃-elim
+          (weaken (φ ⊃ ⊥) $
+            assume {Γ = Γ} ((¬ φ) ⊃ φ))
           (¬-equiv₂ $
-            assume {Γ = Γ , (¬ φ) ⇒ φ}
-              (φ ⇒ ⊥)
+            assume {Γ = Γ , (¬ φ) ⊃ φ}
+              (φ ⊃ ⊥)
           )
       )
 

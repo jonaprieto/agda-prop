@@ -26,12 +26,12 @@ data PropFormula : Set where
   Var              : Fin n → PropFormula
   ⊤                : PropFormula
   ⊥                : PropFormula
-  _∧_ _∨_ _⇒_ _⇔_  : (φ ψ : PropFormula) → PropFormula
+  _∧_ _∨_ _⊃_ _⇔_  : (φ ψ : PropFormula) → PropFormula
   ¬_               : (φ : PropFormula)   → PropFormula
 
 infix  11 ¬_
 infixl 8 _∧_ _∨_
-infixr 7 _⇒_ _⇔_
+infixr 7 _⊃_ _⇔_
 
 -- Context is a list (set) of hypotesis and axioms.
 
@@ -113,10 +113,10 @@ data _⊢_ : Ctxt → PropFormula → Set where
                                             → Γ , φ ∨ ψ ⊢ χ
 -- Implication.
 
-  ⇒-intro  : ∀ {Γ} {φ ψ}                    → Γ , φ ⊢ ψ
-                                            → Γ ⊢ φ ⇒ ψ
+  ⊃-intro  : ∀ {Γ} {φ ψ}                    → Γ , φ ⊢ ψ
+                                            → Γ ⊢ φ ⊃ ψ
 
-  ⇒-elim   : ∀ {Γ} {φ ψ}                    → Γ ⊢ φ ⇒ ψ → Γ ⊢ φ
+  ⊃-elim   : ∀ {Γ} {φ ψ}                    → Γ ⊢ φ ⊃ ψ → Γ ⊢ φ
                                             → Γ ⊢ ψ
 -- Biconditional.
 

@@ -14,7 +14,7 @@ r : PropFormula
 r = Var (# 2)
 
 φ : PropFormula
-φ = ¬ ((p ∧ (p ⇒ q)) ⇒ q) -- (p ∧ q) ∨ (¬ r)
+φ = ¬ ((p ∧ (p ⊃ q)) ⊃ q) -- (p ∧ q) ∨ (¬ r)
 
 cnfφ : PropFormula
 cnfφ = ¬ q ∧ (p ∧ (¬ p ∨ q))

@@ -13,7 +13,7 @@ open import Data.PropFormula.Properties n
   using ( ¬-injective ; subst )
 open import Data.PropFormula.Syntax n
 open import Data.PropFormula.Theorems.Classical n
-open import Data.PropFormula.Theorems.Implication n      using ( subst⊢⇒₁ )
+open import Data.PropFormula.Theorems.Implication n      using ( subst⊢⊃₁ )
 
 open import Function                              using ( _$_ ; _∘_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
@@ -25,12 +25,12 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
 ¬-equiv₁
   : ∀ {Γ} {φ}
   → Γ ⊢ ¬ φ
-  → Γ ⊢ φ ⇒ ⊥
-¬-to-⇒⊥ = ¬-equiv₁
+  → Γ ⊢ φ ⊃ ⊥
+¬-to-⊃⊥ = ¬-equiv₁
 
 -- Proof.
 ¬-equiv₁ {Γ}{φ} Γ⊢¬φ =
-  ⇒-intro
+  ⊃-intro
     (¬-elim
       (weaken φ Γ⊢¬φ)
       (assume {Γ = Γ} φ))
@@ -39,15 +39,15 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
 -- Theorem.
 ¬-equiv₂
   : ∀ {Γ} {φ}
-  → Γ ⊢ φ ⇒ ⊥
+  → Γ ⊢ φ ⊃ ⊥
   → Γ ⊢ ¬ φ
-⇒⊥-to-¬ = ¬-equiv₂
+⊃⊥-to-¬ = ¬-equiv₂
 
 -- Proof.
-¬-equiv₂ {Γ}{φ} Γ⊢φ⇒⊥ =
+¬-equiv₂ {Γ}{φ} Γ⊢φ⊃⊥ =
   ¬-intro
-    (⇒-elim
-      (weaken φ Γ⊢φ⇒⊥)
+    (⊃-elim
+      (weaken φ Γ⊢φ⊃⊥)
       (assume {Γ = Γ} φ))
 -------------------------------------------------------------------------- ∎
 
@@ -59,8 +59,8 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
 
 -- Proof.
 ¬¬-equiv₁ {Γ}{φ} Γ⊢¬¬φ =
-  (⇒-elim
-    (⇒-intro $ RAA
+  (⊃-elim
+    (⊃-intro $ RAA
       (¬-elim
         (weaken (¬ φ) $
           assume {Γ = Γ} $ ¬ (¬ φ))
@@ -76,31 +76,31 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
 
 -- Proof.
 ¬¬-equiv₂ {Γ}{φ} Γ⊢φ =
-  ⇒⊥-to-¬
-    (⇒-intro
+  ⊃⊥-to-¬
+    (⊃-intro
       (¬-elim
         (assume {Γ = Γ} (¬ φ))
         (weaken (¬ φ) Γ⊢φ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
-¬∨-to-⇒
+¬∨-to-⊃
   : ∀ {Γ} {φ ψ}
   → Γ ⊢ ¬ φ ∨ ψ
-  → Γ ⊢ φ ⇒ ψ
+  → Γ ⊢ φ ⊃ ψ
 
 -- Proof.
-¬∨-to-⇒ {Γ}{φ}{ψ} =
-  ⇒-elim $
-    ⇒-intro $
+¬∨-to-⊃ {Γ}{φ}{ψ} =
+  ⊃-elim $
+    ⊃-intro $
       ∨-elim {Γ = Γ}
-        (⇒-intro $
+        (⊃-intro $
           ⊥-elim {Γ = Γ , ¬ φ , φ} ψ
           (¬-elim
             (weaken φ $
               assume {Γ = Γ} (¬ φ))
             (assume {Γ = Γ , ¬ φ} φ)))
-        (⇒-intro $
+        (⊃-intro $
           weaken φ $
             assume {Γ = Γ} ψ)
 -------------------------------------------------------------------------- ∎
@@ -156,8 +156,8 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
 -- Proof.
 ¬-inside {Γ}{φ}{ψ} φ≡ψ Γ⊢¬φ =
   ¬-equiv₂
-    (⇒-intro
-      (⇒-elim
+    (⊃-intro
+      (⊃-elim
         (¬-equiv₁
           (weaken ψ Γ⊢¬φ))
         (subst
@@ -168,32 +168,32 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym )
 -- Theorem.
 subst⊢¬
   : ∀ {Γ} {φ γ}
-  → Γ ⊢ γ ⇒ φ
+  → Γ ⊢ γ ⊃ φ
   → Γ ⊢ ¬ φ
   → Γ ⊢ ¬ γ
 
 -- Proof.
-subst⊢¬ {Γ}{φ}{γ} Γ⊢γ⇒φ Γ⊢¬φ =
-  ⇒⊥-to-¬ (subst⊢⇒₁ Γ⊢γ⇒φ (¬-to-⇒⊥ Γ⊢¬φ))
+subst⊢¬ {Γ}{φ}{γ} Γ⊢γ⊃φ Γ⊢¬φ =
+  ⊃⊥-to-¬ (subst⊢⊃₁ Γ⊢γ⊃φ (¬-to-⊃⊥ Γ⊢¬φ))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
-¬⇔-to-⇒¬∧⇒¬
+¬⇔-to-⊃¬∧⊃¬
   : ∀ {Γ} {φ₁ φ₂}
   → Γ ⊢ ¬ (φ₁ ⇔ φ₂)
-  → Γ ⊢ (φ₁ ⇒ ¬ φ₂) ∧ (φ₂ ⇒ ¬ φ₁)
+  → Γ ⊢ (φ₁ ⊃ ¬ φ₂) ∧ (φ₂ ⊃ ¬ φ₁)
 
 -- Proof.
-¬⇔-to-⇒¬∧⇒¬ {Γ} {φ₁} {φ₂} thm =
+¬⇔-to-⊃¬∧⊃¬ {Γ} {φ₁} {φ₂} thm =
   ∧-intro
-    (⇒-intro
+    (⊃-intro
       (¬-intro
         (¬-elim
           (weaken φ₂ $ weaken φ₁ thm)
           (⇔-intro
             (weaken φ₁ $ assume {Γ = Γ , φ₁} φ₂)
             (weaken φ₂ $ weaken φ₂ $ assume {Γ = Γ} φ₁)))))
-    (⇒-intro
+    (⊃-intro
       (¬-intro
         (¬-elim (weaken φ₁ $ weaken φ₂ thm)
           (⇔-intro
