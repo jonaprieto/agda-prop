@@ -107,8 +107,9 @@ data _⊢_ : (Γ : Ctxt)(φ : PropFormula) → Set where
 
 Tested with:
 
-* [Agda](https://github.com/agda/agda) version 2.5.2
-* [Agda Standard Library](https://github.com/agda/agda-stdlib/) v0.13
+* [Agda](https://github.com/agda/agda) version 2.5.3
+* [Agda Standard Library](https://github.com/agda/agda-stdlib/)
+  version 0.14
 
 
 ## Library
