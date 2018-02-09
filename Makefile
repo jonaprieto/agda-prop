@@ -21,3 +21,7 @@ test :
 	agda src/Data/PropFormula.agda --verbose=0
 	agda test/ex-andreas-abel.agda --verbose=0
 	agda test/nform.agda --verbose=0
+
+.PHONY: listings
+listings: 
+	agda -i. -isrc --html --html-dir=docs README.agda -v0
