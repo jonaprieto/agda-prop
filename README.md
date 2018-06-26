@@ -16,6 +16,10 @@ and some properties ready to work with and some algorithms like NNF, CNF, among 
 
 ## Quick Start
 
+### Prerequisites
+
+* [Agda][Agda] 2.5.4
+
 We define two data types, the formula data type `Prop` and the theorem
 data type `_⊢_`, that depended of a *list* of hypothesis and the conclusion,
 a formula. The constructors are the following.
