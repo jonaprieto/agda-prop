@@ -42,7 +42,6 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
                 (∨-intro₂ φ (assume {Γ = Γ , ψ ∨ γ} ψ)))
               (∨-intro₂ (φ ∨ ψ) (assume {Γ = Γ , ψ ∨ γ} γ))))
           (assume (ψ ∨ γ)))))
-
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
