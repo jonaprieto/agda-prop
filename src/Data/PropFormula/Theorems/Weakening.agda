@@ -27,17 +27,17 @@ weaken-Δ₁
   → Γ ⨆ Δ ⊢ φ
 
 -- Proof.
-weaken-Δ₁ {[]} {φ} [] Γ⊢φ = Γ⊢φ
-weaken-Δ₁ {x ∷ Γ} {φ} [] Γ⊢φ  = substΓ (sym helper) Γ⊢φ
+weaken-Δ₁ {[]}    {φ} [] Γ⊢φ = Γ⊢φ
+weaken-Δ₁ {x ∷ Γ} {φ} [] Γ⊢φ = substΓ (sym helper) Γ⊢φ
   where
     helper : ∀ {Γ} → Γ ⨆ [] ≡ Γ
-    helper {[]}    = refl
+    helper {[]} = refl
     helper {x ∷ Γ} rewrite helper {Γ = Γ} = refl
 weaken-Δ₁ {Γ} {φ} (x ∷ []) Γ⊢φ = weaken x Γ⊢φ
 weaken-Δ₁ {Γ} {φ} (x₁ ∷ Δ) Γ⊢φ =
   substΓ
-    (helper {Γ = Γ} {x = x₁})
-    (weaken-Δ₁ {Γ = Γ , x₁} {φ = φ} Δ
+    helper
+    (weaken-Δ₁ Δ
       (weaken x₁ Γ⊢φ))
   where
     helper : ∀ {Γ Δ} {x} → (Γ , x ) ⨆  Δ ≡ Γ ⨆ (x ∷ Δ)
@@ -53,8 +53,8 @@ weaken-Δ₂
   → Δ ⨆ Γ ⊢ φ
 
 -- Proof.
-weaken-Δ₂ {Γ}  {φ} []           Γ⊢φ = Γ⊢φ
-weaken-Δ₂ {[]} {φ} (hyp ∷ [])   Γ⊢φ = weaken₂ hyp Γ⊢φ
-weaken-Δ₂ {Γ}  {φ} (hyp ∷ [])   Γ⊢φ = weaken₂ hyp Γ⊢φ
-weaken-Δ₂ {Γ}  {φ} (hyp ∷ hyps) Γ⊢φ = weaken₂ hyp (weaken-Δ₂ hyps Γ⊢φ)
+weaken-Δ₂ {_}  []           Γ⊢φ = Γ⊢φ
+weaken-Δ₂ {[]} (hyp ∷ [])   Γ⊢φ = weaken₂ hyp Γ⊢φ
+weaken-Δ₂ {_}  (hyp ∷ [])   Γ⊢φ = weaken₂ hyp Γ⊢φ
+weaken-Δ₂ {_}  (hyp ∷ hyps) Γ⊢φ = weaken₂ hyp (weaken-Δ₂ hyps Γ⊢φ)
 -------------------------------------------------------------------------- ∎

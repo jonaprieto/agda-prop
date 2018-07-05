@@ -21,11 +21,6 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 ------------------------------------------------------------------------------
 
--- Proof.
-
--------------------------------------------------------------------------- ∎
-
-
 -- Theorem.
 ∨-assoc₁
   : ∀ {Γ} {φ ψ γ}
@@ -36,17 +31,17 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 ∨-assoc₁ {Γ}{φ}{ψ}{γ} =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (∨-intro₁ γ
           (∨-intro₁ ψ
-            (assume {Γ = Γ} φ)))
+            (assume φ)))
         (⊃-elim
           (⊃-intro
             (∨-elim {Γ = Γ , ψ ∨ γ}
               (∨-intro₁ γ
                 (∨-intro₂ φ (assume {Γ = Γ , ψ ∨ γ} ψ)))
               (∨-intro₂ (φ ∨ ψ) (assume {Γ = Γ , ψ ∨ γ} γ))))
-          (assume {Γ = Γ} (ψ ∨ γ)))))
+          (assume (ψ ∨ γ)))))
 
 -------------------------------------------------------------------------- ∎
 
@@ -60,7 +55,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 ∨-assoc₂ {Γ}{φ}{ψ}{γ} =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (⊃-elim
           (⊃-intro
             (∨-elim {Γ  = Γ , φ ∨ ψ}
@@ -69,10 +64,10 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
               (∨-intro₂ φ
                 (∨-intro₁ γ
                   (assume {Γ = Γ , φ ∨ ψ} ψ)))))
-          (assume {Γ = Γ} (φ ∨ ψ)))
+          (assume (φ ∨ ψ)))
         (∨-intro₂ φ
           (∨-intro₂ ψ
-            (assume {Γ = Γ} γ)))))
+            (assume γ)))))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -81,10 +76,10 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
   → Γ ⊢ (φ ∨ (ψ ∨ γ)) ⇔ ((φ ∨ ψ) ∨ γ)
 
 -- Proof.
-∨-assoc {Γ}{φ}{ψ}{γ} =
+∨-assoc {φ = φ}{ψ}{γ} =
   ⇔-intro
-    (∨-assoc₁ (assume {Γ = Γ} (φ ∨ (ψ ∨ γ))))
-    (∨-assoc₂ (assume {Γ = Γ} (φ ∨ ψ ∨ γ)))
+    (∨-assoc₁ (assume (φ ∨ (ψ ∨ γ))))
+    (∨-assoc₂ (assume (φ ∨ ψ ∨ γ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -94,14 +89,14 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
   → Γ ⊢ ψ ∨ φ
 
 -- Proof.
-∨-comm {Γ}{φ}{ψ} =
+∨-comm {φ = φ}{ψ} =
   ⊃-elim $
     ⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (∨-intro₂ ψ
-          (assume {Γ = Γ} φ))
+          (assume φ))
         (∨-intro₁ φ $
-           assume {Γ = Γ} ψ))
+           assume ψ))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -114,19 +109,19 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 ∨-dist₁ {Γ}{φ}{ψ}{γ} =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (∧-intro
           (∨-intro₁ ψ
-            (assume {Γ = Γ} φ))
+            (assume φ))
           (∨-intro₁ γ
-            (assume {Γ = Γ} φ)))
+            (assume φ)))
         (∧-intro
           (∨-intro₂ φ
             (∧-proj₁
-              (assume {Γ = Γ} (ψ ∧ γ))))
+              (assume (ψ ∧ γ))))
           (∨-intro₂ φ
             (∧-proj₂
-              (assume {Γ = Γ} (ψ ∧ γ)))))))
+              (assume (ψ ∧ γ)))))))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -136,21 +131,21 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
   → Γ ⊢ φ ∨ (ψ ∧ γ)
 
 -- Proof.
-∨-dist₂  {Γ}{φ}{ψ}{γ} Γ⊢⟪φ∨ψ⟫∧⟪φ∨γ⟫ =
+∨-dist₂ {Γ}{φ}{ψ}{γ} Γ⊢⟪φ∨ψ⟫∧⟪φ∨γ⟫ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (∨-intro₁ (ψ ∧ γ)
-          (assume {Γ = Γ} φ))
+          (assume φ))
         (⊃-elim
           (⊃-intro
-            (∨-elim {Γ = Γ , ψ}
+            (∨-elim
               (∨-intro₁ (ψ ∧ γ)
                 (assume {Γ = Γ , ψ} φ))
               (∨-intro₂ φ
                 (∧-intro
                   (weaken γ
-                    (assume {Γ = Γ} ψ))
+                    (assume ψ))
                   (assume {Γ = Γ , ψ} γ)))))
           (∧-proj₂
             (weaken ψ Γ⊢⟪φ∨ψ⟫∧⟪φ∨γ⟫)))))
@@ -163,10 +158,10 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
   → Γ ⊢ (φ ∨ (ψ ∧ γ)) ⇔ ((φ ∨ ψ) ∧ (φ ∨ γ))
 
 -- Proof.
-∨-dist {Γ}{φ}{ψ}{γ} =
+∨-dist {φ = φ}{ψ}{γ} =
   ⇔-intro
-    (∨-dist₁ (assume {Γ = Γ} (φ ∨ (ψ ∧ γ))))
-    (∨-dist₂ (assume {Γ = Γ} (φ ∨ ψ ∧ (φ ∨ γ))))
+    (∨-dist₁ (assume (φ ∨ (ψ ∧ γ))))
+    (∨-dist₂ (assume (φ ∨ ψ ∧ (φ ∨ γ))))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -185,12 +180,12 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
           (¬-elim
             (weaken φ
               (∧-proj₁
-                (assume {Γ = Γ} (¬ φ ∧ ¬ ψ))))
+                (assume (¬ φ ∧ ¬ ψ))))
             (assume {Γ = Γ , ¬ φ ∧ ¬ ψ }  φ))
           (¬-elim
             (weaken ψ
               (∧-proj₂
-                (assume {Γ = Γ} (¬ φ ∧ ¬ ψ))))
+                (assume (¬ φ ∧ ¬ ψ))))
             (assume {Γ = Γ , ¬ φ ∧ ¬ ψ}  ψ))))
       (weaken (¬ φ ∧ ¬ ψ) Γ⊢φ∨ψ))
 -------------------------------------------------------------------------- ∎
@@ -210,13 +205,13 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
         (¬-intro $
           ¬-elim
             (weaken φ $
-              assume {Γ = Γ} (¬ (φ ∨ ψ)))
+              assume (¬ (φ ∨ ψ)))
             (∨-intro₁ ψ $
               assume {Γ = Γ , ¬ (φ ∨ ψ)} φ))
         (¬-intro $
           ¬-elim
             (weaken ψ $
-              assume {Γ = Γ} (¬ (φ ∨ ψ)))
+              assume (¬ (φ ∨ ψ)))
             (∨-intro₂ φ $
               assume {Γ = Γ , ¬ (φ ∨ ψ)} ψ))
 -------------------------------------------------------------------------- ∎
@@ -229,17 +224,17 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 ¬∧¬-to-¬∨ = ∨-dmorgan₂
 
 -- Proof.
-∨-dmorgan₂ {Γ}{φ}{ψ} Γ⊢¬φ∧¬ψ  =
+∨-dmorgan₂ {φ = φ}{ψ} Γ⊢¬φ∧¬ψ  =
   ¬-intro
-    (∨-elim {Γ = Γ}
+    (∨-elim
       (¬-elim
         (weaken φ
           (∧-proj₁ Γ⊢¬φ∧¬ψ ))
-        (assume {Γ = Γ} φ))
+        (assume φ))
       (¬-elim
         (weaken ψ
           (∧-proj₂ Γ⊢¬φ∧¬ψ ))
-        (assume {Γ = Γ} ψ)))
+        (assume ψ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -249,12 +244,12 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 ¬∨-⇔-¬∧¬ = ∨-dmorgan
 
 -- Proof.
-∨-dmorgan {Γ}{φ}{ψ} =
+∨-dmorgan {φ = φ}{ψ} =
   ⇔-intro
     (∨-dmorgan₁
-      (assume {Γ = Γ} (¬ (φ ∨ ψ))))
+      (assume (¬ (φ ∨ ψ))))
     (∨-dmorgan₂
-      (assume {Γ = Γ} (¬ φ ∧ ¬ ψ)))
+      (assume (¬ φ ∧ ¬ ψ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -265,14 +260,14 @@ lem1
 ¬¬∨¬¬-to-∨ = lem1
 
 -- Proof.
-lem1 {Γ}{φ}{ψ} =
+lem1 {φ = φ}{ψ} =
   ⊃-elim $
     ⊃-intro $
-      ∨-elim {Γ = Γ}
+      ∨-elim
         (∨-intro₁ ψ $
-          ⊃-elim vanDalen244e $ assume {Γ = Γ} $ ¬ ¬ φ)
+          ⊃-elim vanDalen244e $ assume $ ¬ ¬ φ)
         (∨-intro₂ φ $
-          ⊃-elim vanDalen244e $ assume {Γ = Γ} $ ¬ ¬ ψ)
+          ⊃-elim vanDalen244e $ assume $ ¬ ¬ ψ)
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -282,15 +277,15 @@ lem2
   → Γ ⊢ φ
 
 -- Proof.
-lem2 {Γ}{φ}{ψ} Γ⊢⟪φ∨ψ⟫∧¬ψ =
+lem2 {φ = φ}{ψ} Γ⊢⟪φ∨ψ⟫∧¬ψ =
   ⊃-elim
     (⊃-intro $
-      (∨-elim {Γ = Γ}
-        (assume {Γ = Γ} φ)
+      (∨-elim
+        (assume φ)
         (⊥-elim φ
           (¬-elim
             (weaken ψ (∧-proj₂ Γ⊢⟪φ∨ψ⟫∧¬ψ))
-            (assume {Γ = Γ} ψ)))))
+            (assume ψ)))))
     (∧-proj₁ Γ⊢⟪φ∨ψ⟫∧¬ψ)
 -------------------------------------------------------------------------- ∎
 
@@ -309,11 +304,11 @@ resolve₀ {Γ}{φ}{ψ}{γ} Γ⊢φ∨ψ Γ⊢¬φ∨γ =
          (lem2 {Γ = Γ , ¬ ψ ∧ ¬ γ} $
            ∧-intro
              (weaken (¬ ψ ∧ ¬ γ) Γ⊢¬φ∨γ)
-             (∧-proj₂ $ assume {Γ = Γ} $ ¬ ψ ∧ ¬ γ))
+             (∧-proj₂ $ assume $ ¬ ψ ∧ ¬ γ))
          (lem2 $
            ∧-intro
              (weaken (¬ ψ ∧ ¬ γ) Γ⊢φ∨ψ)
-             (∧-proj₁ $ assume {Γ = Γ} $ ¬ ψ ∧ ¬ γ))
+             (∧-proj₁ $ assume $ ¬ ψ ∧ ¬ γ))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -333,10 +328,7 @@ resolve₂
   → Γ ⊢ ψ ∨ γ
 
 -- Proof.
-resolve₂ Γ⊢φ∨ψ Γ⊢γ∨¬φ =
-  resolve₀
-    Γ⊢φ∨ψ
-    (∨-comm Γ⊢γ∨¬φ)
+resolve₂ Γ⊢φ∨ψ Γ⊢γ∨¬φ = resolve₀ Γ⊢φ∨ψ (∨-comm Γ⊢γ∨¬φ)
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -346,10 +338,7 @@ resolve₃
   → Γ ⊢ ψ ∨ γ
 
 -- Proof.
-resolve₃ {Γ}{φ}{ψ}{γ} Γ⊢ψ∨φ Γ⊢γ∨¬φ =
-  resolve₀
-    (∨-comm Γ⊢ψ∨φ)
-    (∨-comm Γ⊢γ∨¬φ)
+resolve₃ Γ⊢ψ∨φ Γ⊢γ∨¬φ = resolve₀ (∨-comm Γ⊢ψ∨φ) (∨-comm Γ⊢γ∨¬φ)
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -359,13 +348,13 @@ resolve₄
   → Γ ⊢ ψ
 
 -- Proof.
-resolve₄ {Γ}{φ} {ψ} Γ⊢¬φ∨ψ Γ⊢φ =
+resolve₄ {φ = φ}{ψ} Γ⊢¬φ∨ψ Γ⊢φ =
  ⊃-elim
    (⊃-intro $
-     ∨-elim {Γ = Γ}
-       (assume {Γ = Γ} ψ)
-       (assume {Γ = Γ} ψ))
-   (resolve₀ {Γ = Γ} {φ = φ} {ψ = ψ} {γ = ψ}
+     ∨-elim
+       (assume ψ)
+       (assume ψ))
+   (resolve₀
      (∨-intro₁ ψ Γ⊢φ)
      Γ⊢¬φ∨ψ)
 -------------------------------------------------------------------------- ∎
@@ -388,12 +377,12 @@ resolve₆
   → Γ ⊢ ψ
 
 -- Proof.
-resolve₆ {Γ}{φ}{ψ} Γ⊢ψ∨φ Γ⊢¬φ =
+resolve₆ {φ = φ}{ψ} Γ⊢ψ∨φ Γ⊢¬φ =
  ⊃-elim
    (⊃-intro $
-     ∨-elim {Γ = Γ}
-       (assume {Γ = Γ} ψ)
-       (assume {Γ = Γ} ψ))
+     ∨-elim
+       (assume ψ)
+       (assume ψ))
    (resolve₀ (∨-comm Γ⊢ψ∨φ) (∨-intro₁ ψ Γ⊢¬φ))
 -------------------------------------------------------------------------- ∎
 
@@ -404,7 +393,7 @@ resolve₇
   → Γ ⊢ ψ
 
 -- Proof.
-resolve₇ {Γ}{φ}{ψ} Γ⊢φ∨ψ Γ⊢¬φ = resolve₆ (∨-comm Γ⊢φ∨ψ) Γ⊢¬φ
+resolve₇ Γ⊢φ∨ψ Γ⊢¬φ = resolve₆ (∨-comm Γ⊢φ∨ψ) Γ⊢¬φ
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -435,12 +424,12 @@ subst⊢∨₁
   → Γ ⊢ γ ∨ ψ
 
 -- Proof.
-subst⊢∨₁ {Γ}{φ}{ψ}{γ} Γ⊢φ⊃γ Γ⊢φ∨ψ =
+subst⊢∨₁ {φ = φ}{ψ}{γ} Γ⊢φ⊃γ Γ⊢φ∨ψ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
-        (∨-intro₁ ψ (⊃-elim (weaken φ Γ⊢φ⊃γ) (assume {Γ = Γ} φ)))
-        (∨-intro₂ γ (assume {Γ = Γ} ψ))))
+      (∨-elim
+        (∨-intro₁ ψ (⊃-elim (weaken φ Γ⊢φ⊃γ) (assume φ)))
+        (∨-intro₂ γ (assume ψ))))
     Γ⊢φ∨ψ
 -------------------------------------------------------------------------- ∎
 
@@ -452,12 +441,12 @@ subst⊢∨₂
   → Γ ⊢ φ ∨ γ
 
 -- Proof.
-subst⊢∨₂ {Γ}{φ}{ψ}{γ} Γ⊢ψ⊃γ Γ⊢φ∨ψ =
+subst⊢∨₂ {φ = φ}{ψ}{γ} Γ⊢ψ⊃γ Γ⊢φ∨ψ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
-        (∨-intro₁ γ (assume {Γ = Γ} φ))
-        (∨-intro₂ φ (⊃-elim (weaken ψ Γ⊢ψ⊃γ) (assume {Γ = Γ} ψ)))))
+      (∨-elim
+        (∨-intro₁ γ (assume φ))
+        (∨-intro₂ φ (⊃-elim (weaken ψ Γ⊢ψ⊃γ) (assume ψ)))))
     Γ⊢φ∨ψ
 -------------------------------------------------------------------------- ∎
 
@@ -476,7 +465,7 @@ subst⊢∨₂ {Γ}{φ}{ψ}{γ} Γ⊢ψ⊃γ Γ⊢φ∨ψ =
           (⊥-elim ψ
             (¬-elim
               (weaken φ
-                (assume {Γ = Γ} (¬ φ)))
+                (assume (¬ φ)))
             (assume {Γ = Γ , ¬ φ} φ)))
           (assume {Γ = Γ , ¬ φ} ψ)))
       (weaken (¬ φ) Γ⊢φ∨ψ))
@@ -489,12 +478,12 @@ subst⊢∨₂ {Γ}{φ}{ψ}{γ} Γ⊢ψ⊃γ Γ⊢φ∨ψ =
  → Γ ⊢ φ
 
 -- Proof.
-φ∨⊥-to-φ {Γ} {φ} Γ⊢φ∨⊥ =
+φ∨⊥-to-φ {φ = φ} Γ⊢φ∨⊥ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
-        (assume {Γ = Γ} φ)
-        (⊥-elim φ (assume {Γ = Γ} ⊥))))
+      (∨-elim
+        (assume φ)
+        (⊥-elim φ (assume ⊥))))
     Γ⊢φ∨⊥
 -------------------------------------------------------------------------- ∎
 
@@ -506,11 +495,11 @@ subst⊢∨₁≡
   → Γ ⊢ γ ∨ ψ
 
 -- Proof.
-subst⊢∨₁≡ {Γ} {φ}{ψ}{γ} φ≡γ Γ⊢φ∨ψ =
+subst⊢∨₁≡ {φ = φ}{ψ}{γ} φ≡γ Γ⊢φ∨ψ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
-        (∨-intro₁ ψ (subst φ≡γ (assume {Γ = Γ} φ)))
-        (∨-intro₂ γ (assume {Γ = Γ} ψ))))
+      (∨-elim
+         (∨-intro₁ ψ (subst φ≡γ (assume φ)))
+        (∨-intro₂ γ (assume ψ))))
     Γ⊢φ∨ψ
 -------------------------------------------------------------------------- ∎

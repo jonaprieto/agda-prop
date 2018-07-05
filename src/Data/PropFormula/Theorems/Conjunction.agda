@@ -55,8 +55,8 @@ open import Function using ( _$_ ; _∘_  )
 -- Proof.
 ∧-assoc {Γ} {φ}{ψ}{γ} =
   ⇔-intro
-    (∧-assoc₁ (assume {Γ = Γ} (φ ∧ (ψ ∧ γ))))
-    (∧-assoc₂ (assume {Γ = Γ} (φ ∧ ψ ∧ γ)))
+    (∧-assoc₁ (assume (φ ∧ (ψ ∧ γ))))
+    (∧-assoc₂ (assume (φ ∧ ψ ∧ γ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -79,18 +79,18 @@ open import Function using ( _$_ ; _∘_  )
   → Γ ⊢ (φ ∧ ψ) ∨ (φ ∧ γ)
 
 -- Proof.
-∧-dist₁ {Γ}{φ}{ψ}{γ} Γ⊢φ∧ψ∨γ =
+∧-dist₁ {φ = φ}{ψ}{γ} Γ⊢φ∧ψ∨γ =
   ⊃-elim
     (⊃-intro $
-      ∨-elim {Γ = Γ}
+      ∨-elim
         (∨-intro₁ (φ ∧ γ)
           (∧-intro
             (weaken ψ (∧-proj₁ Γ⊢φ∧ψ∨γ))
-            (assume {Γ = Γ} ψ)))
+            (assume  ψ)))
         (∨-intro₂ (φ ∧ ψ)
           (∧-intro
             (weaken γ  (∧-proj₁ Γ⊢φ∧ψ∨γ))
-            (assume {Γ = Γ} γ))))
+            (assume  γ))))
     (∧-proj₂ Γ⊢φ∧ψ∨γ)
 -------------------------------------------------------------------------- ∎
 
@@ -101,22 +101,22 @@ open import Function using ( _$_ ; _∘_  )
   → Γ ⊢ φ ∧ (ψ ∨ γ)
 
 -- Proof.
-∧-dist₂ {Γ}{φ}{ψ}{γ} =
+∧-dist₂ {φ = φ}{ψ}{γ} =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (∧-intro
           (∧-proj₁
-            (assume {Γ = Γ} (φ ∧ ψ)))
+            (assume (φ ∧ ψ)))
           (∨-intro₁ γ
             (∧-proj₂
-              (assume {Γ = Γ} (φ ∧ ψ)))))
+              (assume (φ ∧ ψ)))))
         (∧-intro
           (∧-proj₁
-            (assume {Γ = Γ} (φ ∧ γ)))
+            (assume (φ ∧ γ)))
           (∨-intro₂ ψ
             (∧-proj₂
-              (assume {Γ = Γ} (φ ∧ γ)))))))
+              (assume (φ ∧ γ)))))))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -125,10 +125,10 @@ open import Function using ( _$_ ; _∘_  )
   → Γ ⊢ φ ∧ (ψ ∨ γ) ⇔ (φ ∧ ψ) ∨ (φ ∧ γ)
 
 -- Proof.
-∧-dist {Γ}{φ}{ψ}{γ} =
+∧-dist {φ = φ}{ψ}{γ} =
   ⇔-intro
-    (∧-dist₁ (assume {Γ = Γ} (φ ∧ (ψ ∨ γ))))
-    (∧-dist₂ (assume {Γ = Γ} (φ ∧ ψ ∨ (φ ∧ γ))))
+    (∧-dist₁ (assume (φ ∧ (ψ ∨ γ))))
+    (∧-dist₂ (assume (φ ∧ ψ ∨ (φ ∧ γ))))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -145,7 +145,7 @@ open import Function using ( _$_ ; _∘_  )
       RAA $
         ¬-elim
           (weaken (¬ (¬ φ ∨ ¬ ψ)) $
-            assume {Γ = Γ} $ ¬ (φ ∧ ψ))
+            assume $ ¬ (φ ∧ ψ))
           (∧-intro
             (RAA
               (¬-elim
@@ -176,12 +176,12 @@ open import Function using ( _$_ ; _∘_  )
         (¬-intro $
           ¬-elim
             (weaken (φ ∧ ψ) $
-              assume {Γ = Γ} (¬ φ))
+              assume (¬ φ))
             (∧-proj₁ $
               assume {Γ = Γ , ¬ φ} (φ ∧ ψ)))
         (¬-intro $
           ¬-elim
-            (weaken (φ ∧ ψ) $ assume {Γ = Γ} (¬ ψ))
+            (weaken (φ ∧ ψ) $ assume (¬ ψ))
           (∧-proj₂ $
             assume {Γ = Γ , ¬ ψ} (φ ∧ ψ)))
 -------------------------------------------------------------------------- ∎
@@ -196,9 +196,9 @@ open import Function using ( _$_ ; _∘_  )
 ∧-dmorgan {Γ}{φ}{ψ} =
   ⇔-intro
     (∧-dmorgan₂
-      (assume {Γ = Γ} (¬ φ ∨ ¬ ψ)))
+      (assume (¬ φ ∨ ¬ ψ)))
     (∧-dmorgan₁
-      (assume {Γ = Γ} (¬ (φ ∧ ψ))))
+      (assume (¬ (φ ∧ ψ))))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -209,7 +209,7 @@ subst⊢∧₁
   → Γ ⊢ γ ∧ ψ
 
 -- Proof.
-subst⊢∧₁ {Γ}{φ}{ψ} Γ⊢φ⊃ψ Γ⊢φ∧ψ =
+subst⊢∧₁ Γ⊢φ⊃ψ Γ⊢φ∧ψ =
   ∧-intro
     (⊃-elim (∧-proj₁ (∧-intro Γ⊢φ⊃ψ Γ⊢φ∧ψ)) (∧-proj₁ Γ⊢φ∧ψ))
     (∧-proj₂ Γ⊢φ∧ψ)

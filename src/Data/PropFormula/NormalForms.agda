@@ -69,13 +69,13 @@ nnf₁-lem {Γ} {φ} (suc n) Γ⊢φ
 ...  | disj φ₁ φ₂ =
   (⊃-elim
     (⊃-intro
-     (∨-elim {Γ = Γ}
+     (∨-elim
        (∨-intro₁
          (nnf₁ n φ₂)
-         (nnf₁-lem n (assume {Γ = Γ} φ₁)))
+         (nnf₁-lem n (assume φ₁)))
        (∨-intro₂
          (nnf₁ n φ₁)
-         (nnf₁-lem n (assume {Γ = Γ} φ₂)))))
+         (nnf₁-lem n (assume φ₂)))))
       Γ⊢φ)
 ...  | impl φ₁ φ₂   = nnf₁-lem n (⊃-to-¬∨ Γ⊢φ)
 ...  | biimpl φ₁ φ₂ = nnf₁-lem n (⇔-equiv₁ Γ⊢φ)
@@ -85,13 +85,13 @@ nnf₁-lem {Γ} {φ} (suc n) Γ⊢φ
 ...  | nimpl φ₁ φ₂  = nnf₁-lem n (subst⊢¬ helper Γ⊢φ)
   where
     helper : Γ ⊢ φ₂ ∨ ¬ φ₁ ⊃ (φ₁ ⊃ φ₂)
-    helper = ⊃-intro (¬∨-to-⊃ (∨-comm (assume {Γ = Γ} (φ₂ ∨ ¬ φ₁))))
+    helper = ⊃-intro (¬∨-to-⊃ (∨-comm (assume (φ₂ ∨ ¬ φ₁))))
 ...  | nbiim φ₁ φ₂  =
   nnf₁-lem n
     (subst⊢¬
       (⊃-intro
         (⇔-equiv₂
-          (assume {Γ = Γ} ((φ₁ ⊃ φ₂) ∧ (φ₂ ⊃ φ₁)))))
+          (assume ((φ₁ ⊃ φ₂) ∧ (φ₂ ⊃ φ₁)))))
           Γ⊢φ)
 ...  | ntop       = ¬-elim Γ⊢φ ⊤-intro
 ...  | nbot       = ⊤-intro
@@ -152,33 +152,33 @@ dist-∧-lem {Γ} {φ} Γ⊢φ with d-view-aux φ
 dist-∧-lem {Γ} {.((φ ∨ ψ) ∧ γ)} Γ⊢⟨φ∨ψ⟩∧γ | case₁ φ ψ γ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (∨-intro₁ (dist-∧ (ψ ∧ γ))
           (dist-∧-lem
             (∧-intro
-              (assume {Γ = Γ} φ)
+              (assume φ)
               (weaken φ (∧-proj₂ Γ⊢⟨φ∨ψ⟩∧γ)))))
         (∨-intro₂ (dist-∧ (φ ∧ γ))
           (dist-∧-lem
             (∧-intro
-              (assume {Γ = Γ} ψ)
+              (assume ψ)
               (weaken ψ (∧-proj₂ Γ⊢⟨φ∨ψ⟩∧γ)))))))
      (∧-proj₁ Γ⊢⟨φ∨ψ⟩∧γ)
 
 dist-∧-lem {Γ} {.(φ ∧ (ψ ∨ γ))} Γ⊢φ∧⟨ψ∨γ⟩ | case₂ φ ψ γ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (∨-intro₁ (dist-∧ (φ ∧ γ))
           (dist-∧-lem
             (∧-intro
               (weaken ψ (∧-proj₁ Γ⊢φ∧⟨ψ∨γ⟩))
-              (assume {Γ = Γ} ψ))))
+              (assume ψ))))
         (∨-intro₂ (dist-∧ (φ ∧ ψ))
           (dist-∧-lem
             (∧-intro
               (weaken γ (∧-proj₁ Γ⊢φ∧⟨ψ∨γ⟩))
-              (assume {Γ = Γ} γ))))))
+              (assume γ))))))
     (∧-proj₂ Γ⊢φ∧⟨ψ∨γ⟩)
 dist-∧-lem {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 --------------------------------------------------------------------------- ∎
@@ -196,25 +196,25 @@ from-dist-∧-lem {Γ} {.((φ ∨ ψ) ∧ γ)} Γ⊢⟨φ∨ψ⟩∧γ | case₁
     (∧-dist₂
       (⊃-elim
         (⊃-intro
-          (∨-elim {Γ = Γ}
+          (∨-elim
             (∨-intro₁ (γ ∧ ψ)
               (∧-comm
                 (from-dist-∧-lem
-                  (assume {Γ = Γ} (dist-∧ (φ ∧ γ))))))
+                  (assume (dist-∧ (φ ∧ γ))))))
             (∨-intro₂ (γ ∧ φ)
               (∧-comm
                 (from-dist-∧-lem
-                  (assume {Γ = Γ} (dist-∧ (ψ ∧ γ))))))))
+                  (assume (dist-∧ (ψ ∧ γ))))))))
         Γ⊢⟨φ∨ψ⟩∧γ))
 from-dist-∧-lem {Γ} {.(φ ∧ (ψ ∨ γ))} Γ⊢φ∧⟨ψ∨γ⟩ | case₂ φ ψ γ =
   ∧-dist₂
     (⊃-elim
       (⊃-intro
-        (∨-elim {Γ = Γ}
+        (∨-elim
           (∨-intro₁ (φ ∧ γ)
-            (from-dist-∧-lem (assume {Γ = Γ} (dist-∧ (φ ∧ ψ)))))
+            (from-dist-∧-lem (assume (dist-∧ (φ ∧ ψ)))))
           (∨-intro₂ (φ ∧ ψ)
-            (from-dist-∧-lem (assume {Γ = Γ} (dist-∧ (φ ∧ γ)))))))
+            (from-dist-∧-lem (assume (dist-∧ (φ ∧ γ)))))))
       Γ⊢φ∧⟨ψ∨γ⟩)
 from-dist-∧-lem {Γ} {.φ} Γ⊢φ             | other φ     = Γ⊢φ
 --------------------------------------------------------------------------- ∎
@@ -242,9 +242,9 @@ dnf-dist-lem {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ =
 dnf-dist-lem {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
-        (∨-intro₁ (dnf-dist ψ) (dnf-dist-lem (assume {Γ = Γ} φ)))
-        (∨-intro₂ (dnf-dist φ) (dnf-dist-lem (assume {Γ = Γ} ψ)))))
+      (∨-elim
+        (∨-intro₁ (dnf-dist ψ) (dnf-dist-lem (assume φ)))
+        (∨-intro₂ (dnf-dist φ) (dnf-dist-lem (assume ψ)))))
     Γ⊢φ∨ψ
 dnf-dist-lem {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
 --------------------------------------------------------------------------- ∎
@@ -256,26 +256,25 @@ from-dnf-dist-lem
   → Γ ⊢ φ
 
 -- Proof.
-from-dnf-dist-lem {Γ} {φ} Γ⊢φ with d-view φ
-from-dnf-dist-lem {Γ} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ =
+from-dnf-dist-lem {_} {φ} Γ⊢φ with d-view φ
+from-dnf-dist-lem {_} {φ ∧ ψ} Γ⊢φ∧ψ | conj .φ .ψ =
   ∧-intro
-    (from-dnf-dist-lem {Γ = Γ} {φ = φ}
+    (from-dnf-dist-lem {φ = φ}
       (∧-proj₁ (from-dist-∧-lem Γ⊢φ∧ψ)))
-    (from-dnf-dist-lem {Γ = Γ} {φ = ψ}
-      (∧-proj₂ {Γ = Γ} {φ = dnf-dist φ}
+    (from-dnf-dist-lem {φ = ψ}
+      (∧-proj₂ {φ = dnf-dist φ}
         (from-dist-∧-lem Γ⊢φ∧ψ)))
-from-dnf-dist-lem {Γ} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
+from-dnf-dist-lem {_} {φ ∨ ψ} Γ⊢φ∨ψ | disj .φ .ψ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
+      (∨-elim
         (∨-intro₁ ψ
-          (from-dnf-dist-lem (assume {Γ = Γ} (dnf-dist φ))))
+          (from-dnf-dist-lem (assume (dnf-dist φ))))
         (∨-intro₂ φ
-          (from-dnf-dist-lem (assume {Γ = Γ} (dnf-dist ψ))))))
+          (from-dnf-dist-lem (assume (dnf-dist ψ))))))
     Γ⊢φ∨ψ
-from-dnf-dist-lem {Γ} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
+from-dnf-dist-lem {_} {φ} Γ⊢φ       | other .φ   = Γ⊢φ
 --------------------------------------------------------------------------- ∎
-
 
 
 -- Def.
@@ -367,19 +366,19 @@ cnf-dist-lem
   → Γ ⊢ cnf-dist φ
 
 -- Proof.
-cnf-dist-lem {Γ} {φ} Γ⊢φ
+cnf-dist-lem {_} {φ} Γ⊢φ
   with d-view φ
-cnf-dist-lem {Γ} {.(φ ∧ ψ)} Γ⊢φ∧ψ | conj φ ψ =
+cnf-dist-lem {_} {.(φ ∧ ψ)} Γ⊢φ∧ψ | conj φ ψ =
   ∧-intro (cnf-dist-lem (∧-proj₁ Γ⊢φ∧ψ)) (cnf-dist-lem (∧-proj₂ Γ⊢φ∧ψ))
-cnf-dist-lem {Γ} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
+cnf-dist-lem {_} {.(φ ∨ ψ)} Γ⊢φ∨ψ | disj φ ψ =
   dist-∨-lem
     (⊃-elim
       (⊃-intro
-        (∨-elim {Γ = Γ}
-          (∨-intro₁ (cnf-dist ψ) (cnf-dist-lem (assume {Γ = Γ} φ)))
-          (∨-intro₂ (cnf-dist φ) (cnf-dist-lem (assume {Γ = Γ} ψ)))))
+        (∨-elim
+          (∨-intro₁ (cnf-dist ψ) (cnf-dist-lem (assume φ)))
+          (∨-intro₂ (cnf-dist φ) (cnf-dist-lem (assume ψ)))))
       Γ⊢φ∨ψ)
-cnf-dist-lem {Γ} {.φ} Γ⊢φ | other φ  = Γ⊢φ
+cnf-dist-lem {_} {.φ} Γ⊢φ | other φ  = Γ⊢φ
 --------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -389,20 +388,20 @@ from-cnf-dist-lem
   → Γ ⊢ φ
 
 -- Proof.
-from-cnf-dist-lem {Γ} {φ} Γ⊢cnfdist
+from-cnf-dist-lem {_} {φ} Γ⊢cnfdist
   with d-view φ
-from-cnf-dist-lem {Γ} {.(φ ∧ ψ)} Γ⊢cnfdistφ∧ψ | conj φ ψ =
+from-cnf-dist-lem {_} {.(φ ∧ ψ)} Γ⊢cnfdistφ∧ψ | conj φ ψ =
   ∧-intro
     (from-cnf-dist-lem (∧-proj₁ Γ⊢cnfdistφ∧ψ))
     (from-cnf-dist-lem (∧-proj₂ Γ⊢cnfdistφ∧ψ))
-from-cnf-dist-lem {Γ} {.(φ ∨ ψ)} Γ⊢cnfdistφ∨ψ | disj φ ψ =
+from-cnf-dist-lem {_} {.(φ ∨ ψ)} Γ⊢cnfdistφ∨ψ | disj φ ψ =
   ⊃-elim
     (⊃-intro
-      (∨-elim {Γ = Γ}
-        (∨-intro₁ ψ (from-cnf-dist-lem (assume {Γ = Γ} (cnf-dist φ))))
-        (∨-intro₂ φ (from-cnf-dist-lem (assume {Γ = Γ} (cnf-dist ψ))))))
+      (∨-elim
+        (∨-intro₁ ψ (from-cnf-dist-lem (assume (cnf-dist φ))))
+        (∨-intro₂ φ (from-cnf-dist-lem (assume (cnf-dist ψ))))))
     (from-dist-∨-lem Γ⊢cnfdistφ∨ψ)
-from-cnf-dist-lem {Γ} {.φ} Γ⊢φ | other φ  = Γ⊢φ
+from-cnf-dist-lem {_} {.φ} Γ⊢φ | other φ  = Γ⊢φ
 --------------------------------------------------------------------------- ∎
 
 -- Def.

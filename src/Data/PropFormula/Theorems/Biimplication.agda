@@ -14,7 +14,6 @@ open import Data.PropFormula.Theorems.Implication n
   using ( ⊃-to-¬∨; ⊃⊃-to-∧⊃; ∧⊃-to-⊃⊃ )
 open import Data.PropFormula.Theorems.Negation n
   using ( ¬-equiv₁ ; ¬-equiv₂; ¬∨-to-⊃; ¬¬-equiv₁; ¬¬-equiv₂ )
-
 open import Data.PropFormula.Syntax n
 
 open import Function using ( _$_ )
@@ -32,11 +31,11 @@ open import Function using ( _$_ )
   ∧-intro
     (⊃-intro
       (⇔-elim₁
-        (assume {Γ = Γ} φ)
+        (assume φ)
         (weaken φ Γ⊢φ⇔ψ)))
     (⊃-intro
       (⇔-elim₂
-        (assume {Γ = Γ} ψ)
+        (assume ψ)
          (weaken ψ Γ⊢φ⇔ψ)))
 -------------------------------------------------------------------------- ∎
 
@@ -47,14 +46,14 @@ open import Function using ( _$_ )
   → Γ ⊢ φ ⇔ ψ
 
 -- Proof.
-⇔-equiv₂ {Γ}{φ}{ψ} Γ⊢⟪φ⊃ψ⟫∧⟪ψ⊃φ⟫ =
+⇔-equiv₂ {φ = φ}{ψ} Γ⊢⟪φ⊃ψ⟫∧⟪ψ⊃φ⟫ =
   ⇔-intro
     (⊃-elim
       (weaken φ (∧-proj₁ Γ⊢⟪φ⊃ψ⟫∧⟪ψ⊃φ⟫))
-      (assume {Γ = Γ} φ))
+      (assume φ))
     (⊃-elim
       (weaken ψ (∧-proj₂ Γ⊢⟪φ⊃ψ⟫∧⟪ψ⊃φ⟫))
-      (assume {Γ = Γ} ψ))
+      (assume ψ))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -66,9 +65,9 @@ open import Function using ( _$_ )
 ⇔-equiv {Γ}{φ}{ψ} =
   ⇔-intro
     (⇔-equiv₁
-      (assume {Γ = Γ} (φ ⇔ ψ)))
+      (assume (φ ⇔ ψ)))
     (⇔-equiv₂
-      (assume {Γ = Γ} ((φ ⊃ ψ) ∧ (ψ ⊃ φ))))
+      (assume ((φ ⊃ ψ) ∧ (ψ ⊃ φ))))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -78,7 +77,7 @@ open import Function using ( _$_ )
   → Γ ⊢ (φ ⇔ ψ) ⇔ γ
 
 -- Proof.
-⇔-assoc₁ {Γ}{φ}{ψ}{γ} thm =
+⇔-assoc₁ {Γ}{φ = φ}{ψ}{γ} thm =
   ⇔-intro
     (RAA
       (¬-elim
@@ -91,7 +90,7 @@ open import Function using ( _$_ )
                   (⇔-elim₁
                     (assume {Γ = Γ , φ ⇔ ψ , ¬ γ , ψ ⇔ γ} φ)
                     (weaken φ $ weaken (ψ ⇔ γ)
-                        (weaken (¬ γ) $ assume {Γ = Γ} (φ ⇔ ψ))))
+                        (weaken (¬ γ) $ assume (φ ⇔ ψ))))
                   (⇔-elim₁
                     (assume {Γ = Γ , φ ⇔ ψ , ¬ γ , ψ ⇔ γ} φ)
                     (weaken φ $ weaken (ψ ⇔ γ) $ weaken (¬ γ) $
@@ -113,14 +112,14 @@ open import Function using ( _$_ )
                           (weaken φ
                             (weaken ψ
                               (weaken (¬ γ)
-                                (assume {Γ = Γ} (φ ⇔ ψ))))))
+                                (assume (φ ⇔ ψ))))))
                         (⇔-elim₁
                           (assume {Γ = Γ , φ ⇔ ψ , ¬ γ , ψ} φ)
                           (weaken φ $
                             weaken ψ $ weaken (¬ γ) $ weaken (φ ⇔ ψ) thm)))))
                   (⇔-elim₂ -- φ
                     (assume {Γ = Γ , φ ⇔ ψ , ¬  γ} ψ)
-                    (weaken ψ (weaken (¬ γ) (assume {Γ = Γ} (φ ⇔ ψ)))))))
+                    (weaken ψ (weaken (¬ γ) (assume (φ ⇔ ψ)))))))
               (assume {Γ = Γ , φ ⇔ ψ , ¬ γ} ψ)))
           (⊥-elim ψ
             (¬-elim
@@ -128,13 +127,13 @@ open import Function using ( _$_ )
               (assume {Γ = Γ , φ ⇔ ψ , ¬ γ} γ))))))
     (⇔-intro
       (⇔-elim₂
-        (weaken φ $ assume {Γ = Γ} γ)
+        (weaken φ $ assume γ)
         (⇔-elim₁
           (assume {Γ = Γ , γ} φ)
           (weaken φ $ weaken γ thm)))
       (⇔-elim₂
         (⇔-intro
-          (weaken ψ $ weaken ψ $ assume {Γ = Γ} γ)
+          (weaken ψ $ weaken ψ $ assume γ)
           (weaken γ $ assume {Γ = Γ , γ} ψ))
         (weaken ψ $ weaken γ thm)))
 -------------------------------------------------------------------------- ∎
@@ -152,10 +151,10 @@ open import Function using ( _$_ )
       (⇔-elim₁
         (⇔-intro
           (weaken φ (assume {Γ = Γ , φ} ψ))
-          (weaken ψ (weaken ψ (assume {Γ = Γ} φ))))
+          (weaken ψ (weaken ψ (assume φ))))
         (weaken ψ (weaken φ thm)))
       (⇔-elim₁
-        (weaken γ (assume {Γ = Γ} φ))
+        (weaken γ (assume φ))
           (⇔-elim₂
             (assume {Γ = Γ , φ} γ)
             (weaken γ (weaken φ thm)))))
@@ -170,7 +169,7 @@ open import Function using ( _$_ )
                   (⇔-elim₂
                     (assume {Γ = Γ , ψ ⇔ γ , ¬ φ , (φ ⇔ ψ)} γ)
                     (weaken γ $ weaken (φ ⇔ ψ) $ weaken (¬ φ) $
-                      assume {Γ = Γ} (ψ ⇔ γ)))
+                      assume (ψ ⇔ γ)))
                   (⇔-elim₂
                     (assume {Γ = Γ , ψ ⇔ γ , ¬ φ , (φ ⇔ ψ)} γ)
                     (weaken γ $ weaken (φ ⇔ ψ) $ weaken (¬ φ) $
@@ -198,7 +197,7 @@ open import Function using ( _$_ )
                             weaken (ψ ⇔ γ) thm)))))
                   (⇔-elim₁
                     (assume {Γ = Γ , ψ ⇔ γ , ¬ φ} ψ)
-                    (weaken ψ (weaken (¬ φ) (assume {Γ = Γ} (ψ ⇔ γ)))))))
+                    (weaken ψ (weaken (¬ φ) (assume (ψ ⇔ γ)))))))
               (assume {Γ = Γ , ψ ⇔ γ , ¬ φ} ψ))))))
 -------------------------------------------------------------------------- ∎
 
@@ -208,10 +207,10 @@ open import Function using ( _$_ )
   → Γ ⊢ (φ ⇔ (ψ ⇔ γ)) ⇔ ((φ ⇔ ψ) ⇔ γ)
 
 -- Proof.
-⇔-assoc {Γ}{φ}{ψ}{γ} =
+⇔-assoc {φ = φ}{ψ}{γ} =
   ⇔-intro
-    (⇔-assoc₁ (assume {Γ = Γ} (φ ⇔ ψ ⇔ γ)))
-    (⇔-assoc₂ (assume {Γ = Γ} ((φ ⇔ ψ) ⇔ γ)))
+    (⇔-assoc₁ (assume (φ ⇔ ψ ⇔ γ)))
+    (⇔-assoc₂ (assume ((φ ⇔ ψ) ⇔ γ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -223,8 +222,8 @@ open import Function using ( _$_ )
 -- Proof.
 ⇔-comm {Γ}{φ}{ψ} Γ⊢φ⇔ψ =
   ⇔-intro
-    (⇔-elim₂ (assume {Γ = Γ} ψ) (weaken ψ Γ⊢φ⇔ψ))
-    (⇔-elim₁ (assume {Γ = Γ} φ) (weaken φ Γ⊢φ⇔ψ))
+    (⇔-elim₂ (assume ψ) (weaken ψ Γ⊢φ⇔ψ))
+    (⇔-elim₁ (assume φ) (weaken φ Γ⊢φ⇔ψ))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -236,8 +235,8 @@ open import Function using ( _$_ )
 
 ⊃-⇔-¬∨ {Γ}{φ}{ψ} =
   ⇔-intro
-    (⊃-to-¬∨ (assume {Γ = Γ} (φ ⊃ ψ)))
-    (¬∨-to-⊃ (assume {Γ = Γ} (¬ φ ∨ ψ)))
+    (⊃-to-¬∨ (assume (φ ⊃ ψ)))
+    (¬∨-to-⊃ (assume (¬ φ ∨ ψ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -254,7 +253,7 @@ bicon₀-thm {Γ}{φ}{ψ} Γ⊢φ⇔ψ Γ⊢¬ψ =
       (¬-elim
         (weaken ψ Γ⊢¬ψ)
       (⇔-elim₂
-        (assume {Γ = Γ} ψ)
+        (assume ψ)
         (weaken ψ Γ⊢φ⇔ψ))))
 -------------------------------------------------------------------------- ∎
 
@@ -271,7 +270,7 @@ bicon₁-thm {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
     (⊃-intro
       (¬-elim
         (⇔-elim₂
-          (assume {Γ = Γ} ψ)
+          (assume ψ)
           (weaken ψ Γ⊢¬φ⇔ψ))
         (weaken ψ Γ⊢φ)))
 -------------------------------------------------------------------------- ∎
@@ -284,8 +283,8 @@ bicon₁-thm {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
 -- Proof.
 ¬-equiv {Γ}{φ} =
   ⇔-intro
-    (¬-equiv₁ (assume {Γ = Γ} (¬ φ)))
-    (¬-equiv₂ (assume {Γ = Γ} (φ ⊃ ⊥)))
+    (¬-equiv₁ (assume (¬ φ)))
+    (¬-equiv₂ (assume (φ ⊃ ⊥)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -296,8 +295,8 @@ bicon₁-thm {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
 -- Proof.
 ¬¬-equiv {Γ}{φ} =
   ⇔-intro
-    (¬¬-equiv₁ (assume {Γ = Γ} (¬ (¬ φ))))
-    (¬¬-equiv₂ (assume {Γ = Γ} φ))
+    (¬¬-equiv₁ (assume (¬ (¬ φ))))
+    (¬¬-equiv₂ (assume φ))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -306,10 +305,10 @@ bicon₁-thm {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
   → Γ ⊢ (φ ⊃ (ψ ⊃ γ)) ⇔ ((φ ∧ ψ) ⊃ γ)
 
 -- Proof.
-⊃⊃-⇔-∧⊃ {Γ}{φ}{ψ}{γ} =
+⊃⊃-⇔-∧⊃ {φ = φ}{ψ}{γ} =
   ⇔-intro
-    (⊃⊃-to-∧⊃ (assume {Γ = Γ} (φ ⊃ ψ ⊃ γ)))
-    (∧⊃-to-⊃⊃ (assume {Γ = Γ} (φ ∧ ψ ⊃ γ)))
+    (⊃⊃-to-∧⊃ (assume (φ ⊃ ψ ⊃ γ)))
+    (∧⊃-to-⊃⊃ (assume (φ ∧ ψ ⊃ γ)))
 -------------------------------------------------------------------------- ∎
 
 -- Theorem.
@@ -321,16 +320,16 @@ bicon₁-thm {Γ}{φ}{ψ} Γ⊢¬φ⇔ψ Γ⊢φ =
 subst⊢⇔₁ = ⇔-trans
 
 -- Proof.
-⇔-trans {Γ}{φ}{ψ}{γ} Γ⊢γ⇔φ Γ⊢φ⇔ψ =
+⇔-trans {φ = φ}{ψ}{γ} Γ⊢γ⇔φ Γ⊢φ⇔ψ =
   ⇔-intro
     (⇔-elim₁
       (⇔-elim₁
-        (assume {Γ = Γ} γ)
+        (assume γ)
         (weaken γ Γ⊢γ⇔φ))
       (weaken γ Γ⊢φ⇔ψ))
     (⇔-elim₂
       (⇔-elim₂
-        (assume {Γ = Γ} ψ)
+        (assume ψ)
         (weaken ψ Γ⊢φ⇔ψ))
       (weaken ψ Γ⊢γ⇔φ))
 -------------------------------------------------------------------------- ∎

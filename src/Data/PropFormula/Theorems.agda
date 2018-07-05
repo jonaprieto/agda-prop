@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------
 -- Agda-Prop Library.
--- A compilation of propositional theorems.
+-- A compilation of theorems in Propositional Logic
 ------------------------------------------------------------------------------
 
 open import Data.Nat using ( ℕ )

@@ -23,7 +23,6 @@ open import Function using ( _$_ ; _∘_ )
 
 ------------------------------------------------------------------------------
 
-
 -- Theorem.
 e245b
   : ∀ {Γ Δ} {φ ψ}
@@ -63,7 +62,7 @@ e245b {Γ}{Δ} Γ⊢φ Δ,φ⊢ψ =
   → Γ ⊢ ¬ (φ ⇔ ψ)
 
 -- Proof.
-⊃¬∧¬⊃-to-¬⇔ {Γ} {φ} {ψ} thm =
+⊃¬∧¬⊃-to-¬⇔ {Γ}{φ}{ψ} thm =
  ¬-intro
    (¬-elim
      (¬-intro
@@ -72,7 +71,7 @@ e245b {Γ}{Δ} Γ⊢φ Δ,φ⊢ψ =
            (weaken ψ (weaken (φ ⇔ ψ) (∧-proj₁ thm)))
            (⇔-elim₂
              (assume {Γ = Γ , φ ⇔ ψ} ψ)
-             (weaken ψ (assume {Γ = Γ} (φ ⇔ ψ)))))
+             (weaken ψ (assume (φ ⇔ ψ)))))
          (assume {Γ = Γ , φ ⇔ ψ} ψ)))
     (RAA
       (¬-elim
@@ -83,7 +82,7 @@ e245b {Γ}{Δ} Γ⊢φ Δ,φ⊢ψ =
                (assume {Γ = Γ , φ ⇔ ψ , ¬ ψ} φ))
              (⇔-elim₁
                (assume {Γ = Γ , φ ⇔ ψ , ¬ ψ} φ)
-               (weaken φ (weaken (¬ ψ) (assume {Γ = Γ} (φ ⇔ ψ)))))))
+               (weaken φ (weaken (¬ ψ) (assume (φ ⇔ ψ)))))))
          (⊃-elim
            (weaken (¬ ψ) (weaken (φ ⇔ ψ) (∧-proj₂ thm)))
            (assume {Γ = Γ , φ ⇔ ψ} (¬ ψ))))))
