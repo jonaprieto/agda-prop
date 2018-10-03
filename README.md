@@ -18,7 +18,13 @@ and some properties ready to work with and some algorithms like NNF, CNF, among 
 
 ### Prerequisites
 
-* [Agda][Agda] 2.5.4
+Tested with:
+
+* [Agda](https://github.com/agda/agda) version 2.5.4
+* [Agda Standard Library](https://github.com/agda/agda-stdlib/)
+  version 0.16
+
+### Types
 
 We define two data types, the formula data type `Prop` and the theorem
 data type `_⊢_`, that depended of a *list* of hypothesis and the conclusion,
@@ -106,15 +112,6 @@ data _⊢_ : (Γ : Ctxt)(φ : PropFormula) → Set where
   ⇔-elim₂ : ∀ {Γ} {φ ψ}                     → Γ ⊢ ψ → Γ ⊢ φ ⇔ ψ
                                             → Γ ⊢ φ
 ```
-
-### Requirements
-
-Tested with:
-
-* [Agda](https://github.com/agda/agda) version 2.5.4
-* [Agda Standard Library](https://github.com/agda/agda-stdlib/)
-  version 0.16
-
 
 ## Library
 
